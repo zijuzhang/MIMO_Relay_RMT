@@ -43,17 +43,13 @@ Questions
 \begin{enumerate}
 %\item Why does this not fit into the current tools we have for analyzing MIMO channels? Aspects of this that we currently lack. 
 \item Are there similar results for amplify and forward relay networks? If so can we use the same tools?
-\item For deterministic channels, do we know the capacity for this type of irs or amplify and forward relaying?
-Check for this in Teletar
-\item How is the IRS different than an amplify and forward relay? Add details 
-\item How would this be different from Lucinda's work? 
-They assume decode and forward?
-\item Why do we need free probability and why aren't results to normal RMT sufficient.
-\item Should we even consider noise being added at IRS? Based on previous work, no noise should be added at the IRS.
-\item Explain why it is reasonable to consider a single coefficient of channel and no multipath.
+\item For deterministic channels, do we know the capacity for this type of irs or amplify and forward relaying? TODO
+\item Why do we need free probability and why aren't results to normal RMT sufficient. TODO
+\item Explain why it is reasonable to consider a single coefficient of channel and no multipath. TODO
 \item Can phases be design such that a specific receiver detects a single transmitted symbol?
 \item Is it reasonable to assume that an IRS will know sufficient CSI?
-\item Need to show if other user interference can be cancelled using IRS?
+\item Need to show if other user interference can be cancelled using IRS? yes for the case of complex 
+\item Is it reasonable to think of complex as a two channel real MIMO system?
 \end{enumerate}
 \chapter{System Model}
 \section{Lucinda's System Model}
@@ -67,16 +63,26 @@ They assume decode and forward?
 \item Not power allocation to the different antennas is performed?
 \item 
 \end{itemize}
-
-
-\section{General notes}
+My TODO
+\begin{enumerate}
+	\item
+		Really have nice formalization of the final channel whose AED is desired.
+	\item
+		Then start building up with SISO one hop first then relay and finally up to the point where some form of FPT is
+		required.
+	\item
+		Look at algo from Lucinda Paper
+	\item
+		Look at the other article Saba sent
+	\item
+		Start looking at how to incorporate ideas from the pilot decontamination into this
+\end{enumerate}
 \begin{itemize}
 \item Why is the assumption of asymmetric important and what exactly does asymmetric mean? Means that the attenuation coefficient may not be the same in the link from relay to detector. This makes finding the distribution hard for some reason detailed in lucinda's paper.
 \item Can any of this be used in a MIMO broadcast setting where no processing can be done at the receiver?
-\item What CSI will be known at the IRS?
-\item Need to look at optimal matched filtering for precoding. Will not be possible for IRS and also might not even assumed that this CSI would be known.
+\item Need to look at optimal matched filtering for precoding. Will not be possible for IRS and also might not even assumed that this
+	CSI would be known. Indeed it won't be able to do this precoding, so what do we lose?
 \item Need to look at how to detect at the final end point for amplify and forward methods and IRS methods in general.
-\item What kind of noise will be present at the detector if we cant decode and forward. 
 \item TODO derive standard ergodic capacity of MIMO channel. How the standard form with the determinant decomposes into the eigenvalue product. Also look at LogDet in problem 5 of Tutorial 1 of RMT
 \item For Marcenco Pasteur, why is it reasonable to assumed variance is one over NR
 \item IRS wouldnt have any impact in the case of a guassian channel unless it knows the incoming phases. The phase of a gaussian is uniform so adding a shift won't change this. 
