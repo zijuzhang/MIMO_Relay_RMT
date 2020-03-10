@@ -31,11 +31,52 @@
 
 
 
-\title{Free Probability Analysis of Secrecy Capacity in Relay Networks}
+\title{Free Probability Analysis of Capacity in Relay Networks}
 \author{Peter Hartig}
 
 \begin{document}
 \maketitle
+\chapter{Introduction}
+The goal of this work is to develop a framework to analyze the capacity of communication networks that incorporate intelligent reflective surfaces. 
+\par
+Questions
+\begin{enumerate}
+\item Why does this not fit into the current tools we have for analyzing MIMO channels?
+\item Are there similar results for amplify and forward relay networks? If so can we use the same tools?
+\item For deterministic channels, do we know the capacity for this type of irs or amplify and forward relaying?
+Check for this in Teletar
+\item How is the IRS different than an amplify and forward relay? Add details 
+\item How would this be different from Lucinda's work? 
+They assume decode and forward?
+\item Why do we need free probability and why aren't results to normal RMT sufficient.
+\end{enumerate}
+\chapter{System Model}
+\section{Lucinda's System Model}
+\begin{itemize}
+\item Decode and forward relaying so at each relay, the original signal is perfectly detected and then retransmitted after a precoding. 
+\item Point to point with all relays having the same number of antennas and receiver usering having at least as many antennas as the transmitting user.
+\item Assumes a single hop in the system. TODO check if it is common for IRS systems to have multiple hops
+\item Allows for multiple relays to be in the single hop. L total relays
+\item Assumes Source knowns no CSI
+\item Assumes relays have perfect CSI of all channels. TOD Discuss if this is this realistic for such large systems and if not, if we can add uncertainty to model easily.
+\item Not power allocation to the different antennas is performed?
+\item 
+\end{itemize}
+
+
+\section{General notes}
+\begin{itemize}
+\item Why is the assumption of asymmetric important and what exactly does asymmetric mean?
+\item Can any of this be used in a MIMO broadcast setting where no processing can be done at the receiver?
+\item What CSI will be known at the IRS?
+\item Need to look at optimal matched filtering for precoding. Will not be possible for IRS and also might not even assumed that this CSI would be known.
+\item Need to look at how to detect at the final end point for amplify and forward methods and IRS methods in general.
+\item What kind of noise will be present at the detector if we can decode and forward
+\item TODO derive standard ergodic capacity of MIMO channel. How the standard form with the determinant decomposes into the eigenvalue product. Also look at LogDet in problem 5 of Tutorial 1 of RMT
+\item For Marcenco Pasteur, why is it reasonable to assumed variance is one over NR
+%\item 
+\end{itemize}
+
 
 \bibliography{bibliography}
 \end{document}
