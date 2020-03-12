@@ -1,0 +1,109 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx, neuralnetwork,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+
+\bibliographystyle{alpha}
+
+\author{Peter Hartig}
+
+\begin{document}
+
+\chapter{To Review}
+\section{System Model For IRS Work}
+\begin{enumerate}
+\item 
+	We assume non-frequency selective channels using techniques like OFDM. (Is this always going to be reasonable? As in the IRS/MIMO capacity optimization paper)
+	
+\item 
+	We assume a transmitter without channel state information and thus power is distributed equally over all antennas such that
+	\begin{equation}
+	\mathbf{Q_{\mathbf{x}}} = \frac{P^{\text{Total}}}{N_T}
+	\end{equation}
+	in which $P^{\text{Total}}$ is the power available at the transmitter, and $N_T$ is the number of antennas at the transmitter. 
+	
+\item Intelligent Reflective Surfaces (IRS) are placed between transmitter and surface made of individual elements each of which reflects the single signal received at the element with a unique phase shift.
+\item Individual users transmit simultaneously to the first set of IRS's. This transmit signal hops through an arbitrary number of IRS's. The final set of IRS's reflect the signal to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
+
+\item
+Each element of the IRS can apply a phase shift to the incoming signal.
+\item 
+A set of $T$ transmitters is assumed to transmit $T$ statistically independent symbols in time period T1. This signal is then transmitted through $N$ sets of IRS's, each with $R_{n,i}$, $i \in [1... \; R^n_L]$ reflecting surfaces. The signal received at element $k$ of IRS $(n,i)$ is 
+\begin{equation}
+s^{n}_{i,k} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{h}^{n-1}_{j,i,k})^T \boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}
+\end{equation}
+with $\mathbf{h}^{n-1}_{j,i,k}$ as the vector of channel coefficients between the $j$th IRS in the $(n-1)$st set of IRS's and $k$th element of the $i$th IRS in the $n$th set of IRS's.
+
+\item
+The vector of received signals for all elements at IRS $(n,i)$ is therefore
+\begin{equation}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}.
+\end{equation}
+
+
+
+\item For a specific receiving user with potentially multiple receiver antennas, the above results in a recursive form
+\begin{equation}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j} \left[
+\sum_{k = 1}^{R^{n-1}_L} (\mathbf{H}^{n-2}_{k,i})^T\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
+\end{equation}
+with 
+
+\begin{equation}
+\mathbf{s}^{1}_{i} = (\mathbf{H}^{0}_{i})^T\boldsymbol{I}\mathbf{x}
+\end{equation}
+ in which $\boldsymbol{I}$ is the identify matrix and $\mathbf{x}$ is the original vector of transmitted symbols.
+ Factoring out $\mathbf{x}$, we obtain an equivalent channel through which $\mathbf{x}$ passes.
+  
+\item
+	Note that this model assumes sufficient spacing between sets of IRSs such that we consider the signal reflected in set $(n-1)$ only at set $n$ and not at any set $k$, for any $n<k<(n-1)$.
+\item
+	Each IRS is assumed to have channel knowledge of up and downlink???
+
+\end{enumerate}
+
+
+\section{Notes from Lucinda's System Model}
+\begin{itemize}
+\item Decode and forward relaying so at each relay, the original signal is perfectly detected and then re-transmitted after a precoding. 
+\item Point to point with all relays having the same number of antennas and receiver having at least as many antennas as the transmitting user.
+\item Assumes a single hop in the system. TODO check if it is common for IRS systems to have multiple hops
+\item Allows for multiple relays to be in the single hop. L total relays
+\item Assumes Source knows no CSI so naive power allocation is used
+\item Assumes relays have perfect CSI of all channels. TODO Discuss if this is this realistic for such large systems and if not, if we can add uncertainty to model easily.
+\end{itemize}
+
+
+%\chapter{To Discuss}
+
+\chapter{Questions}
+\begin{enumerate}
+\item Is it reasonable to think of complex as a two channel real MIMO system?
+\end{enumerate}
+
+
+My TODO
+\begin{enumerate}
+	\item
+		Read Voiculescu paper and understand why these results cannot be applied to this situation based off of Tulino review.
+		
+	\item 
+		Understand how Lucinda's paper get around this problem (also see the other paper she cites) and then see how this might be done differently as was done in the pilot decontamination paper. 
+		
+	\item Begin translating the above system model into this framework to find AED.
+	\item Are there similar results for amplify and forward relay networks? If so can we use the same tools?
+	\item Adapt system model for tapped channel
+	
+	
+
+\end{enumerate}
+
+
+
+\bibliography{bibliography}
+\end{document}

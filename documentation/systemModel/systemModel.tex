@@ -6,7 +6,7 @@
 \usepackage{graphicx, neuralnetwork,tikz}
 \usepackage{float}
 \usetikzlibrary{positioning}
-
+\input defs.tex
 
 \bibliographystyle{alpha}
 \graphicspath{ {./figures/} }
@@ -45,28 +45,25 @@ Questions
 \item Are there similar results for amplify and forward relay networks? If so can we use the same tools?
 \item For deterministic channels, do we know the capacity for this type of irs or amplify and forward relaying? TODO
 \item Why do we need free probability and why aren't results to normal RMT sufficient. TODO
-\item Explain why it is reasonable to consider a single coefficient of channel and no multipath. TODO
-\item Can phases be design such that a specific receiver detects a single transmitted symbol?
+\item Can phases be designed such that a specific receiver detects a single transmitted symbol?
 \item Is it reasonable to assume that an IRS will know sufficient CSI?
-\item Need to show if other user interference can be cancelled using IRS? yes for the case of complex 
+\item Need to show if other user interference can be canceled using IRS? yes for the case of complex 
 \item Is it reasonable to think of complex as a two channel real MIMO system?
 \end{enumerate}
 \chapter{System Model}
-\section{Lucinda's System Model}
+\section{Notes from Lucinda's System Model}
 \begin{itemize}
-\item Decode and forward relaying so at each relay, the original signal is perfectly detected and then retransmitted after a precoding. 
-\item Point to point with all relays having the same number of antennas and receiver usering having at least as many antennas as the transmitting user.
+\item Decode and forward relaying so at each relay, the original signal is perfectly detected and then re-transmitted after a precoding. 
+\item Point to point with all relays having the same number of antennas and receiver having at least as many antennas as the transmitting user.
 \item Assumes a single hop in the system. TODO check if it is common for IRS systems to have multiple hops
 \item Allows for multiple relays to be in the single hop. L total relays
-\item Assumes Source knowns no CSI
+\item Assumes Source knows no CSI
 \item Assumes relays have perfect CSI of all channels. TOD Discuss if this is this realistic for such large systems and if not, if we can add uncertainty to model easily.
 \item Not power allocation to the different antennas is performed?
 \item 
 \end{itemize}
 My TODO
 \begin{enumerate}
-	\item
-		Really have nice formalization of the final channel whose AED is desired.
 	\item
 		Then start building up with SISO one hop first then relay and finally up to the point where some form of FPT is
 		required.
@@ -91,11 +88,21 @@ My TODO
 %\item 
 \end{itemize}
 
-\section{My System Model}
+\section{System Model For IRS Work}
 \begin{enumerate}
-\item IRS: A surface made of individual elements each of which reflect the single signal received by the surface with a unique phase shift.
-\item Most general: Individual users transmit simultaneously to the first set of IRS's. These relays hop through an arbitrary number of IRS's. The final set of IRS's reflect the signal out to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
-\item How do we describe the signal coming off of an IRS? Large diagonal matrix with each reflecting element represented as one elements (one phase shift) along the diagonal. 
+\item 
+	We assume non-frequency selective channels using techniques like OFDM. (Is this always going to be reasonable?)
+	
+\item 
+	We assume a transmitter without channel state information and thus power is distributed equally over all antennas such that
+	\begin{equation}
+	\mathbf{Q_{\mathbf{x}}} = \frac{P^{\text{Total}}}{N_T}
+	\end{equation}
+	in which $P^{\text{Total}}$ is the power available at the transmitter, and $N_T$ is the number of antennas at the transmitter. 
+	
+\item Intelligent Reflective Surfaces (IRS) are placed between transmitter and surface made of individual elements each of which reflects the single signal received at the element with a unique phase shift.
+\item Individual users transmit simultaneously to the first set of IRS's. This transmit signal hops through an arbitrary number of IRS's. The final set of IRS's reflect the signal to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
+
 \item
 Each element of the IRS can apply a phase shift to the incoming signal.
 \item 
@@ -111,7 +118,41 @@ The vector of received signals for all elements at IRS $(n,i)$ is therefore
 \mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}.
 \end{equation}
 
-with $\mathbf{s}^{n}_{i} \in \mathbb{C}^{n_L}$
+
+
+\item For a specific receiving user with potentially multiple receiver antennas, the above results in a recursive form
+\begin{equation}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j} \left[
+\sum_{k = 1}^{R^{n-1}_L} (\mathbf{H}^{n-2}_{k,i})^T\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
+\end{equation}
+with 
+
+\begin{equation}
+\mathbf{s}^{1}_{i} = (\mathbf{H}^{0}_{i})^T\boldsymbol{I}\mathbf{x}
+\end{equation}
+ in which $\boldsymbol{I}$ is the identify matrix and $\mathbf{x}$ is the original vector of transmitted symbols.
+ Factoring out $\mathbf{x}$, we obtain an equivalent channel through which $\mathbf{x}$ passes.
+  
+\item
+	Note that this model assumes sufficient spacing between sets of IRSs such that we consider the signal reflected in set $(n-1)$ only at set $n$ and not at any set $k$, for any $n<k<(n-1)$.
+\end{enumerate}
+\section{Background For IRS Work}
+Now that we known the characteristics of the channel for which we need the capacity, build of the tools to find this.
+\begin{enumerate}
+\item First show the capacity for a deterministic point-to-point communication channel (with eigenvalues included).
+\item Next show how this extends to the non-deterministic channel and how we end up needing the pdf of the eigenvalues for the final channel.
+\item For a non-deterministic channel in which the transmitter has no CSI knowledge and Gaussian distributed $\mathbf{x}$ the capacity ($\mathcal{C}$) of a point-to-point channel $\mathbf{H}$ is 
+\begin{equation}
+\Capacity{(H)} = \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P^{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
+\end{equation}
+%Given the distribution for the eigenvalues of $\mathbf{H}\mathbf{H}^H$ this can be rewritten as 
+%\begin{equation}
+%\Capacity{(H)} = N \left[\Log\left(|\mathbf{I}_{N_R}+\frac{P^{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
+%
+%\end{equation}
+
+
+\item Look at if there is an AED definition of capacity for amplify and forward relays. If so, consider the IRS as a special case of this? This should just be equivalent to point-to-point for the deterministic case as long as we can factor out the original transmitted symbol vector. This addition of noise at the relay may cause issues but if the channel is gaussian this might be okay as along as the final noise variance is adjusted.
 
 \end{enumerate}
 
