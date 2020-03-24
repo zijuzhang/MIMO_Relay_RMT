@@ -3,6 +3,8 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
 \usepackage{graphicx, neuralnetwork,tikz}
 \usepackage{float}
 \usetikzlibrary{positioning}
@@ -36,125 +38,237 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 \chapter{Introduction}
-The goal of this work is to develop a framework to analyze the capacity of communication networks that incorporate intelligent reflective surfaces. 
+The goal of this work is to consider the IRS channel capacity and secrecy capacity using free probability theory. Specifically, this system is compared to two similar problems which have been shown to admit analysis using free probability. 
 \par
-Questions
+
+\chapter{Problem Background}
+
+\section{Information Theory Tools}
+
 \begin{enumerate}
-%\item Why does this not fit into the current tools we have for analyzing MIMO channels? Aspects of this that we currently lack. 
-\item Are there similar results for amplify and forward relay networks? If so can we use the same tools?
-\item For deterministic channels, do we know the capacity for this type of irs or amplify and forward relaying? TODO
-\item Why do we need free probability and why aren't results to normal RMT sufficient. TODO
-\item Can phases be designed such that a specific receiver detects a single transmitted symbol?
-\item Is it reasonable to assume that an IRS will know sufficient CSI?
-\item Need to show if other user interference can be canceled using IRS? yes for the case of complex 
-\item Is it reasonable to think of complex as a two channel real MIMO system?
+\item For a random MIMO communication channel and CSI known at the transmitter and Gaussian distributed transmit signal $\mathbf{x}$, the capacity ($\mathcal{C}$) of a point-to-point channel $\mathbf{H}$ is given by
+\begin{equation}\label{capacity}
+\Capacity{(H)} = \Expect\left[\underset{tr(\mathbf{Q}_{\mathbf{xx}}) < P_{Total}}{\mathrm{max}} \;\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\mathbf{H}\mathbf{Q}_{\mathbf{xx}}\mathbf{H}^H|\right)\right].
+\end{equation}
+*Question: Without an analytic solution to the waterfilling problem used to choose $\mathbf{Q}_{\mathbf{xx}}$, how can we take an expectation? -> need to do a Monte Carlo simulation (in MIMO book) so probably will not be able to include the beamformer in any free probability solution.
+
+\item
+In the case in which no CSI is known at the transmitter and the power at the transmitter, $P_{\text{Total}}$, is distributed equally across transmit antennas Equation \ref{capacity} becomes
+\begin{equation}
+\Capacity{(H)} = \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P_{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
+\end{equation} 
+Assuming asymptotically large antenna arrays, and given the distribution for the eigenvalues of $\mathbf{H}\mathbf{H}^H$ which we denote by $p_{\lambda}(\lambda)$, Equation \ref{capacity} can be rewritten as 
+\begin{equation}
+\Capacity{(H)} = N_r \Expect\left[\Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda\right)\right].
+\end{equation}
+ in which the expectation is taken over $p_{\lambda}(\lambda)$.
+
+\item The secrecy capacity of the general wire-tapped communication channel with perfect knowledge of the channels to both the legitimate receiver, $\mathbf{H} \in \mathbb{C}_{N_r \times N_t}$, and eavesdropper, $\hat{\mathbf{H}}\in \mathbb{C}_{N_e \times N_t}$, is given by 
+
+\begin{gather}\label{secrecy_capacity}
+\Capacity{(H)} = \Expect\left[\underset{tr{\mathbf{Q}_{xx}} < P_{Total}}{\mathrm{max}} \;\left[\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\mathbf{H}\mathbf{Q}_{xx}\mathbf{H}^H|\right) -
+\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\hat{\mathbf{H}}\mathbf{Q}_{xx}\hat{\mathbf{H}}^H|\right)
+\right] \right].
+\end{gather}
+Again assuming $P_{\text{Total}}$ is distributed equally across transmit antennas such that $\mathbf{Q}_{xx} = \frac{P_{\text{Total}}}{N_t}\mathbf{I}_{N_t}$, and that both the legitimate user and eavesdropper have sufficient antennas such that $N_r > N_t$ and $N_e >N_t$,  this can be written as 
+
+\begin{gather}\label{secrecy_capacity}
+\Capacity{(H)} = \Expect\left[N_r \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda \right) -
+N_e \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\hat{\lambda} \right) \right]
+\end{gather}
+in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. Generally, finding capacity will require knowledge of the joint asymptotic eigenvalue distribution $p_{\lambda}(\lambda,\hat{\lambda})$.
+
 \end{enumerate}
-\chapter{System Model}
-\section{Notes from Lucinda's System Model}
-\begin{itemize}
-\item Decode and forward relaying so at each relay, the original signal is perfectly detected and then re-transmitted after a precoding. 
-\item Point to point with all relays having the same number of antennas and receiver having at least as many antennas as the transmitting user.
-\item Assumes a single hop in the system. TODO check if it is common for IRS systems to have multiple hops
-\item Allows for multiple relays to be in the single hop. L total relays
-\item Assumes Source knows no CSI
-\item Assumes relays have perfect CSI of all channels. TOD Discuss if this is this realistic for such large systems and if not, if we can add uncertainty to model easily.
-\item Not power allocation to the different antennas is performed?
+\section{Free Probability/Random Matrix Theory Tools}
+
+Here the current tools available from free probability analysis are reviewed in order to clarify the types of polynomials (composite channels) which can be analyzed.
+\begin{enumerate}
 \item 
-\end{itemize}
-My TODO
-\begin{enumerate}
+	Transformations of the AED
+	Detail how to recover the true pdf given the Steiltjes, R/S transforms
+	\begin{itemize}
 	\item
-		Then start building up with SISO one hop first then relay and finally up to the point where some form of FPT is
-		required.
+		For general random matrices, we can still find the eigenvalue distributions using the problem of moments
+	\end{itemize}
+
+\item 
+	Relevant matrices with known AEDs.
+	\begin{itemize}
+	\item General zero-mean iid $n\timesn$ with variance 1/$N$ -> Full Circle
+	\item Sum of the matrix above with its adjoint. The result is self-adjoint so the eigenvalues are all real.
+	\item 
+	\end{itemize}
+\item
+	Free Families
+	\begin{itemize}
+	\item blank
+	\end{itemize}
+
+
+\item
+	Matrix Composition: Detail requirements on the variables
+	\begin{itemize}
 	\item
-		Look at algo from Lucinda Paper
+	Additive free convolution using the R-Transform for two free variables with known R-Transforms.
 	\item
-		Look at the other article Saba sent
-	\item
-		Start looking at how to incorporate ideas from the pilot decontamination into this
+	Multiplicitate free convolution using the S-Transform for two free variables with known S-Transforms.
+	
+	\end{itemize}
+
 \end{enumerate}
+
+
+\chapter{Comparison to Previous Work}
+First, the two systems to which the IRS channel is compared are first given and relevant details are highlighted. 
+\section{Notes from Basic Relay Work}
+\subsection{System Model}
+
 \begin{itemize}
-\item Why is the assumption of asymmetric important and what exactly does asymmetric mean? Means that the attenuation coefficient may not be the same in the link from relay to detector. This makes finding the distribution hard for some reason detailed in lucinda's paper.
-\item Can any of this be used in a MIMO broadcast setting where no processing can be done at the receiver?
-\item Need to look at optimal matched filtering for precoding. Will not be possible for IRS and also might not even assumed that this
-	CSI would be known. Indeed it won't be able to do this precoding, so what do we lose?
-\item Need to look at how to detect at the final end point for amplify and forward methods and IRS methods in general.
-\item TODO derive standard ergodic capacity of MIMO channel. How the standard form with the determinant decomposes into the eigenvalue product. Also look at LogDet in problem 5 of Tutorial 1 of RMT
-\item For Marcenco Pasteur, why is it reasonable to assumed variance is one over NR
-\item IRS wouldnt have any impact in the case of a guassian channel unless it knows the incoming phases. The phase of a gaussian is uniform so adding a shift won't change this. 
-\item Generally will not be able to optimize the secrecy capacity of the phase matrix because finding the CSI to eavedroppers would be hard. This would also impact the resulting estimate for the SNR based upon any noise injected into the system.
-
-%\item 
+\item Assuming decode and forwarding at relays and a matched filter precoding, the resulting received signal is given by 
+\begin{equation}
+\mathbf{y} = \mathbf{H}_{Total} \mathbf{s} +  \mathbf{n} = \sum_{r=1}^{R_L} \mathbf{H}_{r}\mathbf{H}_{r}^{\dagger}\mathbf{s} +  \mathbf{n}
+\end{equation}
+for which the composite channel is given by 
+\begin{equation}
+\mathbf{H}_{Total} = \mathbf{H}_{1}\mathbf{H}_{1}^{H} +\cdots +\mathbf{H}_{R_L}\mathbf{H}_{R_L}^{H}.
+\end{equation}
+Assuming the covariance matrix $\mathbf{Q}_s = \mathbf{I}_{N_R}$, the ergodic capacity is given by 
+\begin{equation}\label{ergodic_capacity}
+E\left[\text{log}_2(\mathbf{I}_{N_R} + \frac{P}{\sigma_n}\mathbf{H}_{Total}\mathbf{H}_{Total}^H)\right].
+\end{equation}
+We consider $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$ as a polynomial in the self-adjoint variables $\mathbf{H}_{i}\mathbf{H}_{i}^{H}$.
 \end{itemize}
+\subsection{Free Probability Analysis}
 
-\section{System Model For IRS Work}
+
+
+\section{Notes Pilot Decontamination Work}
+\subsection{System Model}
+Here we consider the signal 
+\begin{equation}
+\mY = \mH\mX + \mH_I \mX_I + \mW
+\end{equation}
+with covariance matrix 
+\begin{gather*}
+\mQ_{YY} = (\mH\mX + \mH_I \mX_I + \mW)(\mH\mX + \mH_I \mX_I + \mW)^H = 
+\\
+\mH\mX\mX^H\mH^H + \mH\mX\mX_I^H\mH_I^H + \mH\mX\mW^H +\\ \mH_I \mX_I \mX^H\mH^H + \mH_I \mX_I\mX_I^H\mH_I^H + \mH_I \mX_I\mW^H + \mW\mX^H\mH^H + \mW\mX_I^H\mH_I^H + \mW\mH_I^H.
+\end{gather*}
+Clearly, the individual terms of this polynomial are not self-adjoint.
+\subsection{Free Probability Analysis}
+Need to figure out how the actual steiltjes transform of this polynomial is found.
+- There is a fixed point equation for finding this transform.
+
+- Ultimately we want to have a form of the Steiltjes transform for the entire channel AED using a fixed point equation.
+\chapter{IRS Work}
+
+\section{System Model}\label{system_model}
+
 \begin{enumerate}
 \item 
 	We assume non-frequency selective channels using techniques like OFDM. (Is this always going to be reasonable?)
 	
+%\item 
+%	We assume a transmitter without channel state information and thus power is distributed equally over all antennas such that
+%	\begin{equation}
+%	\mathbf{Q_{\mathbf{x}}} = \frac{P^{\text{Total}}}{N_T}
+%	\end{equation}
+%	in which $P^{\text{Total}}$ is the power available at the transmitter, and $N_T$ is the number of antennas at the transmitter. 
 \item 
-	We assume a transmitter without channel state information and thus power is distributed equally over all antennas such that
+	We assume a transmitter with channel state information and beamforming capability such that the transmitted signal is given by 
 	\begin{equation}
-	\mathbf{Q_{\mathbf{x}}} = \frac{P^{\text{Total}}}{N_T}
+	\mathbf{x} = \mathbf{F}\mathbf{s}^0
 	\end{equation}
-	in which $P^{\text{Total}}$ is the power available at the transmitter, and $N_T$ is the number of antennas at the transmitter. 
+	in  which $\mathbf{U}$ is a beamforming matrix, $\mathbf{s}^0$ is the normalized vector of transmitted symbols such that $\mathbf{Q_{\mathbf{s}^0,\mathbf{s}^0}} = \mathbf{I}_{N_R}$. 
 	
-\item Intelligent Reflective Surfaces (IRS) are placed between transmitter and surface made of individual elements each of which reflects the single signal received at the element with a unique phase shift.
-\item Individual users transmit simultaneously to the first set of IRS's. This transmit signal hops through an arbitrary number of IRS's. The final set of IRS's reflect the signal to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
+\item Intelligent Reflective Surfaces (IRS) are placed between transmitter and receiver. The IRS is made of individual elements each of which can reflect the received signal with a unique, chosen phase shift.
 
-\item
-Each element of the IRS can apply a phase shift to the incoming signal.
+%\item Individual users transmit simultaneously to the first set of IRS's. This transmit signal hops through an arbitrary number of IRS's. The final set of IRS's reflect the signal to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
+
 \item 
-A set of $T$ transmitters is assumed to transmit $T$ statistically independent symbols in time period T1. This signal is then transmitted through $N$ sets of IRS's, each with $R_{n,i}$, $i \in [1... \; R^n_L]$ reflecting surfaces. The signal received at element $k$ of IRS $(n,i)$ is 
+The signal $\mathbf{x}$ is transmitted through $N$ sets of IRS's. The set $n, \forall n = [1 \cdots N]$, has $L^n$ reflecting surfaces. Each reflecting surface in set $n$ is indexed by $R^n_{i}, \forall i = [1\cdots L^n]$ and has $K_{i}^{n}$ elements.
+\item 
+ The  signal received at element $k$ of IRS $R_i^n$ is 
 \begin{equation}
-s^{n}_{i,k} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{h}^{n-1}_{j,i,k})^T \boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}
+s^{n}_{i,k} = \sum_{j = 1}^{L^{n-1}} (\mathbf{h}^{n-1}_{j,i,k})^T \boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}
 \end{equation}
-with $\mathbf{h}^{n-1}_{j,i,k}$ as the vector of channel coefficients between the $j$th IRS in the $(n-1)$st set of IRS's and $k$th element of the $i$th IRS in the $n$th set of IRS's.
+with $\boldsymbol{\Theta}^{n-1}_{j}$ as the phases shifts applied by $R_j^{n-1}$ and $\mathbf{h}^{n-1}_{j,i,k}$ as the vector of channel coefficients between $R_j^{n-1}$ and element $k$ of $R_i^n$.
 
 \item
-The vector of received signals for all elements at IRS $(n,i)$ is therefore
-\begin{equation}
-\mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}.
+The \emph{vector} of received signals for all elements at $R^n_{i}$, is given by
+\begin{equation}\label{received_vector}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{L^{n-1}} \mathbf{H}^{n-1}_{j,i}\boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}.
+\end{equation}
+in which $\mathbf{H}^{n-1}_{j,i} = [\mathbf{h}^{n-1}_{j,i,1} \cdots \mathbf{h}^{n-1}_{j,i,K_{j}^{n-1}}]^T$.
+
+
+
+\item For a specific receiving user with potentially multiple receiver antennas, the received signal is given in a recursive form by
+\begin{equation}\label{general_received}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{L^{n-1}} \mathbf{H}^{n-1}_{j,i}\boldsymbol{\Theta}^{n-1}_{j} \left[
+\sum_{k = 1}^{L^{n-2}} \mathbf{H}^{n-2}_{k,i}\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
 \end{equation}
 
-
-
-\item For a specific receiving user with potentially multiple receiver antennas, the above results in a recursive form
-\begin{equation}
-\mathbf{s}^{n}_{i} = \sum_{j = 1}^{R^{n-1}_L} (\mathbf{H}^{n-1}_{j,i})^T\boldsymbol{\Theta}^{n-1}_{j} \left[
-\sum_{k = 1}^{R^{n-1}_L} (\mathbf{H}^{n-2}_{k,i})^T\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
-\end{equation}
-with 
-
-\begin{equation}
-\mathbf{s}^{1}_{i} = (\mathbf{H}^{0}_{i})^T\boldsymbol{I}\mathbf{x}
-\end{equation}
- in which $\boldsymbol{I}$ is the identify matrix and $\mathbf{x}$ is the original vector of transmitted symbols.
- Factoring out $\mathbf{x}$, we obtain an equivalent channel through which $\mathbf{x}$ passes.
   
 \item
-	Note that this model assumes sufficient spacing between sets of IRSs such that we consider the signal reflected in set $(n-1)$ only at set $n$ and not at any set $k$, for any $n<k<(n-1)$.
+	Note that this model assumes sufficient spacing between set $n$ and set $n+2$ such that we consider the signal reflected in set $n$ only at set $n+1$ and not for any $n<k$.
+
+
+\item 
+	Just as in the model from Relay by Luci, we write the composite channel as 
+
 \end{enumerate}
-\section{Background For IRS Work}
-Now that we known the characteristics of the channel for which we need the capacity, build of the tools to find this.
-\begin{enumerate}
-\item First show the capacity for a deterministic point-to-point communication channel (with eigenvalues included).
-\item Next show how this extends to the non-deterministic channel and how we end up needing the pdf of the eigenvalues for the final channel.
-\item For a non-deterministic channel in which the transmitter has no CSI knowledge and Gaussian distributed $\mathbf{x}$ the capacity ($\mathcal{C}$) of a point-to-point channel $\mathbf{H}$ is 
-\begin{equation}
-\Capacity{(H)} = \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P^{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
+To better analyze types of components within the polynomial characterizing the resulting, composite channel as in ..., we now consider two specific cases of this general system model.  
+
+\subsection{Case in which $N=1$}
+First we consider the case in which there is only one set (one hop) of IRSs between the transmitter and receiver. 
+Equation \ref{general_received} now becomes 
+\begin{equation}\label{N=1_received}
+\mathbf{s}^{1} = \sum_{j = 1}^{L^{1}} \mathbf{H}^{1}_{j}\boldsymbol{\Theta}^{1}_{j}
+\mathbf{H}^{0}_{j} \mathbf{U}\mathbf{s}
 \end{equation}
-%Given the distribution for the eigenvalues of $\mathbf{H}\mathbf{H}^H$ this can be rewritten as 
-%\begin{equation}
-%\Capacity{(H)} = N \left[\Log\left(|\mathbf{I}_{N_R}+\frac{P^{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
-%
-%\end{equation}
+in which $\mathbf{s}$ is the original vector of transmitted symbols. In this case, the composite channel is given by 
+\begin{equation}
+\mathbf{H}_{Total} = \sum_{j = 1}^{L^{1}} \mathbf{H}^{1}_{j}\boldsymbol{\Theta}^{1}_{j}
+\mathbf{H}^{0}_{j}\mathbf{U}.
+\end{equation}
+The individual terms of the polynomial in \eqref{ergodic_capacity} are not self-adjoint unless $L^{1} = 1$ and the precoding matrix is chosen such that 
+\begin{equation}
+\mathbf{U} = [\mathbf{H}^{1}_{1}\boldsymbol{\Theta}^{1}_{1}\mathbf{H}^{0}_{1}]^H.
+\end{equation}
 
 
-\item Look at if there is an AED definition of capacity for amplify and forward relays. If so, consider the IRS as a special case of this? This should just be equivalent to point-to-point for the deterministic case as long as we can factor out the original transmitted symbol vector. This addition of noise at the relay may cause issues but if the channel is gaussian this might be okay as along as the final noise variance is adjusted.
+\subsection{Case in which $L_n=1$}
+We now consider the case with only a single IRS in each hop between the transmitter and receiver. 
+Equation \ref{general_received} now becomes 
+\begin{equation}\label{L_n=1_received}
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{L^{n-1}} \mathbf{H}^{n-1}_{j,i}\boldsymbol{\Theta}^{n-1}_{j} \left[
+\sum_{k = 1}^{L^{n-2}} \mathbf{H}^{n-2}_{k,i}\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
+\end{equation}
+In this case, the composite channel is given by 
+\begin{equation}
+\mathbf{H}_{Total} = \mathbf{H}^{N}_{1}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{N-1}_{1}\boldsymbol{\Theta}^{N-1}_{1} \cdots  
+\mathbf{H}^{0}_{j}\mathbf{U}.
+\end{equation}
+Similar to the case \ref{N=1_received}, the variable of the composite channel polynomial are only self-adjoint if 
 
-\end{enumerate}
+** But can we actually do something with a term with so many different variables?
+
+\section{System Model With Secrecy Capacity}
+The model from Section \ref{system_model} can be easily extended to the case in which an eavesdropper may be located at any point along the transmission path. We denote the received signal at the eavesdropper by
+
+\begin{equation}\label{general_received}
+\hat{\mathbf{s}}^{n}_{i} = \sum_{j = 1}^{L^{n-1}} \hat{\mathbf{H}}^{n-1}_{j,i}\boldsymbol{\Theta}^{n-1}_{j} \mathbf{s}^{n-1}_{j}.
+\end{equation}
+Note that the term $\mathbf{s}^{n-1}_{j}$ is unchanged from \ref{received_vector} because up until the final hop, the path for the eavesdropper and legitimate receiver are the same. 
+
+* We should only need to known the difference between the two composite channels to find the secrecy capacity. Even if we don't know the individual ones?
+\section{Free Probability Analysis}
+
+\chapter{My TODO}
+
 
 \bibliography{bibliography}
 \end{document}
