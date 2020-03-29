@@ -18,7 +18,7 @@
 \maketitle
 \tableofcontents
 \chapter{Introduction}
-The goal of this work is to consider the intelligent reflective surface (IRS) channel capacity and secrecy capacity using free probability theory. Specifically, this system is compared to two similar problems which have been shown to admit analysis using free probability. 
+The goal of this work is to consider the intelligent reflective surface (IRS) channel capacity and secrecy capacity using the tools of free probability. First, two similar problems which have been shown to admit analysis using free probability are considered. These examples are then compared to the IRS channel. 
 \par
 
 \chapter{Problem Background}
@@ -26,27 +26,27 @@ The goal of this work is to consider the intelligent reflective surface (IRS) ch
 \section{Information Theory Tools}
 
 \begin{enumerate}
-\item For a random MIMO communication channel and CSI known at the transmitter and Gaussian distributed transmit signal $\mathbf{x}$, the capacity ($\mathcal{C}$) of a point-to-point channel $\mathbf{H}$ is given by
+\item For a random MIMO communication channel with Gaussian distributed transmit signal $\mathbf{x}$, and CSI known at the transmitter,  the capacity ($\mathcal{C}$) of a point-to-point channel characterized by the flat-fading channel matrix $\mathbf{H}$ is given by
 \begin{equation}\label{capacity}
 \Capacity{(\mathbf{H})} = \Expect\left[\underset{tr(\mathbf{Q}_{\mathbf{xx}}) < P_{Total}}{\mathrm{max}} \;\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\mathbf{H}\mathbf{Q}_{\mathbf{xx}}\mathbf{H}^H|\right)\right].
 \end{equation}
-*Question: Without an analytic solution to the waterfilling problem used to choose $\mathbf{Q}_{\mathbf{xx}}$, how can we take an expectation? Answer: need to do a Monte Carlo simulation (in MIMO book) so probably will not be able to include the beamformer in any free probability solution.
+Solving for the optimial $\mathbf{Q}_{\mathbf{xx}}$ generally lacks an analytic solution and requires solving the  "waterfilling" problem to choose $\mathbf{Q}_{\mathbf{xx}}$. As a result, taking an expectation of this general expressiong requires Monte Carlo simulation (as seen in MIMO course book).
 
 \item
-In the case in which no CSI is known at the transmitter and the power at the transmitter, $P_{\text{Total}}$, is distributed equally across transmit antennas Equation \ref{capacity} becomes
-\begin{equation}
+In the case in which CSI is \textbf{not} known at the transmitter, the power at the transmitter, $P_{\text{Total}}$, is distributed equally across transmit antennas and Equation \ref{capacity} becomes
+\begin{equation}\label{capacity_no_csi}
 \Capacity{(\mathbf{H})} = \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P_{\text{Total}}}{N_T \sigma_n}\mathbf{H}\mathbf{H}^H|\right)\right].
 \end{equation} 
-Assuming asymptotically large antenna arrays, and given the distribution for the eigenvalues of $\mathbf{H}\mathbf{H}^H$ which we denote by $p_{\lambda}(\lambda)$, Equation \ref{capacity} can be rewritten as 
-\begin{equation}
+Assuming asymptotically large antenna arrays, and given the distribution for the eigenvalues of $\mathbf{H}\mathbf{H}^H$ which we denote by $p_{\lambda}(\lambda)$, Equation \ref{capacity_no_csi} can be rewritten as 
+\begin{equation}\label{capacity_AED}
 \Capacity{(\mathbf{H})} = N_r \Expect\left[\Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda\right)\right].
 \end{equation}
- in which the expectation is taken over $p_{\lambda}(\lambda)$.
+ in which the expectation is taken over $p_{\lambda}(\lambda)$ known as the asymptotic eigenvalue distribution (AED).
 
-\item The secrecy capacity of the general wire-tapped communication channel with perfect knowledge of the channels to both the legitimate receiver, $\mathbf{H} \in \mathbb{C}_{N_r \times N_t}$, and eavesdropper, $\hat{\mathbf{H}}\in \mathbb{C}_{N_e \times N_t}$, is given by 
+\item The secrecy capacity of the general wire-tapped communication channel with perfect knowledge of the channels to both the legitimate receiver, $\mathbf{H} \in \mathbb{C}_{N_r \times N_t}$, and an eavesdropper, $\hat{\mathbf{H}}\in \mathbb{C}_{N_e \times N_t}$, is given by 
 
 \begin{gather}\label{secrecy_capacity}
-\Capacity{(\mathbf{H})} = \Expect\left[\underset{tr{\mathbf{Q}_{xx}} < P_{Total}}{\mathrm{max}} \;\left[\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\mathbf{H}\mathbf{Q}_{xx}\mathbf{H}^H|\right) -
+\Capacity{(\mathbf{H})} = \Expect\left[\underset{tr({\mathbf{Q}_{xx}}) < P_{Total}}{\mathrm{max}} \;\left[\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\mathbf{H}\mathbf{Q}_{xx}\mathbf{H}^H|\right) -
 \Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}\hat{\mathbf{H}}\mathbf{Q}_{xx}\hat{\mathbf{H}}^H|\right)
 \right] \right].
 \end{gather}
@@ -56,7 +56,7 @@ Again assuming $P_{\text{Total}}$ is distributed equally across transmit antenna
 \Capacity{(\mathbf{H})} = \Expect\left[N_r \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda \right) -
 N_e \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\hat{\lambda} \right) \right]
 \end{gather}
-in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. Generally, finding capacity will require knowledge of the joint asymptotic eigenvalue distribution $p_{\lambda}(\lambda,\hat{\lambda})$.
+in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. Generally, finding capacity will require knowledge of the \emph{joint} AED $p_{\lambda}(\lambda,\hat{\lambda})$.
 
 \end{enumerate}
 \section{Random Matrix Theory and Free Probability Tools}
@@ -65,22 +65,15 @@ in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mat
 For some matrices, we know the AED directly. For more general classes of matrices we find the AED using the known moments of the matrix to find the Stieltjes transform and then inverting the Stieltjes transform to find the true distribution. Generally, given the distributions of two matrices, the distribution for compositions of these matrices is difficult to find. 
 
 \subsubsection{Free Probability}
-In case of asymptotically large matrices, we can consider the matrices and free variables and use the theories of free probability. The distribution resulting from the composition of free variables can be found using the R-transform and S-transform to linearize addition and multiplication respectively.
+By considering asymptotically large matrices as free random variables, the distribution resulting from the composition of free random variables can be found using the R-transform and S-transform to linearize addition and multiplication respectively.
 
-\subsubsection{Other Tools from Free Probability}
-Here the current tools available from free probability analysis are reviewed in order to clarify the types of polynomials (composite channels) which can be analyzed.
-
-\section{Itelligent Reflective Surfaces}
-In the following work, the MIMO channel with IRSs is considered. 
-
-
-\chapter{Comparison to Previous Work}
-First, the two systems to which the IRS channel is compared are first given and relevant details are highlighted. 
-\section{Notes from Decode and Forward Relay Work in \cite{hadley2019capacity}}
+\chapter{Previous Work}
+First, two systems related to the IRS channel capacity problem are described and relevant details are highlighted. 
+\section{Notes from Decode and Forward Relay Work in \cite{hadley2019capacity}}\label{relay}
 \subsection{System Model}
 
 \begin{itemize}
-\item Assuming decode and forwarding at relays and a matched filter precoding at the transmitter, the resulting received signal is given by 
+\item A decode and forward protocol is used at $R_L$ different relays between a transmitter and receiver. A matched filter precoding is applied at each transmitting relay such that the signal at the receiver is given by 
 \begin{equation}
 \mathbf{y} = \mathbf{H}_{Total} \mathbf{s} +  \mathbf{n} = \sum_{r=1}^{R_L} \mathbf{H}_{r}\mathbf{H}_{r}^{\dagger}\mathbf{s} +  \mathbf{n}
 \end{equation}
@@ -95,11 +88,12 @@ E\left[\text{log}_2(\mathbf{I}_{N_R} + \frac{P}{\sigma_n}\mathbf{H}_{Total}\math
 We consider $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$ as a polynomial in the self-adjoint variables $\mathbf{H}_{i}\mathbf{H}_{i}^{H}$.
 \end{itemize}
 \subsection{Free Probability Analysis}
-The use of additive free convolution in
+It is claimed in the final paragraph of the "theory" section of \cite{hadley2019capacity} that the R-transform and S-transform cannot be used to analyze more complex polynomials. This seems to contradict the methods used in the decontamination paper (TO DISCUSS). 
+
 
 \section{Notes Pilot Decontamination Work}
 \subsection{System Model}
-Here we consider the signal 
+Disregarding the motivation and context of this problem, we want to find the AED of the signal 
 \begin{equation}
 \mY = \mH\mX + \mH_I \mX_I + \mW
 \end{equation}
@@ -110,20 +104,29 @@ with covariance matrix
 \mH\mX\mX^H\mH^H + \mH\mX\mX_I^H\mH_I^H + \mH\mX\mW^H +\\ \mH_I \mX_I \mX^H\mH^H + \mH_I \mX_I\mX_I^H\mH_I^H + \mH_I \mX_I\mW^H + \mW\mX^H\mH^H + \mW\mX_I^H\mH_I^H + \mW\mH_I^H.
 \end{gather*}
 Clearly, the individual terms of this polynomial are not self-adjoint.
-\subsection{Free Probability Analysis}
-Need to figure out how the actual steiltjes transform of this polynomial is found.
-- There is a fixed point equation for finding this transform.
+\subsection{Free Probability Analysis}\label{decont_fpt}
+In order to analyzed the matrix polynomial above, the Stieltjes of the matrix 
 
-- Ultimately we want to have a form of the Steiltjes transform for the entire channel AED using a fixed point equation.
+\begin{equation}
+\mathbf{D} = \sum_{k=1}^{K} \alpha_k \mathbf{B}_k \mathbf{C}_k
+\end{equation}
+with $\alpha_k \in \mathbb{R}$ is considered. Given the S-transform of $\mathbf{B}_k $ and $\mathbf{C}_k$ (\cite{nica2006lectures}) we can first use the product property of the S-transform to find the Stieltjes transform of each term in the sum $\mathbf{B}_k \mathbf{C}_k$. Given the Stieltjes transform of each term, we then find the R-transform of each term $\mathbf{B}_k \mathbf{C}_k$ and exploiting the additive property of the R-transform, we find the R-transform of $\mathbf{D}$. Inverting the R-transform to get the Stieltjes transform of $\mathbf{D}$ which we can evaluate to find the AED.
+\par
+Note that the resulting Stieltjes transform is given as a fixed point equation which is then evaluated for each value of of interest to find the corresponding value of the AED. 
+
+
+\begin{itemize}
+\item The IRS model needs to be checked for compatibility with \cite{nica2006lectures}.
+\item Need to solve for a similar fixed point equation.
+\item Evaluate the capacity by using the above distribution to perform an integration.
+\end{itemize} 
 \chapter{IRS Work}
 
 \section{System Model}\label{system_model}
 
-
-
 \begin{enumerate}
 \item 
-	We assume non-frequency selective channels using techniques like OFDM. (Is this always going to be reasonable?)
+	We assume non-frequency selective channels using techniques like OFDM. (Is this always going to be reasonable? TO DISCUSS)
 	
 %\item 
 %	We assume a transmitter without channel state information and thus power is distributed equally over all antennas such that
@@ -136,21 +139,25 @@ Need to figure out how the actual steiltjes transform of this polynomial is foun
 	\begin{equation}
 	\mathbf{x} = \mathbf{F}\mathbf{s}^0
 	\end{equation}
-	in  which $\mathbf{U}$ is a beamforming matrix, $\mathbf{s}^0$ is the normalized vector of transmitted symbols such that $\mathbf{Q_{\mathbf{s}^0,\mathbf{s}^0}} = \mathbf{I}_{N_R}$. 
+	in  which $\mathbf{F}$ is a beamforming matrix and $\mathbf{s}^0$ is the normalized vector of transmitted symbols such that $\mathbf{Q_{\mathbf{s}^0,\mathbf{s}^0}} = \mathbf{I}_{N_t}$. 
 	
 \item Intelligent Reflective Surfaces (IRS) are placed between transmitter and receiver. The IRS is made of individual elements each of which can reflect the received signal with a unique, chosen phase shift.
 
 %\item Individual users transmit simultaneously to the first set of IRS's. This transmit signal hops through an arbitrary number of IRS's. The final set of IRS's reflect the signal to a set of independent users. Possible? (For half duplex need to make sure number of relay sets makes sense)
 
 \item 
-The signal $\mathbf{x}$ is transmitted through $N$ sets of IRS's. The set $n, \forall n = [1 \cdots N]$, has $L^n$ reflecting surfaces. Each reflecting surface in set $n$ is indexed by $R^n_{i}, \forall i = [1\cdots L^n]$ and has $K_{i}^{n}$ elements.
+The signal $\mathbf{x}$ is transmitted through $N$ sets of IRS's. The set $n, \forall n = [1 \cdots N]$, has $L^n$ reflecting surfaces. Each reflecting surface in set $n$ is indexed by $R^n_{i}, \forall i = [1\cdots L^n]$ and has $K_{i}^{n}$ reflecting elements.
+\item
+The set of $L_n$ individual IRS in set $n$ may be spaced differently and thus the attenuation coefficient for each IRS is given by $\alpha_i^n$.
 \item 
  The  signal received at element $k$ of IRS $R_i^n$ is 
 \begin{equation}
-s^{n}_{i,k} = \sum_{j = 1}^{L^{n-1}} (\mathbf{h}^{n}_{j,i,k})^T \boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}
+s^{n}_{i,k} = \sum_{j = 1}^{L^{n-1}} \alpha_i^n (\mathbf{h}^{n}_{j,i,k})^T \boldsymbol{\Theta}^{n-1}_{j}\mathbf{s}^{n-1}_{j}
 \end{equation}
-with $\boldsymbol{\Theta}^{n-1}_{j}$ as the phases shifts applied by $R_j^{n-1}$ and $\mathbf{h}^{n-1}_{j,i,k}$ as the vector of channel coefficients between $R_j^{n-1}$ and element $k$ of $R_i^n$.
+with $\boldsymbol{\Theta}^{n-1}_{j}$ as the phase shifts applied by IRS $R_j^{n-1}$ and $\mathbf{h}^{n-1}_{j,i,k}$ as the vector of channel coefficients between $R_j^{n-1}$ and element $k$ of $R_i^n$.
 
+\item
+	To reduce notation in the following, the attenuation component,$\alpha_i^n$ is included directly in the channel such that $ \mathbf{h}^{n}_{j,i,k} = \alpha_i^n \mathbf{h}^{n}_{j,i,k}$
 \item
 The \emph{vector} of received signals for all elements at $R^n_{i}$, is given by
 \begin{equation}\label{received_vector}
@@ -160,35 +167,34 @@ in which $\mathbf{H}^{n}_{j,i} = [\mathbf{h}^{n}_{j,i,1} \cdots \mathbf{h}^{n}_{
 
 
 
-\item For IRS $i$ in set $n$, $R^n_{i}$, the received signal vector is given in a recursive form as
+\item For IRS $R^n_{i}$ the received signal vector is given in a recursive form as
 \begin{equation}\label{general_received}
-\mathbf{s}^{n}_{i} = \sum_{j = 1}^{L^{n-1}} \mathbf{H}^{n}_{j,i}\boldsymbol{\Theta}^{n-1}_{j} \left[
-\sum_{k = 1}^{L^{n-2}} \mathbf{H}^{n-1}_{k,i}\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
+\mathbf{s}^{n}_{i} = \sum_{j = 1}^{L^{n-1}}  \mathbf{H}^{n}_{j,i}\boldsymbol{\Theta}^{n-1}_{j} \left[
+\sum_{k = 1}^{L^{n-2}}  \mathbf{H}^{n-1}_{k,i}\boldsymbol{\Theta}^{n-2}_{k}\mathbf{s}^{n-2}_{k} \right].
 \end{equation}
+
+\item 
 The received signal vector for the first set of IRSs, $R^n_{i}$ $\forall i = [1 \cdots L^{1}]$ is given by 
 \begin{equation}
 \mathbf{s}^{1}_{i} = \mathbf{H}^{1}_{i}\mathbf{F}\mathbf{s}^0
 \end{equation}
 \item 
-	Finally, using $\mathbf{G}_b$ and $\mathbf{G}_e$ as the channel matrices between the last set of IRSs and a legitimate users and an eavesdropper respectively, the received signals for the legitimate user is given by 
+	Finally, using $\mathbf{G}^b$ and $\mathbf{G}^e$ as the channel matrices between the last set of IRSs and a legitimate users and an eavesdropper respectively, the received signals for the legitimate user is given by 
 	\begin{equation}\label{legit_received}
-\mathbf{r}_{b} = \sum_{j = 1}^{L^{N}} \mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{j}\mathbf{s}^{N}_{j}
+\mathbf{r}_{b} = \sum_{j = 1}^{L^{N}}\mathbf{G}^{b}\boldsymbol{\Theta}^{N}_{j}\mathbf{s}^{N}_{j}
 \end{equation}
 	and the received signal for the eavesdropper is given by 
 	\begin{equation}\label{tap_received}
-\mathbf{r}_{e} = \sum_{j = 1}^{L^{N}} \mathbf{G}_{e}\boldsymbol{\Theta}^{N}_{j}\mathbf{s}^{N}_{j}
+\mathbf{r}_{e} = \sum_{j = 1}^{L^{N}} \mathbf{G}^{e}\boldsymbol{\Theta}^{N}_{j}\mathbf{s}^{N}_{j}
 \end{equation}
 \item
 	Note that this model assumes sufficient spacing between set $n$ and set $n+2$ such that we consider the signal reflected in set $n$ only at set $n+1$ and not for any $n<k$.
-	
-\item 
-	Note that by allowing for $L^{n} >1$ (more than one IRS in each step of the path) highlights the fact that the channels to each IRS may have a unique attenuation coefficient. If this were not the case, this system model could be equivalently modeled by a \emph{single} large IRS in each step of the path. 
 
 \end{enumerate}
-To better analyze types of components within the polynomial characterizing the resulting, composite channel we consider only the legitimate receiver channel for specific cases of this general system model. Before these examples, we first consider the optimization of the phase-shifting array at each IRS.
+To better analyze types of components within the polynomial characterizing the resulting composite channel, we consider only the legitimate receiver channel for specific cases of this general system model. Before these examples, we first consider the optimization of the phase-shifting array at each IRS.
 
 \subsection{Optimization at IRS}
-Assuming full CSI at each IRS (detail what this means), one choice for optimization of the phase-shift array $\boldsymbol{\Theta}$ is given by 
+We assume the transmitter uses equal power distribution for the reasons shown in \ref{capacity}. With full CSI at each IRS (detail what this means), one choice for optimization of the phase-shift array $\boldsymbol{\Theta}$ is given by 
 
     \begin{equation}
     \begin{array}{ll}
@@ -203,7 +209,7 @@ Assuming full CSI at each IRS (detail what this means), one choice for optimizat
     \end{equation}
 
 in which $\boldsymbol{\Theta}$ represents the choice of all $\boldsymbol{\Theta}^n_i$ and $\mathbf{H}_{Total}$ is the composite channel from transmitter to receiver. The constraint enforces that $\boldsymbol{\Theta}^n_i$ is diagonal and that each element on the diagonal has unit modulus. 
-Noting that terms in the matrix  $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$ will generally have terms that are both convex and concave in the diagonal elements of $\boldsymbol{\Theta}^n_i$, this optimization problem is generally non-convex. A similar version of this problem is presented and analyzed in \cite{wu2019intelligent}.
+Noting that elements the matrix  $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$ will generally have terms that are both convex and concave w.r.t. the diagonal elements of $\boldsymbol{\Theta}^n_i$, this optimization problem is generally non-convex. A similar version of this problem is presented and analyzed in \cite{wu2019intelligent}.
 \par
 We now considering this problem in the case by case basis in the following examples. 
 
@@ -212,69 +218,79 @@ We now considering this problem in the case by case basis in the following examp
 We now consider the case with only a single IRS in each hop between the transmitter and receiver. 
 Equation \ref{legit_received} now becomes 
 	\begin{equation}
-\mathbf{r}_{b} =  \mathbf{G}_{b}\boldsymbol{\Theta}^{1}\mathbf{H}^{1}\mathbf{F}\mathbf{s}^0
+\mathbf{r}_{b} =  \mathbf{G}^{b}\boldsymbol{\Theta}^{1}\mathbf{H}^{1}\mathbf{F}\mathbf{s}^0
 \end{equation}
 Assuming no CSI at the transmitter, the composite channel covariance matrix is given by 
 \begin{equation}
-\mathbf{Q}_{bb} = [\mathbf{G}_{b}\boldsymbol{\Theta}^{1}\mathbf{H}^{1}][\mathbf{G}_{b}\boldsymbol{\Theta}^{1*}\mathbf{H}^{1}]^H
+\mathbf{Q}_{bb} = [\mathbf{G}^{b}\boldsymbol{\Theta}^{1}\mathbf{H}^{1}][\mathbf{G}^{b}\boldsymbol{\Theta}^{1*}\mathbf{H}^{1}]^H
 \end{equation}
 This is similar to the example given in \cite[Section 4.10]{muller2013applications}. As we are interested in the distribution of the non-zero eigenvalues of this matrix, we can instead consider the distribution of 
 \begin{equation}
-\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}_{b}\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*}\mathbf{G}_{b}^H]\mathbf{H}^{1}\mathbf{H}^{1H}
+\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{b}\boldsymbol{\Theta}^{1} \boldsymbol{\Theta}^{1*}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
 \end{equation}
 
 Noting that $\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*} = \mathbf{I}$ this becomes
 
 \begin{equation}
-\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}_{b}\mathbf{G}_{b}^H]\mathbf{H}^{1}\mathbf{H}^{1H}
+\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{b}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
 \end{equation}
 
-In order to use the same methods for finding the AED as \cite[Section 4.10]{muller2013applications}, it must first be shown that $\left(\left( \mathbf{G}_{b},\mathbf{G}_{b}^\dagger \right)
-,\left( \mathbf{H}^{1},\mathbf{H}^{1^\dagger} \right)
+In order to use the same methods for finding the AED as \cite[Section 4.10]{muller2013applications}, it must first be shown that $\left(\left( \mathbf{G}^{b}\mathbf{G}^{b^\dagger }\right)
+,\left( \mathbf{H}^{1}\mathbf{H}^{1^\dagger} \right)
 \right)$
 form a free family. 
 \par
-Referring to Section \ref{irs_opt}, we find that given the assumed complete knowledge of the CSI at base stations, 
+TODO need to investigate how the final AED is found in this work.
 
 \subsection{Case in which $L_n=1$}
-We now generalize to a system with $N$ IRS hops but still a \emph{single} IRS in each hop between the transmitter and receiver. 
+We now increase the generalization to a system with $N$ IRS hops but still a \emph{single} IRS in each hop between the transmitter and receiver. 
 Equation \ref{general_received} now becomes 
 \begin{equation}\label{}
-\mathbf{r}_{b} =  \mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{s}^{N}
+\mathbf{r}_{b} =  \mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{s}^{N}
 \end{equation}
 in which $\mathbf{s}^{N}$ is defined in Equation \ref{general_received}.
 
 In this case, the composite channel is given by 
 \begin{equation}
-\mathbf{H}_{Total} = \mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}
+\mathbf{H}_{Total} = \mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}
 \end{equation}
 with covariance matrix 
 \begin{equation}
-\mathbf{Q}_{bb} = \mathbf{H}_{Total}\mathbf{H}_{Total}^H = [\mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}][\mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}]^H
+\mathbf{Q}_{bb} = \mathbf{H}_{Total}\mathbf{H}_{Total}^H = [\mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}][\mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}\mathbf{H}^{1}]^H
 \end{equation}
 Using the rotational property of the trace as in the previous case
 We can equivalently look for the AED of the matrix 
 \begin{equation}
-\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}][\mathbf{G}_{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}]\mathbf{H}^{1}\mathbf{H}^{1H}].
+\tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}][\mathbf{G}^{b}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}]\mathbf{H}^{1}\mathbf{H}^{1H}].
 \end{equation}
 Iterating this procedure and noting that $\boldsymbol{\Theta}^{n}\boldsymbol{\Theta}^{n*} = \mathbf{I}$ $\forall n \in [1\cdots N]$, this is exactly the case from \cite[Section 4.10]{muller2013applications}.
 
 \subsection{Case in which $N=1$}
-We now consider the case in which there is one IRS hop between the transmitter and receiver with arbitrarily many IRSs. 
+We now consider the case in which there is one IRS hop between the transmitter and receiver (i.e $N=1$) but with an  arbitrarily number of surfaces ($L_n$). 
 Equation \ref{legit_received} now becomes 
 \begin{equation}
-\mathbf{r}_{b} = \sum_{j = 1}^{L^{1}} \mathbf{G}_{b}\boldsymbol{\Theta}^{1}_{j}\mathbf{H}^{1}_{j}\mathbf{F}\mathbf{s}^0
+\mathbf{r}_{b} = \sum_{j = 1}^{L^{1}} \mathbf{G}^{b}_{j}\boldsymbol{\Theta}^{1}_{j}\mathbf{H}^{1}_{j}\mathbf{F}\mathbf{s}^0
 \end{equation}
 with composite channel
 \begin{equation}
-\mathbf{H}_{Total} = \sum_{j = 1}^{L^{1}} \mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{j}\mathbf{H}^{1}_{j}
+\mathbf{H}_{Total} = \sum_{j = 1}^{L^{1}} \mathbf{G}^{b}_{j}\boldsymbol{\Theta}^{N}_{j}\mathbf{H}^{1}_{j}\mathbf{F}
 \end{equation}
 and covariance matrix
 
 \begin{equation}
-\mathbf{Q}_{bb} = [\mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{1}_{1} + \cdots + \mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{L^{1}}\mathbf{H}^{1}_{L^{1}}]
-[\mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{1}_{1} + \cdots + \mathbf{G}_{b}\boldsymbol{\Theta}^{N}_{L^{1}}\mathbf{H}^{1}_{L^{1}}]^H
+\mathbf{Q}_{bb} = [\mathbf{G}^{b}_{1}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{1}_{1}\mathbf{F} + 
+\cdots + \mathbf{G}^{b}_{N}\boldsymbol{\Theta}^{N}_{L^{1}}\mathbf{H}^{1}_{L^{1}}\mathbf{F}]
+[\mathbf{G}^{b}_{1}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{1}_{1}\mathbf{F} + 
+\cdots + \mathbf{G}^{b}_{N}\boldsymbol{\Theta}^{N}_{L^{1}}\mathbf{H}^{1}_{L^{1}}\mathbf{F}]^H
 \end{equation}
+
+This sum looks similar to the polynomial considered in Section \ref{decont_fpt}, however each term of the polynomial contains more than two variables. If we can iteratively apply the S-transform rule then perhaps we can deal with this in the same way (TO DISCUSS). 
+\par
+Unlike the model with amplify and forward relays discussed in section \ref{relay} and \cite{hadley2019capacity}, the individual variables in each term of the 
+polynomial, $\mathbf{G}^{b}_{1}\boldsymbol{\Theta}^{N}_{1}\mathbf{H}^{1}_{1}\mathbf{F}$ cannot be self-adjoint
+ assuming the channel matrices $\mathbf{H}^{1}_{j} \neq \mathbf{H}^{1}_{i} $ $\forall j \neq i$. 
+ This prevents using the methods proposed in \cite{belinschi2017analytic} for finding the AED of this polynomial.
+ 
 \section{System Model With Secrecy Capacity}
 The model from Section \ref{system_model} can be easily extended to the case in which an eavesdropper may be located at any point along the transmission path. We denote the received signal at the eavesdropper by
 
@@ -286,13 +302,11 @@ Note that the term $\mathbf{s}^{n-1}_{j}$ is unchanged from \ref{received_vector
 * We should only need to known the difference between the two composite channels to find the secrecy capacity. Even if we don't know the individual ones?
 \section{Free Probability Analysis}
 
-\chapter{TODO}
-\section{My TODO}
+\chapter{Next Steps}
+\section{Independent TODO items}
 \begin{itemize}
 \item 
-	Show why the channels are free. 
-\item
-	Use method from mueller paper to solve further.
+	Show why the channels are free as assumed in decontamination work.
 \end{itemize}
 \section{Questions}
 \begin{itemize}
@@ -302,6 +316,16 @@ Note that the term $\mathbf{s}^{n-1}_{j}$ is unchanged from \ref{received_vector
 \item 
 	Confirm that the one example on how to pull out the hermetian matrices is a result of the trace property.
 	
+\item 
+	Examples of secrecy codes apart from the one presented in the original wire-tap paper
+	
+\item 
+	How to actually evaluate a pdf given a fixed point equation for the stieltjes transform and an expression for the
+	AED in terms of the Steitjes transform. 
+	
+\item 
+	Can we iterate the process used in the decontamination work (i.e) use the S-Transform on terms with $>2$
+	 matrices (free variables).
 \end{itemize}
 
 \bibliography{bibliography}
