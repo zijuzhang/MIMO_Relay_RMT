@@ -56,7 +56,13 @@ Again assuming $P_{\text{Total}}$ is distributed equally across transmit antenna
 \Capacity{(\mathbf{H})} = \Expect\left[N_r \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda \right) -
 N_e \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\hat{\lambda} \right) \right]
 \end{gather}
-in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. Generally, finding the capacity will require knowledge of the \emph{joint} AED $p_{\lambda}(\lambda,\hat{\lambda})$.
+or equivalently 
+\begin{gather}\label{secrecy_capacity}
+\Capacity{(\mathbf{H})} = \Expect\left[\frac{N_r}{N_T }\Log\left(\frac{1+\frac{P^{\text{Total}}}{\sigma_n}\lambda }{1+\frac{P^{\text{Total}}}{\sigma_n}\hat{\lambda} }\right) \right]
+\end{gather}
+
+in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. 
+Generally, finding the capacity will require knowledge of the \emph{joint} AED $p_{\lambda}(\lambda,\hat{\lambda})$.
 
 \end{enumerate}
 \section{Random Matrix Theory and Free Probability Tools}
