@@ -1,6 +1,9 @@
 import numpy as np
 import copy
 from testing.circle_laws import *
+
+
+
 class Network:
     def __init__(self, num_elements, network_size):
         """
@@ -16,27 +19,27 @@ class Network:
         for elements in network_size:
             step_surfaces = []
             for previous_surface in range(previous_size):
-                step_surfaces.append(IRS(previous_surface,  num_elements))
+                step_surfaces.append(IRS(previous_size,  num_elements))
             self.network_channels.append(step_surfaces)
             previous_size = elements
-        self.covariance = np.zeros((num_elements, num_elements))
+        self.covariance = 1j*np.zeros((num_elements, num_elements))
 
     def get_covariance(self, path=[0]):
         for ind, matrix in enumerate(self.network_channels):
-            if len(path)  == len(self.network_channels):
+            if len(path) == len(self.network_channels):
                 self.channel_from_path(path)
             if len(path) < len(self.network_channels):
                 path.append(ind)
                 self.get_covariance(path=copy.deepcopy(path))
-        return self.covariance()
+        return self.covariance@np.conj(self.covariance.T)
 
 
     def channel_from_path(self, path):
         for ind, surface_ind in enumerate(path):
             if ind == 0:
-                matrix = self.network_channels[ind][surface_ind]
+                matrix = self.network_channels[ind][surface_ind].channels[path[ind]]
             else:
-                matrix = matrix@self.network_channels[ind][surface_ind]
+                matrix = matrix@self.network_channels[ind][surface_ind].channels[path[ind]]
         self.covariance += matrix
 
 class IRS:

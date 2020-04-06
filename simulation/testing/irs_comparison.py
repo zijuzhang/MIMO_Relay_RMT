@@ -17,7 +17,7 @@ no_irs = []
 irs = []
 cross = []
 cross_irs = []
-average = 10
+average = 3
 for i in range(average):
     H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     G = c_rand(rows, cols)
@@ -32,10 +32,10 @@ for i in range(average):
     total_irs = GH + HG + HH + GG
     total = GF + FG + FF + GG
     check = GG + FF
-    # cross_irs_sum = GH + HG
-    cross_irs_sum = GG + HH
-    cross_no_irs_sum = FF + GG
-    # cross_no_irs_sum = GF + FG
+    cross_irs_sum = GH + HG
+    # cross_irs_sum = GG + HH
+    # cross_no_irs_sum = FF + GG
+    cross_no_irs_sum = GF + FG
     main = GG + HH
 
     e_val_total, e_vec_total = np.linalg.eig(total)
