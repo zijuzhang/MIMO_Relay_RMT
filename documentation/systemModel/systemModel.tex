@@ -234,7 +234,7 @@ This is similar to the example given in \cite[Section 4.10]{muller2013applicatio
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\boldsymbol{\Theta}^{1} \boldsymbol{\Theta}^{1*}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
 \end{equation}
 
-Noting that $\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*} = \mathbf{I}$ this becomes
+Noting that for diagonal matrices, matrix multiplication is commutative and that $\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*} = \mathbf{I}$ this becomes
 
 \begin{equation}
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
@@ -268,7 +268,7 @@ We can equivalently look for the AED of the matrix
 \begin{equation}
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}][\mathbf{G}^{B}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}]\mathbf{H}^{1}\mathbf{H}^{1H}].
 \end{equation}
-Iterating this procedure and noting that $\boldsymbol{\Theta}^{n}\boldsymbol{\Theta}^{n*} = \mathbf{I}$ $\forall n \in [1\cdots N]$, this is exactly the case from \cite[Section 4.10]{muller2013applications}.
+Noting again that matrix multiplication with a diagonal matrix is commutative and that $\boldsymbol{\Theta}^{n}\boldsymbol{\Theta}^{n*} = \mathbf{I}$ $\forall n \in [1\cdots N]$, we iterate the above procedure just as in \cite[Section 4.10]{muller2013applications}.
 
 \subsection{Case: $N=1$}
 We now consider the case in which there is one IRS hop between the transmitter and receiver (i.e $N=1$) but with an  arbitrarily number of surfaces ($L_n$). 
