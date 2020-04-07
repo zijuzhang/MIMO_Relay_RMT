@@ -1,6 +1,7 @@
 # Project specific 
 #whitelistings
 #documentation/systemModel/systemModel.pdf	
+*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
