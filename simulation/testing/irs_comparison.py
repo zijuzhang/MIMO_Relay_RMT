@@ -17,7 +17,7 @@ no_irs = []
 irs = []
 cross = []
 cross_irs = []
-average = 3
+average = 1
 for i in range(average):
     H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     G = c_rand(rows, cols)

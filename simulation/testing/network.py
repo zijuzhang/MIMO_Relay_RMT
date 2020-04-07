@@ -5,7 +5,7 @@ import seaborn
 
 bins = 300
 surface_size = 500
-net = Network(surface_size, [2, 1])
+net = Network(surface_size, [1, 1, 1])
 cov = net.get_covariance()
 e_val, e_vec = np.linalg.eig(cov)
 AED, AED_bins = np.histogram(np.asarray(e_val), bins=bins)
