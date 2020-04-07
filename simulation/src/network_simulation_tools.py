@@ -1,6 +1,6 @@
-import numpy as np
 import copy
-from testing.circle_laws import *
+from src.circle_laws import *
+import cvxpy as cp
 
 class Network:
     def __init__(self, num_elements, network_size):
@@ -48,3 +48,14 @@ class IRS:
         self.channels = []
         for i in range(num_previous_surfaces):
             self.channels.append(c_rand(num_elements,num_elements))
+
+
+def water_filling(covariance_matrix, power_constraint, sigma_square=1e-2):
+    e_values = np.linalg.eig(covariance_matrix)[0]
+    variables = cp.Variable(covariance_matrix.shape[0])
+    constraint = [cp.sum(variables) <= power_constraint]
+    utility = cp.sum(cp.log(1+variables*e_values/sigma_square))
+    prob = cp.Problem(cp.Maximize(utility), constraint)
+    prob.solve()
+    return variables.value
+

@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from testing import circle_laws as cl
-import math
+from src import circle_laws as cl
 
 size = 500
 matrix = np.random.randn(size, size)/np.sqrt(size)

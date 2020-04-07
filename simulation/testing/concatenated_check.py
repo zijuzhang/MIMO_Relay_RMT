@@ -1,5 +1,4 @@
-import numpy as np
-import testing.circle_laws as cl
+import src.circle_laws as cl
 import numpy as np
 import matplotlib.pyplot as plt
 rows = 500

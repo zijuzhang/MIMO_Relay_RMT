@@ -1,8 +1,10 @@
 from src.network_simulation_tools import *
+from src.network_simulation_tools import *
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn
 
+test = water_filling(np.eye(10), 10)
 bins = 300
 surface_size = 500
 net = Network(surface_size, [1, 1, 1])

@@ -1,6 +1,4 @@
-import numpy as np
-from testing.circle_laws import *
-import testing.circle_laws as cl
+from src.circle_laws import *
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn
