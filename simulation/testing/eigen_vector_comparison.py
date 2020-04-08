@@ -9,7 +9,7 @@ cols = 500
 bins = 300
 
 fig, ax = plt.subplots()
-plt.title("Eigen Vector Comparison: i.i.d, $\mathbb{N}(0,1/N)$, H = H_1 \Phi H_2")
+plt.title("Eigen value Comparison: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
 
 average = 1
 for i in range(average):
@@ -37,5 +37,5 @@ for i in range(average):
 
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
-seaborn.despine(ax=ax, offset=0) # the important part here
+seaborn.despine(ax=ax, offset=0)  # the important part here
 plt.show()

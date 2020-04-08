@@ -116,12 +116,14 @@ Some any of individual terms of this polynomial are not self-adjoint. (TO DISCUS
 \mH\mX\mX^H\mH^H + \mH_I \mX_I\mX_I^H\mH_I^H + \mW\mW^H.
 \end{gather*}
 \subsection{Free Probability Analysis}\label{decont_fpt}
-
-
+Consider a channel describe by the matrix sum
 \begin{equation}
-\mathbf{D} = \sum_{k=1}^{K} \alpha_k \mathbf{B}_k \mathbf{C}_k
+\mathbf{D} = \sum_{k=1}^{K}\mathbf{D}_k = \sum_{k=1}^{K} \alpha_k \mathbf{B}_k \mathbf{C}_k
 \end{equation}
-with $\alpha_k \in \mathbb{R}$ is considered. Given the S-transform of the *self-adjoint matrices $\mathbf{B}_k $ and $\mathbf{C}_k$ (\cite{nica2006lectures}) we can first use the product property of the S-transform to find the Stieltjes transform of each term in the sum $\mathbf{B}_k \mathbf{C}_k$. Given the Stieltjes transform of each term, we then find the R-transform of each term $\mathbf{B}_k \mathbf{C}_k$ and exploiting the additive property of the R-transform, we find the R-transform of $\mathbf{D}$. Inverting the R-transform to get the Stieltjes transform of $\mathbf{D}$ which we can evaluate to find the AED.
+with $\alpha_k \in \mathbb{R}$. Ultimately the goal is to find the AED of the covariance matrix $C_{DD^H}$ using the Stieltjes transform  $G_{C_{DD^H}}(s)$. In order to do this the following steps will be used.
+
+
+Given the S-transform of the *self-adjoint matrices $\mathbf{B}_k $ and $\mathbf{C}_k$ (\cite{nica2006lectures}) we can first use the product property of the S-transform to find the Stieltjes transform of each term in the sum $\mathbf{B}_k \mathbf{C}_k$. Given the Stieltjes transform of each term, we then find the R-transform of each term $\mathbf{B}_k \mathbf{C}_k$ and exploiting the additive property of the R-transform, we find the R-transform of $\mathbf{D}$. Inverting the R-transform to get the Stieltjes transform of $\mathbf{D}$ which we can evaluate to find the AED.
 \par
 Note that the resulting Stieltjes transform is given as a fixed point equation which is then evaluated for each value of of interest to find the corresponding value of the AED. 
 
@@ -234,7 +236,7 @@ This is similar to the example given in \cite[Section 4.10]{muller2013applicatio
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\boldsymbol{\Theta}^{1} \boldsymbol{\Theta}^{1*}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
 \end{equation}
 
-Noting that for diagonal matrices, matrix multiplication is commutative and that $\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*} = \mathbf{I}$ this becomes
+Assuming cross terms cancel and that $\boldsymbol{\Theta}^{1}\boldsymbol{\Theta}^{1*} = \mathbf{I}$ this becomes
 
 \begin{equation}
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\mathbf{G}^{bH}]\mathbf{H}^{1}\mathbf{H}^{1H}
@@ -268,7 +270,7 @@ We can equivalently look for the AED of the matrix
 \begin{equation}
 \tilde{\mathbf{Q}}_{bb} = [\mathbf{G}^{B}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}][\mathbf{G}^{B}\boldsymbol{\Theta}^{N}\mathbf{H}^{N} \cdots \boldsymbol{\Theta}^{1}]\mathbf{H}^{1}\mathbf{H}^{1H}].
 \end{equation}
-Noting again that matrix multiplication with a diagonal matrix is commutative and that $\boldsymbol{\Theta}^{n}\boldsymbol{\Theta}^{n*} = \mathbf{I}$ $\forall n \in [1\cdots N]$, we iterate the above procedure just as in \cite[Section 4.10]{muller2013applications}.
+Assuming cross terms cancel and that $\boldsymbol{\Theta}^{n}\boldsymbol{\Theta}^{n*} = \mathbf{I}$ $\forall n \in [1\cdots N]$, we iterate the above procedure just as in \cite[Section 4.10]{muller2013applications}.
 
 \subsection{Case: $N=1$}
 We now consider the case in which there is one IRS hop between the transmitter and receiver (i.e $N=1$) but with an  arbitrarily number of surfaces ($L_n$). 
@@ -316,6 +318,68 @@ $\prod_{n=1}^{N} L_n$. Each term of this polynomial will be equivalent to the co
 \par
 One example is shown in figure \ref{irs_figure}
 
+\section{Solving } 
+\subsection{General Approach } 
+
+Using the model from the decontamination work we say the total channel is described by 
+\begin{equation}
+\mathbf{D} = \sum_{k=1}^{K}\mathbf{D}_k = \sum_{k=1}^{K} \alpha_k \mathbf{B}_k \mathbf{C}_k
+\end{equation}
+We now consider how to ultimately arrive at an expression for the AED of $DD^H$
+\begin{itemize}
+
+\item 
+	We first find the Stieltjes transform of each term in the total channel $G_{D_kD_k^H}(s)$.
+\item
+	Now we use a key property of the Stieljes transform
+	\begin{equation}
+	G_{\lambda^2}(s) = \frac{G_{\lambda}(\sqrt{s})- G_{\lambda}(-\sqrt{s})}{2\sqrt{s}}
+	\end{equation}
+	to find the Stieltjes transform of the symmetrized singular value decomposition of $D_k$.
+\item
+	Taking the R-transform, $\tilde{R}_{D_k}(w)$ of the result, we then use the free additive convolution property in order to 
+	find the R-transform of the entire equivalent channel $\tilde{R}_{D}(w)$. 
+\item
+	Using the key property of the Stieltjes transform again we can find the the R-transform of the 
+	covariance matrix of the symmetrized channel, $\tilde{R}_{DD^H}(w)$ . We can then find $\tilde{G}_{DD^H}(s)$ and 
+	use the inversion to find the symmetrized AED.
+
+\item 
+	Noting that a covariance matrix is positive semi-definite, all eigenvalues are are non-negative. Therefore,
+	the symmetrized AED is equal to the true AED when evaluated for non-negative values. 
+
+\end{itemize}
+
+\subsection{Solving for $G_{D_kD_k^H}(s)$ } 
+For the model presented we have 
+\begin{equation}
+D_k = G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1
+\end{equation}
+and 
+\begin{equation}
+C_N = D_kD_k^H = [G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1]
+[H_1 \boldsymbol{\Theta}_1 \cdots H_N \boldsymbol{\Theta}_N G_B]
+\end{equation}
+\begin{itemize}
+\item 
+	Because commuting matrix multiplication does not change the non-zero eigen value distribution, we consider 
+	the matrix 
+\begin{equation}
+\tilde{C}_N = [\boldsymbol{\Theta}_1^H \cdots H_N^H \boldsymbol{\Theta}_N^H G_B^H][G_B \boldsymbol{\Theta}_N  \cdots \boldsymbol{\Theta}_1 H_1 H_1^H]
+\end{equation}
+
+\item 
+	We use the following key property of the Stieltjes transform and S-Transform. 
+\begin{equation}
+S_{C_N}(z) = \frac{z+1}{z+\chi_N} S_{\tilde{C}_N}(\frac{z}{\chi_N})
+\end{equation}
+
+\item 
+	Iterating this procedure, we can see that ultimately the phase matrices will all cancel out.
+
+\end{itemize}
+
+
 
 \begin{figure}
 
@@ -339,10 +403,7 @@ Assuming that we choose a system such that we can find $ p_{\lambda}(\lambda)$ o
 \chapter{Next Steps}
 \section{Independent TODO items}
 \begin{itemize}
-\item 
-	Show why the individual channel matrices are free as assumed in decontamination work.
-\item
-	Work on example of how to find AED given a fixed point equation for the Stieltjes transform.
+\item Key is to look at 
 \end{itemize}
 \section{Questions}
 \begin{itemize}

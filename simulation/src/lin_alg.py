@@ -2,6 +2,8 @@ import numpy as np
 
 capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix))
 
+c_rand = lambda rows, cols:  np.random.randn(rows, cols)/np.sqrt(rows) + 1j*np.random.randn(rows, cols)/np.sqrt(rows)
+
 def is_orthonormal(matrix):
     orthonormal = []
     for ind in range(matrix.shape[1]):
