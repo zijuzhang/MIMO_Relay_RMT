@@ -5,14 +5,17 @@ from src.lin_alg import *
 
 
 class Network:
-    def __init__(self, num_elements, network_size):
+    def __init__(self, num_elements, network_size, eavesdropper=False):
         """
         Assume that the final size is always 1
         :param num_elements:
         :param network_size:
         """
-        if network_size[-1] != 1:
-            network_size.apend([1])
+        self.paths_check = 0
+        if network_size[-1] != 1 and not eavesdropper:
+            network_size.append(1)
+        elif network_size[-1] != 2 and eavesdropper:
+            network_size.append(2)
         previous_size = 1
         self.network_size = network_size
         self.network_channels = []
@@ -23,34 +26,52 @@ class Network:
             self.network_channels.append(step_surfaces)
             previous_size = elements
         self.covariance = 1j*np.zeros((num_elements, num_elements))
+        self.transmit_covariance_eve = 1j*np.zeros((num_elements, num_elements))
         self.channel = 1j*np.zeros((num_elements, num_elements))
+        self.channel_eve = 1j*np.zeros((num_elements, num_elements))
+        self.get_channel()
 
 
-    def get_channel_covariance(self):
+
+    def get_channel_covariance(self, eve=False):
         """
         Numerical Error will usually give some imaginary components here
         :return:
         """
-        self.get_channel()
-        self.covariance = self.channel @ np.conj(self.channel.T)
-        return self.covariance
+        if eve:
+            self.covariance_eve = self.channel_eve @ np.conj(self.channel_eve.T)
+            return self.covariance, self.covariance_eve
+        else:
+            self.covariance = self.channel @ np.conj(self.channel.T)
+            return self.covariance
 
-    def get_transmit_covariance(self, transmit_powers):
+
+    def get_transmit_covariance(self, transmit_powers, eve=False):
+        self.paths_check = 0
         self.transmit_powers = transmit_powers
-        self.get_channel()
-        self.transmit_covariance = self.channel @ self.transmit_powers @ np.conj(self.channel.T)
-        return self.transmit_covariance
+        if not eve:
+            self.transmit_covariance = self.channel @ self.transmit_powers @ np.conj(self.channel.T)
+            return self.transmit_covariance
+        if eve:
+            self.transmit_covariance_eve = self.channel_eve @ self.transmit_powers @ np.conj(self.channel_eve.T)
+            return self.transmit_covariance, self.transmit_covariance_eve
+
 
     def get_channel(self, path=[0]):
+        self.channel = 1j*np.zeros(self.channel.shape)
+        self.channel_eve = 1j*np.zeros(self.channel.shape)
+
         for ind, matrix in enumerate(self.network_channels[path[-1]]):
-            if len(path) == len(self.network_channels)-1:
+            if len(path) == len(self.network_channels):
                 self.channel_from_path(path)
-            if len(path) < len(self.network_channels)-1:
+            if len(path) < len(self.network_channels):
                 path.append(ind)
                 self.get_channel(path=copy.deepcopy(path))
         return self.channel
 
     def channel_from_path(self, path):
+        matrix = None
+        self.paths_check += 1
         for ind, surface_ind in enumerate(path):
             if ind == 0:
                 irs = self.network_channels[ind][surface_ind]
@@ -58,7 +79,17 @@ class Network:
             else:
                 irs = self.network_channels[ind][surface_ind]
                 matrix = irs.channels[path[ind]]@matrix
-        self.channel += matrix
+        if path[-1] == 0:
+            self.channel += matrix
+        elif path[-1] == 1:
+            self.channel_eve += matrix
+
+    def get_capacity(self, secrecy=False):
+        if secrecy:
+            return capacity(self.transmit_covariance) - capacity(self.transmit_covariance_eve)
+        else:
+            return capacity(self.transmit_covariance)
+
 
 class IRS:
     def __init__(self, num_previous_surfaces, num_elements):
@@ -80,16 +111,12 @@ def water_filling(covariance_matrix, power_constraint, sigma_square=1e-2):
     variables = cp.Variable(covariance_matrix.shape[0])
     constraint = [cp.sum(variables) <= power_constraint]
     constraint += [variables >= 0]
-    utility = cp.sum(cp.log(1+variables*e_values/sigma_square))
-    prob = cp.Problem(cp.Maximize(utility), constraint)
+    # utility = cp.sum(cp.log(1+variables*e_values/sigma_square))
+    utility = []
+    utility += [cp.log(1+variables[ind]*e_values[ind]/sigma_square) for ind in range(e_values.size)]
+    prob = cp.Problem(cp.Maximize(cp.sum(utility)), constraint)
     prob.solve(verbose=True)
     return variables.value
 
-def my_water_filling(covariance_matrix, power_constraint, sigma_square=1e-2):
-    """
-    Implementation of water filling optimization for MIMO power allocation.
-    :param covariance_matrix:
-    :param power_constraint:
-    :param sigma_square:
-    :return:
-    """
+# def water_filling_eavesdropper(covariance_bob, covariance_eve):
+#     # First find all eigenvalues and see
