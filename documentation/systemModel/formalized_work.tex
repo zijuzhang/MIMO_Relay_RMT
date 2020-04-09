@@ -1,0 +1,133 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Solution Outline}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+%\tableofcontents
+%\section{Solution Outline} 
+\subsection{Model} 
+
+Using the model from the pilot decontamination work we say the total channel is described by 
+\begin{equation}
+\mathbf{D} = \sum_{k=1}^{K}\mathbf{\mathbf{D}}_k 
+\end{equation}
+We now consider how to ultimately arrive at an expression for the AED of the covariance matrix $\mathbf{D}\mathbf{D}^H$.
+\subsection{Approach 1} 
+The expanded covariance matrix $\mathbf{D}\mathbf{D}^H$ contains both Hermetian (e.g. $\mathbf{D}_k \mathbf{D}_k ^H$) and non-hermetian terms ($\mathbf{D}_k \mathbf{D}_i^H, i \neq k$). Noting that the use of multiplicative free convolution and additive free convolution both require that the involved operators are \emph{hermetian} we could attempt to find the R-Transforms of the terms $\mathbf{D}_k \mathbf{D}_k ^H$ and $(\mathbf{D}_k \mathbf{D}_i^H+\mathbf{D}_i \mathbf{D}_k^H)$ which are both self-adjoint. 
+For the terms $\mathbf{D}_k \mathbf{D}_k ^H$, we can find the S-Tranform using the methods shown in \ref{Polynomial_terms} and \cite{muller2002asymptotic}. From this S-Transform, we can move to the R-Transform in order to use additive free convolution. Finding the R-Transform of the terms $(\mathbf{D}_k \mathbf{D}_i^H+\mathbf{D}_i \mathbf{D}_k^H)$ is, however, not clear because the components of this sum are not are not self-adjoint.
+Instead we consider a second approach. 
+
+
+\subsection{Approach 2} 
+This approach is largely based on the ideas presented in \cite{muller2012channel} and which are applied in \cite[Eqns. 54-56]{muller2014blind}. The exampled \cite{muller2012channel} uses a very similar model to the IRS work.  The idea behind this approach is based on the property of the Stieltjes transform 
+	\begin{equation}\label{ST_property}
+	G_{\lambda^2}(s) = \frac{G_{\lambda}(\sqrt{s})- G_{\lambda}(-\sqrt{s})}{2\sqrt{s}}.
+	\end{equation} (*TO DISCUSS Can we find an equivalent to this property in the S-transform domain?)
+	Note that this property also requies that the matrix $D$ is bi-unitarily invariant.
+	Rather than looking for the Stieltjes transform of the eigenvalues of $\mathbf{D} \mathbf{D}^H$ we will
+	first find the Stieltjes transform of the singular values of $\mathbf{D}$. 
+	Given the definition of the singular values $\sigma(\mathbf{D}) = \sqrt{\lambda(\mathbf{D} \mathbf{D}^H)}$ and 
+	noting that 
+	for a covariance matrix (positive semi-definite) all eigenvalues are non-negative, the eigen
+	values of $\mathbf{D} \mathbf{D}^H$ are the squared singular values of  $\mathbf{D}$. Therefore, if 
+	we can find $G_{\mathbf{D}}(s)$, we can use Property \ref{ST_property} to find $G_{\mathbf{D} \mathbf{D}^H}(s)$.
+	 This is performed using the following steps. 
+
+\begin{enumerate}
+
+
+\item 
+	We first find the Stieltjes transform, $G_{\mathbf{D}_{k}\mathbf{D}_{k}^H}(s)$, for the AED of the 
+	covariance matrix of individual terms, $\mathbf{D}_{k}$.
+	This is discussed further in Section \ref{Polynomial_terms} and \cite[Section II]{muller2002asymptotic}.
+\item
+	Using Property \ref{ST_property} we find the Stieltjes transform of the symmetrized 
+	singular value decomposition of $\mathbf{D}_{k}$, $\tilde{G}_{\mathbf{D}_{k}}(s)$. The symmetrized AED defined 
+	in \cite[Eqn. 38]{muller2012channel} is given by 
+	\begin{equation}
+	\tilde{p}(x) = \frac{p(x)+P(-x)}{2}
+	\end{equation}
+\item
+	Taking the R-transform, $\tilde{R}_{\mathbf{D}_{k}}(w)$ of $\tilde{G}_{\mathbf{D}_{k}}(s)$, we then use the free additive convolution property in order to 
+	find the R-transform of the entire equivalent channel $\tilde{R}_{D}(w) = \sum_{k=1}^{K} \tilde{R}_{\mathbf{D}_{k}}(w) $ . 
+	* Note that while additive free convolution holds for $\tilde{R}_{\mathbf{D}_{k}}(w)$, multiplicative free convolution does
+	 not.
+\item
+	Using $\tilde{R}_{D}(w)$ we then find $\tilde{G}_{D}(s)$. We then use property \eqref{ST_property} in the reverse
+	 order to get $\tilde{G}_{DD^H}(s)$  which allows us to evaluate the  symmetrized AED.
+
+\item 
+	Because all eigenvalues are are non-negative for the covariance matrix $\mathbf{D}\mathbf{D}^H$
+	the symmetrized AED is equal to the true AED when evaluated at non-negative values and can be divided by 2
+	when evaluated at 0. 
+
+\end{enumerate}
+
+
+
+\subsection{Solving for $G_{\mathbf{D}_{k}\mathbf{D}_{k}^H}(s)$}\label{Polynomial_terms}
+Using the model from the IRS work, the individual terms of the channel are given by
+\begin{equation}
+\mathbf{D}_{k} = G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1
+\end{equation}
+and 
+\begin{equation}
+C_N = \mathbf{D}_{k}\mathbf{D}_{k}^H = [G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1]
+[H_1 \boldsymbol{\Theta}_1 \cdots H_N \boldsymbol{\Theta}_N G_B]
+\end{equation}
+\begin{itemize}
+\item 
+	Because commuting matrix multiplication does not change the non-zero eigenvalue distribution, we consider 
+	the matrix 
+\begin{equation}
+\tilde{C}_N = [\boldsymbol{\Theta}_1^H \cdots H_N^H \boldsymbol{\Theta}_N^H G_B^H][G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1 H_1^H]
+\end{equation}
+
+\item 
+	We use the rotational property of the Stieltjes transform and S-Transform. 
+\begin{equation}
+S_{C_N}(z) = \frac{z+1}{z+\chi_N} S_{\tilde{C}_N}(\frac{z}{\chi_N}).
+\end{equation}
+For the two terms of $\tilde{C}_N$, 
+$ H_1 H_1^H$ and $[\boldsymbol{\Theta}_1^H \cdots H_N^H \boldsymbol{\Theta}_N^H G_B^H][G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1]$
+we can use multiplicative free convolution .
+
+\item
+	For the gaussian IID case, $ H_1 H_1^H$  has the marcenko-pastur distribution which has a well defined S-Transform. 
+
+\item 
+	Iterating the rotation property with the second term 
+	\begin{equation}
+	[\boldsymbol{\Theta}_1^H H_2 \cdots H_N^H \boldsymbol{\Theta}_N^H G_B^H]
+	[G_B \boldsymbol{\Theta}_N H_N  \cdots H_2^H \boldsymbol{\Theta}_1]
+	\end{equation}
+	
+	\begin{equation}
+	[ \boldsymbol{\Theta}_N H_N  \cdots H_2^H \boldsymbol{\Theta}_1]
+	[\boldsymbol{\Theta}_1^H H_2 \cdots H_N^H \boldsymbol{\Theta}_N^H G_B^H G_B]
+	\end{equation}
+	
+	 it is seen that ultimately, the phase matrices will cancel out and the result is a product of well known S-Transforms.
+
+
+\item 
+*TO DISCUSS If there is no equivalent to the Property \ref{ST_property} in the S-Transform domain, how do we 
+find a closed form of the Stieltjes transform given an arbitrary S-transform?
+\end{itemize}
+
+
+\bibliography{bibliography}
+\end{document}

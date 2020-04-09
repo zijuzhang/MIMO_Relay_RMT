@@ -323,24 +323,27 @@ One example is shown in figure \ref{irs_figure}
 
 Using the model from the decontamination work we say the total channel is described by 
 \begin{equation}
-\mathbf{D} = \sum_{k=1}^{K}\mathbf{D}_k = \sum_{k=1}^{K} \alpha_k \mathbf{B}_k \mathbf{C}_k
+\mathbf{D} = \sum_{k=1}^{K}\mathbf{D}_k 
 \end{equation}
 We now consider how to ultimately arrive at an expression for the AED of $DD^H$
 \begin{itemize}
 
 \item 
-	We first find the Stieltjes transform of each term in the total channel $G_{D_kD_k^H}(s)$.
+	We first find the Stieltjes transform, $G_{D_kD_k^H}(s)$, for the AED of each term, $D_k$.
+	This is discussed further in Section \ref{Polynomial_terms}.
 \item
-	Now we use a key property of the Stieljes transform
-	\begin{equation}
+	Now we use a property of the Stieljes transform
+	\begin{equation}\label{ST_property}
 	G_{\lambda^2}(s) = \frac{G_{\lambda}(\sqrt{s})- G_{\lambda}(-\sqrt{s})}{2\sqrt{s}}
 	\end{equation}
-	to find the Stieltjes transform of the symmetrized singular value decomposition of $D_k$.
+	to find the Stieltjes transform of the symmetrized singular value decomposition of
+	 $D_k$, $\tilde{G}_{D_k}(s)$. Note that is property is reasonable to use because
+	 we consider Gaussian  $D_k$ which are bi-unitarily invariant.
 \item
 	Taking the R-transform, $\tilde{R}_{D_k}(w)$ of the result, we then use the free additive convolution property in order to 
 	find the R-transform of the entire equivalent channel $\tilde{R}_{D}(w)$. 
 \item
-	Using the key property of the Stieltjes transform again we can find the the R-transform of the 
+	Using property \eqref{ST_property}, we can find the the R-transform of the 
 	covariance matrix of the symmetrized channel, $\tilde{R}_{DD^H}(w)$ . We can then find $\tilde{G}_{DD^H}(s)$ and 
 	use the inversion to find the symmetrized AED.
 
@@ -350,7 +353,7 @@ We now consider how to ultimately arrive at an expression for the AED of $DD^H$
 
 \end{itemize}
 
-\subsection{Solving for $G_{D_kD_k^H}(s)$ } 
+\subsection{Solving for $G_{D_kD_k^H}(s)$}\label{Polynomial_terms}
 For the model presented we have 
 \begin{equation}
 D_k = G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1
@@ -369,7 +372,7 @@ C_N = D_kD_k^H = [G_B \boldsymbol{\Theta}_N H_N \cdots \boldsymbol{\Theta}_1 H_1
 \end{equation}
 
 \item 
-	We use the following key property of the Stieltjes transform and S-Transform. 
+	We use the rotational property of the Stieltjes transform and S-Transform. 
 \begin{equation}
 S_{C_N}(z) = \frac{z+1}{z+\chi_N} S_{\tilde{C}_N}(\frac{z}{\chi_N})
 \end{equation}

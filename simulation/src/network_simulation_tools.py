@@ -38,39 +38,37 @@ class Network:
         Numerical Error will usually give some imaginary components here
         :return:
         """
+        self.covariance_eve = self.channel_eve @ np.conj(self.channel_eve.T)
+        self.covariance = self.channel @ np.conj(self.channel.T)
         if eve:
-            self.covariance_eve = self.channel_eve @ np.conj(self.channel_eve.T)
             return self.covariance, self.covariance_eve
         else:
-            self.covariance = self.channel @ np.conj(self.channel.T)
             return self.covariance
 
 
     def get_transmit_covariance(self, transmit_powers, eve=False):
         self.paths_check = 0
         self.transmit_powers = transmit_powers
+        self.transmit_covariance = self.channel @ self.transmit_powers @ np.conj(self.channel.T)
+        self.transmit_covariance_eve = self.channel_eve @ self.transmit_powers @ np.conj(self.channel_eve.T)
         if not eve:
-            self.transmit_covariance = self.channel @ self.transmit_powers @ np.conj(self.channel.T)
             return self.transmit_covariance
         if eve:
-            self.transmit_covariance_eve = self.channel_eve @ self.transmit_powers @ np.conj(self.channel_eve.T)
             return self.transmit_covariance, self.transmit_covariance_eve
 
 
-    def get_channel(self, path=[0]):
-        self.channel = 1j*np.zeros(self.channel.shape)
-        self.channel_eve = 1j*np.zeros(self.channel.shape)
+    def get_channel(self, path=[], i=0):
+        if len(path) == len(self.network_channels):
+            self.channel_from_path(path)
+        else:
+            for ind in range(self.network_size[i]):
+                if len(path) < len(self.network_channels):
+                    self.get_channel(path=path+[ind], i=i+1)
 
-        for ind, matrix in enumerate(self.network_channels[path[-1]]):
-            if len(path) == len(self.network_channels):
-                self.channel_from_path(path)
-            if len(path) < len(self.network_channels):
-                path.append(ind)
-                self.get_channel(path=copy.deepcopy(path))
-        return self.channel
 
     def channel_from_path(self, path):
         matrix = None
+        previous = 0
         self.paths_check += 1
         for ind, surface_ind in enumerate(path):
             if ind == 0:
@@ -78,7 +76,8 @@ class Network:
                 matrix = irs.channels[path[ind]]
             else:
                 irs = self.network_channels[ind][surface_ind]
-                matrix = irs.channels[path[ind]]@matrix
+                matrix = irs.channels[path[previous]]@matrix
+            previous = surface_ind
         if path[-1] == 0:
             self.channel += matrix
         elif path[-1] == 1:
