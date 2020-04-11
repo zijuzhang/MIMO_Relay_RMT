@@ -76,7 +76,7 @@ class Network:
                 matrix = irs.channels[path[ind]]
             else:
                 irs = self.network_channels[ind][surface_ind]
-                matrix = irs.channels[path[previous]]@matrix
+                matrix = irs.channels[previous]@matrix
             previous = surface_ind
         if path[-1] == 0:
             self.channel += matrix

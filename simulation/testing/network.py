@@ -6,16 +6,18 @@ import seaborn
 
 fig, ax = plt.subplots()
 plt.title("Number of IRS (N=1): i.i.d, $\mathbb{N}(0,1/N)$, H = H_1 \Phi H_2")
-surface_size = 300
+surface_size = 500
 bins = int(surface_size/2)
-list_irs = [1, 1]
+original_network = [1]
+list_irs = [1]
 capacity = []
 secrecy_capacities = []
 capacity_water = []
 secrecy_capacities_water = []
-for num_irs in [2, 4]:
-    list_irs += [1]
-    net = Network(surface_size, list_irs, eavesdropper=True)
+for num_irs in [8, 16, 32]:
+    list_irs = original_network + [num_irs]
+    # list_irs = list_irs + [1]
+    net = Network(surface_size, copy.copy(list_irs), eavesdropper=True)
     optiized_powers = water_filling(net.get_channel_covariance(), 10)
     cov_water = net.get_transmit_covariance(np.diag(optiized_powers))
     e_val_water, e_vec_water = np.linalg.eig(cov_water)
