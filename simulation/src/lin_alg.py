@@ -4,6 +4,8 @@ capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix)
 
 c_rand = lambda rows, cols:  np.random.randn(rows, cols)/np.sqrt(rows) + 1j*np.random.randn(rows, cols)/np.sqrt(rows)
 
+random_phase = lambda size: np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size)))
+
 def is_orthonormal(matrix):
     orthonormal = []
     for ind in range(matrix.shape[1]):
