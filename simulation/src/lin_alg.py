@@ -6,6 +6,8 @@ c_rand = lambda rows, cols:  np.random.randn(rows, cols)/np.sqrt(rows) + 1j*np.r
 
 random_phase = lambda size: np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size)))
 
+hermetian = lambda x: np.conj(x.T)
+
 def is_orthonormal(matrix):
     orthonormal = []
     for ind in range(matrix.shape[1]):
