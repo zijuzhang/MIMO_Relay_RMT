@@ -14,13 +14,26 @@ marcenko = lambda x, beta: pos(1-1/beta)*delta(x) + \
                            np.sqrt(pos(x-np.power((1-np.sqrt(beta)), 2))*pos(np.power((1+np.sqrt(beta)), 2)-x)
                                    / (2*np.pi*beta*x))
 
-#Semi-Circle law related equations
-st_half_circle = lambda s: (s / 2) * np.sqrt(1 - 4 / np.power(s, 2)) - s / 2
-semi_cicle_aed = lambda x: 1 / (2 * np.pi)*np.sqrt(4-np.power(x, 2))
-half_circle_gamma_s_recip = lambda s, gamma_z_recip_s: s*(np.sqrt(gamma_z_recip_s) - 1/s)
-half_circle_stieltjes_gamma = lambda s_vector, iterations: \
-    -(1/s_vector)*(fixed_point(half_circle_gamma_s_recip, s_vector, iterations)+1)
 
+#Semi-Circle law related equations
+
+def st_half_circle(s):
+    return (s / 2) * np.sqrt(1 - 4 / np.power(s, 2)) - s / 2
+
+
+def semi_cicle_aed(x):
+    return 1 / (2 * np.pi)*np.sqrt(4-np.power(x, 2))
+
+
+def half_circle_gamma_s_recip_wrong(s, gamma_z_recip_s):
+    check = np.sqrt(gamma_z_recip_s)
+    return s*(np.sqrt(gamma_z_recip_s) - 1/s)
+
+def half_circle_gamma_s_recip(s, gamma_z_recip_s):
+    return 1/(s*(np.power(gamma_z_recip_s, -1/2) - 1/s))
+
+def half_circle_stieltjes_gamma(s_vector, iterations):
+    return -(1/s_vector)*(fixed_point(half_circle_gamma_s_recip, s_vector, iterations)+1)
 
 
 def deformed_qc_eigen(x, alpha):
