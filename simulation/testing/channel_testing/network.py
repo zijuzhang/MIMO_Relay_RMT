@@ -15,24 +15,22 @@ secrecy_capacities = []
 capacity_water = []
 secrecy_capacities_water = []
 for num_irs in [8, 16, 32]:
-    list_irs = original_network + [num_irs]
-    # list_irs = list_irs + [1]
+    # list_irs = original_network + [num_irs]
+    list_irs = list_irs + [1]
     net = Network(surface_size, copy.copy(list_irs), eavesdropper=True)
-    optiized_powers = water_filling(net.get_channel_covariance(), 10)
-    cov_water = net.get_transmit_covariance(np.diag(optiized_powers))
-    e_val_water, e_vec_water = np.linalg.eig(cov_water)
+    transmit_covariance = water_filling(net.channel, 1)
+    net.get_channel_covariance()
+    e_val_water, e_vec_water = np.linalg.eig(net.covariance)
     AED_water, AED_bins_water = np.histogram(np.asarray(e_val_water), bins=bins)
-    secrecy_capacities_water.append(net.get_capacity(secrecy=True))
-    capacity_water.append(net.get_capacity())
+    secrecy_capacities_water.append(net.get_capacity(transmit_covariance, secrecy=True))
+    capacity_water.append(net.get_capacity(transmit_covariance))
 
-    cov = net.get_transmit_covariance(np.eye(surface_size)/surface_size)
-    e_val, e_vec = np.linalg.eig(cov)
-    AED, AED_bins = np.histogram(np.asarray(e_val), bins=bins)
-    secrecy_capacities.append(net.get_capacity(secrecy=True))
-    capacity.append(net.get_capacity())
+    # e_val, e_vec = np.linalg.eig(cov)
+    # AED, AED_bins = np.histogram(np.asarray(e_val), bins=bins)
+    secrecy_capacities.append(net.get_capacity(np.eye(surface_size)/surface_size, secrecy=True))
+    capacity.append(net.get_capacity(np.eye(surface_size)/surface_size))
 
-
-    ax.plot(AED_bins[1::], AED/surface_size, label=f'Number of IRS: {num_irs}')
+    # ax.plot(AED_bins[1::], AED/surface_size, label=f'Number of IRS: {num_irs}')
     ax.plot(AED_bins_water[1::], AED_water/surface_size, label=f'Water Filling: {num_irs}')
 
 

@@ -18,20 +18,18 @@ class Network:
             network_size.append(2)
         previous_size = 1
         self.network_size = network_size
-        self.network_channels = []
-        for elements in network_size:
+        self.network_surfaces = []
+        for ind, elements in enumerate(network_size):
             step_surfaces = []
             for irs in range(elements):
-                step_surfaces.append(IRS(previous_size,  num_elements))
-            self.network_channels.append(step_surfaces)
+                step_surfaces.append(IRS(previous_size,  num_elements, receiver=((ind+1)==len(network_size))))
+            self.network_surfaces.append(step_surfaces)
             previous_size = elements
         self.covariance = 1j*np.zeros((num_elements, num_elements))
         self.transmit_covariance_eve = 1j*np.zeros((num_elements, num_elements))
         self.channel = 1j*np.zeros((num_elements, num_elements))
         self.channel_eve = 1j*np.zeros((num_elements, num_elements))
         self.get_channel()
-
-
 
     def get_channel_covariance(self, eve=False):
         """
@@ -45,26 +43,13 @@ class Network:
         else:
             return self.covariance
 
-
-    def get_transmit_covariance(self, transmit_powers, eve=False):
-        self.paths_check = 0
-        self.transmit_powers = transmit_powers
-        self.transmit_covariance = self.channel @ self.transmit_powers @ np.conj(self.channel.T)
-        self.transmit_covariance_eve = self.channel_eve @ self.transmit_powers @ np.conj(self.channel_eve.T)
-        if not eve:
-            return self.transmit_covariance
-        if eve:
-            return self.transmit_covariance, self.transmit_covariance_eve
-
-
     def get_channel(self, path=[], i=0):
-        if len(path) == len(self.network_channels):
+        if len(path) == len(self.network_surfaces):
             self.channel_from_path(path)
         else:
             for ind in range(self.network_size[i]):
-                if len(path) < len(self.network_channels):
+                if len(path) < len(self.network_surfaces):
                     self.get_channel(path=path+[ind], i=i+1)
-
 
     def channel_from_path(self, path):
         matrix = None
@@ -72,33 +57,52 @@ class Network:
         self.paths_check += 1
         for ind, surface_ind in enumerate(path):
             if ind == 0:
-                irs = self.network_channels[ind][surface_ind]
-                matrix = irs.channels[path[ind]]
+                irs = self.network_surfaces[ind][surface_ind]
+                matrix = irs.phases@irs.channels[path[ind]]
             else:
-                irs = self.network_channels[ind][surface_ind]
-                matrix = irs.channels[previous]@matrix
+                irs = self.network_surfaces[ind][surface_ind]
+                matrix = irs.phases@irs.channels[previous]@matrix
             previous = surface_ind
         if path[-1] == 0:
             self.channel += matrix
         elif path[-1] == 1:
             self.channel_eve += matrix
 
-    def get_capacity(self, secrecy=False):
+    def get_capacity(self, transmit_covariance, secrecy=False):
         if secrecy:
-            return capacity(self.transmit_covariance) - capacity(self.transmit_covariance_eve)
+            return capacity(self.channel@transmit_covariance@hermetian(self.channel)) \
+                   - capacity(self.channel_eve@transmit_covariance@hermetian(self.channel_eve))
         else:
-            return capacity(self.transmit_covariance)
+            return capacity(self.channel@transmit_covariance@hermetian(self.channel))
+
+    def update_phases(self):
+        for step in self.network_surfaces:
+            for irs in step:
+                irs.set_phase()
 
 
 class IRS:
-    def __init__(self, num_previous_surfaces, num_elements):
-        self.phases = 1j*-1j*np.ones(num_elements)  # Strange but seems to be the way to initialize to real here
+    def __init__(self, num_previous_surfaces, num_elements, receiver=False):
+        self.receiver = receiver
+        self.size = num_elements
+        self.set_phase()
         self.channels = []
         for i in range(num_previous_surfaces):
-            self.channels.append(c_rand(num_elements,num_elements))
+            self.channels.append(c_rand(num_elements, num_elements))
+
+    def set_phase(self):
+        """
+        Change the phase shifts of the irs
+        :return:
+        """
+        if not self.receiver:
+            self.phases = random_phase(self.size)
+        else:
+            self.phases = np.diag(1j*np.ones(self.size))
 
 
-def water_filling(covariance_matrix, power_constraint, sigma_square=1e-2):
+
+def water_filling(channel_matrix, power_constraint, sigma_square=1e-2):
     """
     May not be using cvx correctly but currently this only works for very small problems
     :param covariance_matrix:
@@ -106,16 +110,17 @@ def water_filling(covariance_matrix, power_constraint, sigma_square=1e-2):
     :param sigma_square:
     :return:
     """
-    e_values = np.real(np.linalg.eig(covariance_matrix)[0])  # Remove img residual from numerical errors
-    variables = cp.Variable(covariance_matrix.shape[0])
+    U, Sigma, V_H = np.linalg.svd(channel_matrix)
+    variables = cp.Variable(channel_matrix.shape[1])
     constraint = [cp.sum(variables) <= power_constraint]
     constraint += [variables >= 0]
     # utility = cp.sum(cp.log(1+variables*e_values/sigma_square))
     utility = []
-    utility += [cp.log(1+variables[ind]*e_values[ind]/sigma_square) for ind in range(e_values.size)]
+    utility += [cp.log(1+variables[ind]*Sigma[ind]/sigma_square) for ind in range(variables.size)]
     prob = cp.Problem(cp.Maximize(cp.sum(utility)), constraint)
     prob.solve(verbose=True)
-    return variables.value
+    covariance_matrix = hermetian(V_H)@np.diag(variables.value)@V_H
+    return covariance_matrix
 
 # def water_filling_eavesdropper(covariance_bob, covariance_eve):
 #     # First find all eigenvalues and see
