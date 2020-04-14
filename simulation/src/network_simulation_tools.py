@@ -90,8 +90,7 @@ class IRS:
         if not self.receiver:
             self.phases = random_phase(self.size)
         else:
-            # self.phases = np.diag(-1j*1j*np.ones(self.size))
-            self.phases = random_phase(self.size)
+            self.phases = np.diag(-1j*1j*np.ones(self.size))
 
 
 
@@ -114,6 +113,3 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1e-2):
     prob.solve(verbose=True)
     covariance_matrix = hermetian(V_H)@np.diag(variables.value)@V_H
     return covariance_matrix
-
-# def water_filling_eavesdropper(covariance_bob, covariance_eve):
-#     # First find all eigenvalues and see

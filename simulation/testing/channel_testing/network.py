@@ -15,11 +15,10 @@ secrecy_capacities = []
 capacity_water = []
 secrecy_capacities_water = []
 for num_irs in [8, 16, 32]:
-    # list_irs = original_network + [num_irs]
-    list_irs = list_irs + [1]
+    list_irs = original_network + [num_irs]
+    # list_irs = list_irs + [1]
     net = Network(surface_size, copy.copy(list_irs), eavesdropper=True)
     transmit_covariance = water_filling(net.channel, 1)
-    net.get_channel_covariance()
     e_val_water, e_vec_water = np.linalg.eig(net.covariance)
     AED_water, AED_bins_water = np.histogram(np.asarray(e_val_water), bins=bins)
     secrecy_capacities_water.append(net.get_capacity(transmit_covariance, secrecy=True))
