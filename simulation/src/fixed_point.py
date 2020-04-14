@@ -31,5 +31,4 @@ def fixed_point(fixed_point_function, s_vector, iterations, tolerance=.5, attemp
         if not tol_met:
             print("not converging")
     epsilons = np.asarray(epsilons)
-    return ret_vec
 
