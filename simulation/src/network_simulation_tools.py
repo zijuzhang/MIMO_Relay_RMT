@@ -26,22 +26,11 @@ class Network:
             self.network_surfaces.append(step_surfaces)
             previous_size = elements
         self.covariance = 1j*np.zeros((num_elements, num_elements))
-        self.transmit_covariance_eve = 1j*np.zeros((num_elements, num_elements))
+        self.covariance_eve = 1j*np.zeros((num_elements, num_elements))
         self.channel = 1j*np.zeros((num_elements, num_elements))
         self.channel_eve = 1j*np.zeros((num_elements, num_elements))
-        self.get_channel()
+        self.update_phases()
 
-    def get_channel_covariance(self, eve=False):
-        """
-        Numerical Error will usually give some imaginary components here
-        :return:
-        """
-        self.covariance_eve = self.channel_eve @ np.conj(self.channel_eve.T)
-        self.covariance = self.channel @ np.conj(self.channel.T)
-        if eve:
-            return self.covariance, self.covariance_eve
-        else:
-            return self.covariance
 
     def get_channel(self, path=[], i=0):
         if len(path) == len(self.network_surfaces):
@@ -79,13 +68,16 @@ class Network:
         for step in self.network_surfaces:
             for irs in step:
                 irs.set_phase()
+        self.channel = 1j*np.zeros(self.channel.shape)
+        self.get_channel()
+        self.covariance_eve = self.channel_eve @ np.conj(self.channel_eve.T)
+        self.covariance = self.channel @ np.conj(self.channel.T)
 
 
 class IRS:
     def __init__(self, num_previous_surfaces, num_elements, receiver=False):
         self.receiver = receiver
         self.size = num_elements
-        self.set_phase()
         self.channels = []
         for i in range(num_previous_surfaces):
             self.channels.append(c_rand(num_elements, num_elements))
@@ -98,7 +90,8 @@ class IRS:
         if not self.receiver:
             self.phases = random_phase(self.size)
         else:
-            self.phases = np.diag(1j*np.ones(self.size))
+            # self.phases = np.diag(-1j*1j*np.ones(self.size))
+            self.phases = random_phase(self.size)
 
 
 
