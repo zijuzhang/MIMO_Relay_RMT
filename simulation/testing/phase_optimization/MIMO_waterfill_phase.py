@@ -6,15 +6,15 @@ import seaborn
 
 fig, ax = plt.subplots()
 plt.title("")
-surface_size = 100
+surface_size = 1
 bins = int(surface_size/2)
 original_network = [1]
-list_irs = [1, 2]
+list_irs = [2]
 capacity_water = []
 capacity_water_phase = []
 for num_irs in [4]:
-    list_irs = original_network + [num_irs]
-    # list_irs = list_irs + [1]
+    # list_irs = original_network + [num_irs]
+    list_irs = list_irs + [1]
     net = Network(surface_size, copy.copy(list_irs))
     c1 = net.channel
     optimized_powers_1 = water_filling(net.channel, 1)
