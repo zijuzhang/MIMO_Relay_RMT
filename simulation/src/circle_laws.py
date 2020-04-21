@@ -8,7 +8,8 @@ delta = lambda x: x == 0
 estimated_pdf = lambda x: 1/np.pi * np.imag(x)
 
 
-
+# Quarter Circle Related
+st_quarter_circle_eigen = lambda s: 1/2*np.sqrt(1-4/s) - 1/2
 st_quarter_circle = lambda s: 2*np.sqrt(4-np.power(s, 2))/np.pi * np.log((2+np.sqrt(4-np.power(s, 2)))/(-s))-s/2-2/np.pi
 marcenko = lambda x, beta: pos(1-1/beta)*delta(x) + \
                            np.sqrt(pos(x-np.power((1-np.sqrt(beta)), 2))*pos(np.power((1+np.sqrt(beta)), 2)-x)
@@ -19,7 +20,6 @@ marcenko = lambda x, beta: pos(1-1/beta)*delta(x) + \
 
 def st_half_circle(s):
     return (s / 2) * np.sqrt(1 - 4 / np.power(s, 2)) - s / 2
-
 
 def semi_cicle_aed(x):
     return 1 / (2 * np.pi)*np.sqrt(4-np.power(x, 2))
@@ -37,6 +37,7 @@ def half_circle_stieltjes_gamma(s_vector, iterations):
 
 
 def deformed_qc_eigen(x, alpha):
+    #TODO don't allow nan
     interval = np.logical_and(np.power(1-np.sqrt(alpha), 2) < x, x < np.power(1+np.sqrt(alpha), 2))
     output = interval*np.sqrt((x-np.power(1-np.sqrt(alpha), 2))*(np.power(1+np.sqrt(alpha), 2)-x))/(2*np.pi*alpha*x)
     nan = np.isnan(output)
