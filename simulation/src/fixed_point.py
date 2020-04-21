@@ -17,8 +17,9 @@ def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, atte
         epsilon = []
         tol_met = False
         attempt = 0
+        non_negative = True
         # Use different initialization points if not converging fast enough
-        while not tol_met and attempt < attempt_tol:
+        while not tol_met and attempt < attempt_tol and non_negative:
             # Fixed point is unique in the upper half complex plane so initialize in this region
             # G_k = np.random.uniform(1, 100) + 1j*np.random.uniform(1, 100)
             G_k = .1
@@ -26,7 +27,7 @@ def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, atte
                 val = fixed_point_function(s, G_k)
                 epsilon.append(np.abs(G_k-val))
                 G_k = val
-                if epsilon[-1] <= tolerance:
+                if epsilon[-1] <= tolerance and val >=0:
                     # ret_vec[ind] = estimated_pdf(G_k)
                     ret_vec[ind] = G_k
                     epsilons.append(epsilon[-1])
