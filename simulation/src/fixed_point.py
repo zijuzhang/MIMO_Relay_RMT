@@ -10,7 +10,17 @@ def decontamination(G_k, s, K):
         val += (1 * s * G_k) / (1 - s * np.power(G_k, 2))
     return val
 
-def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, attempt_tol=5):
+def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, attempt_tol=5,func_param=None, unique_half_plane=False):
+    """
+
+    :param fixed_point_function:
+    :param s_vector:
+    :param iterations:
+    :param tolerance:
+    :param attempt_tol:
+    :param unique_half_plane: Inidicates if the fixed point is only unique in the upper half plane.
+    :return:
+    """
     ret_vec = -1j*1j*np.ones(s_vector.shape)
     epsilons = []
     for ind, s in enumerate(s_vector):
@@ -25,12 +35,16 @@ def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, atte
             G_k = np.random.uniform(1, 100) + 1j*np.random.uniform(1, 100)
             # G_k = .1
             for step in range(iterations):
-                val = fixed_point_function(s, G_k)
-                epsilon.append(np.abs(G_k-val))
+                if func_param is not None:
+                    val = fixed_point_function(s, G_k, func_param)
+                else:
+                    val = fixed_point_function(s, G_k)
+                if unique_half_plane and np.imag(val) < 0:
+                    val = np.conj(val)
+                epsilon.append(np.abs(G_k - val))
                 G_k = val
                 check.append(val)
                 if epsilon[-1] <= tolerance:
-                    # ret_vec[ind] = estimated_pdf(G_k)
                     ret_vec[ind] = G_k
                     epsilons.append(epsilon[-1])
                     tol_met = True
@@ -40,7 +54,7 @@ def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, atte
         if tol_met:
             check1 = np.asarray(check)
         if not tol_met:
-            check1 = np.asarray(check)
+            print("not converging")
     epsilons = np.asarray(epsilons)
     return ret_vec
 

@@ -8,37 +8,49 @@ import seaborn
 size = 500
 rows = size
 cols = size
-
+sigma = 1
+rho = 1
+phi = 0
+# sigma = 1
+# rho = 1
 #   Plot Theoretical Distribution and find corresponding capacity
 
-def arg_function(s_val, g_k):
+
+def arg_function(s_val, g_k, sigma=1, rho=1):
     x_s = np.sqrt(s_val)
-    return x_s - x_s*g_k/(1-s_val*np.power(g_k, 2))
+    # return x_s - x_s*g_k/(1-s_val*np.power(g_k, 2))
+    return x_s - pow(sigma, 2)*rho*x_s*g_k/(rho-pow(sigma, 2)*s_val*np.power(g_k, 2))
+
 
 def B_function(x_arg):
     return 1/2*(np.sqrt(1-4/np.power(x_arg, 2))-1)
 
 
-def final_stieltjes(s_values, g_k):
-    x_arg = arg_function(s_values, g_k)
-    return 1/np.sqrt(s_values)*x_arg*((1/2)*np.sqrt(1-4/np.power(x_arg, 2))-1/2)
+def final_stieltjes(s_values, g_k, func_params):
+    sigma = func_params[0]
+    rho = func_params[1]
+    x_arg = arg_function(s_values, g_k, sigma=sigma, rho=rho)
+    G_BB = (1/2)*np.sqrt(1-4/np.power(x_arg, 2))-1/2
+    return 1/np.sqrt(s_values)*x_arg*G_BB
 
-def final_stieltjes_2(s_values, g_k):
-    x_arg = arg_function(s_values, g_k)
-    b_arg = B_function(x_arg)
-    return (1-s_values*np.power(g_k, 2))*(g_k/b_arg-1)
+def final_stieltjes_deformed(s_values, g_k, func_params):
+    sigma = func_params[0]
+    rho = func_params[1]
+    phi = func_params[2]
+    x_arg = arg_function(s_values, g_k, sigma=sigma, rho=rho)
+    G_BB = 1/2 + (1-phi)/(2*np.power(x_arg, 2)) +\
+           np.sqrt(np.power((1-phi), 2)/(4*np.power(x_arg, 4)) - (1+phi)/(2*np.power(x_arg, 2)) + 1/4)
+    # G_BB = np.sqrt(np.power((1-phi), 2)/(4*np.power(x_arg, 4)) - (1+phi)/(2*np.power(x_arg, 2))
+    #                + 1/4) - 1/2 - (1-phi)/(2*np.power(x_arg, 2))
+    return (1/np.sqrt(s_values))*x_arg*G_BB
 
-def final_stieltjes_3(s_values, g_k):
-    x_arg = arg_function(s_values, g_k)
-    b_arg = B_function(x_arg)
-    return np.sqrt((1/s_values)*(g_k/(g_k/b_arg-1)))
 
 
-
-x_values, step = np.linspace(1e-3, 10, 100, retstep=True)
+x_values, step = np.linspace(1e-2, 10, 1000, retstep=True)
 y = 1e-6
 s_vector = x_values + 1j*y
-theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes, s_vector, 100, 1e-2, 3))
+parameters = [sigma, rho, phi]
+theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes_deformed, s_vector, 200, 1e-3, 3, func_param=parameters, unique_half_plane=True))
 theoretic_capacity = aed_capacity(x_values, theoretic_pdf, step, 1/cols, rows)
 
 
@@ -49,13 +61,11 @@ irs_svd = []
 capacities = []
 cross_sum = 0
 main_sum = 0
-attenuation_irs = 1
-los_rank_ratio = 1
-los_rank_matrix = reduced_rank(rows, los_rank_ratio)
+los_rank_matrix = reduced_rank(rows, rho)
 average = 1
 for i in range(average):
-    # H = attenuation_irs*c_rand(rows, cols) @ c_rand(rows, cols)
-    H = attenuation_irs*c_rand(rows, cols) @random_phase(rows)@ c_rand(rows, cols)
+    # H = sigma*c_rand(rows, cols) @ c_rand(rows, cols)
+    H = sigma*c_rand(rows, cols) @random_phase(rows)@ c_rand(rows, cols)
     G = c_rand(rows, cols)@los_rank_matrix
     # check = np.var(H)
     # check1 = np.var(G)
@@ -93,9 +103,9 @@ print(theoretic_capacity)
 #   Plot results
 fig, ax = plt.subplots()
 plt.title("IRS and Line of Sight: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
-# ax.bar(bins_irs[1::], irs_AED/rows, label='total: AED')
+ax.bar(bins_irs[1::], irs_AED/rows, label='total: AED')
 # ax.bar(bins_irs_svd[1::], irs_SVD/rows, label='total: ASD')
-ax.plot(x_values, theoretic_pdf, label='theoretical distribution')
+ax.plot(x_values, theoretic_pdf, label='theoretical distribution', c='r')
 
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
