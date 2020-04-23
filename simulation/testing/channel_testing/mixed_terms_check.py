@@ -14,7 +14,7 @@ irs = []
 cross_sum = 0
 main_sum = 0
 
-average = 1
+average = 5
 for i in range(average):
     H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     G = c_rand(rows, cols)
@@ -27,14 +27,20 @@ for i in range(average):
     HG = H @ np.conj(G.T)
     GF = G @ np.conj(F.T)
     FG = F @ np.conj(G.T)
-    total_irs = GH + HG + HH + GG
-    e_val_total_irs, e_vec_total_irs = np.linalg.eig(total_irs)
+    cross = GH + HG
+    main = HH + GG
+    total_irs = cross + main
+    e_val_total_irs = np.linalg.eigvalsh(total_irs)
+    e_val_cross = np.linalg.eigvalsh(cross)
+    cross_sum += np.sum(e_val_cross)
+    main_sum += np.sum(e_val_total_irs)
     irs.append(np.real(e_val_total_irs))
 
 irs_AED, bins_irs = np.histogram(np.asarray(irs), bins=bins)
 
 
-
+print(f"cross total: {cross_sum}")
+print(f"main total: {main_sum}")
 
 fig, ax = plt.subplots()
 plt.title("IRS Channels Components: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
@@ -45,8 +51,8 @@ plt.legend(loc="upper right")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)  # the important part here
 
-plt.figure()
-plt.plot(np.sort(e_val_total_irs), label='total')
+# plt.figure()
+# plt.plot(np.sort(e_val_total_irs), label='total')
 plt.show()
 
 

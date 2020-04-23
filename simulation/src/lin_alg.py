@@ -12,6 +12,8 @@ def aed_capacity(value, value_probability, step, snr, number_receivers):
 
 
 c_rand = lambda rows, cols:  (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
+c_rand_2 = lambda rows, cols:  (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(cols*rows)
+
 # c_rand = lambda rows, cols: -1j*1j*np.eye(rows)
 
 random_phase = lambda size: np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size)))

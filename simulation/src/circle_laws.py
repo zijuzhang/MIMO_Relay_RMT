@@ -7,14 +7,18 @@ delta = lambda x: x == 0
 #General Definitions
 estimated_pdf = lambda x: 1/np.pi * np.imag(x)
 
+def normalize(x):
+    normalized = x/np.linalg.norm(x)
+    check = np.linalg.norm(normalized)
+    return normalized
+
+
 
 # Quarter Circle Related
-st_quarter_circle_eigen = lambda s: 1/2*np.sqrt(1-4/s) - 1/2
+st_quarter_circle_eigen = lambda s: 1/2 * np.sqrt(1-4/s) - 1/2
 st_quarter_circle = lambda s: 2*np.sqrt(4-np.power(s, 2))/np.pi * np.log((2+np.sqrt(4-np.power(s, 2)))/(-s))-s/2-2/np.pi
-marcenko = lambda x, beta: pos(1-1/beta)*delta(x) + \
-                           np.sqrt(pos(x-np.power((1-np.sqrt(beta)), 2))*pos(np.power((1+np.sqrt(beta)), 2)-x)
-                                   / (2*np.pi*beta*x))
-
+marcenko_st = lambda s, phi: np.sqrt(np.power((1-phi), 2)/(4*np.power(s, 4)) - (1+phi)/(2*np.power(s, 2))
+                   + 1/4) - 1/2 - (1-phi)/(2*np.power(s, 2))
 
 #Semi-Circle law related equations
 
