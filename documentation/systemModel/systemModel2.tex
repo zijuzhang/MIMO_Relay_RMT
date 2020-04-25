@@ -1,0 +1,122 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+\section{Summary of Work}
+Below is a summary of my work up to now.
+\section{System Model}
+I consider a flat-fading MIMO broadcast channel with a linear precoding at the transmitter. 
+Using a basic model with an IRS component and line of sight (LOS) component gives the received signal 
+	 \begin{equation}
+		\mathbf{r} = \mathbf{H}_{Total}\mathbf{F}\mathbf{x}.
+	\end{equation}
+	The total channel, is given by
+	\begin{equation}
+	\mathbf{H}_{Total} =  \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}
+	\end{equation}
+	with both the IRS component $ \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}$ and 
+	the LOS component $\mathbf{G}$. To simplify notation I will assume 
+	$\mathbf{H}_{1} \in \mathbb{C}_{N \times N}$ ...
+
+\section{Channel Capacity}
+First the capacity of the total channel $\mathbf{H}_{Total}$ is considered. 
+Following the methods from (non-hermetian), we can find the AED of the channel 
+covariance matrix, $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$ using the asymptotic distribution of the "symmetrized singular values" of $\mathbf{H}_{Total}$.
+One problem I am currently working on is that the fixed point equation  provided in (non-hermetian) assumes that the
+ elements of $ \mathbf{H}_{1}$ and  $\mathbf{H}_{2}$ have variance $\frac{1}{RS}$. Typically we want these
+  matrices to have elements with variance $\frac{1}{R}$.
+  If I were to use the equation from (non-hermetian), the IRS component would have no impact on the capacity of system. In order to resolve this, I will need to re-derive this which requires using subordination methods. 
+
+\subsection{Canceling Phases}
+Additive free convolution of the R-Transform holds for symmetrized singular value distributions. Therefore we can consider $R_{\mathbf{H}_{Total}} = R_{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}} + R_{\mathbf{G}}$. In order to find the individual terms $R_{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}}$ and $R_{\mathbf{G}}$ we will use the property 
+\begin{equation}
+\tilde{G}_{B}(s) = sG_{BB^{\dagger}}(s^2).
+\end{equation}
+For the term $R_{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}}$ we begin by finding 
+$G_{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H}(s)$ 
+Using the method shown in (vector channel paper), the rotational property of the S-Transform
+\begin{equation}
+S_{C_N}(z) = \frac{z+1}{z+\chi_N} S_{\tilde{C}_N}(\frac{z}{\chi_N}).
+\end{equation}
+is used with 
+\begin{equation}
+\tilde{C}_N = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H
+\end{equation}.
+Applying the rotational property again to the term 
+\begin{equation}
+\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
+\end{equation}
+we get 
+\begin{equation}
+\boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
+\end{equation}
+with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$.
+From this, we can conclude that the present of the phase-shift matrix $\boldsymbol{\Phi}$ does not influence the
+AED of the channel covariance matrix and thus does not affect the channel capacity. 
+
+\section{Optimization}
+
+
+
+\section{Simulation Results}
+
+\subsection{Evaluating Impact of Cross-terms on AED}
+Here we wanted to see if the final AED is influenced by the cross terms in the polynomial describing the channel
+covariance matrix given by $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{results/cross}
+\caption{Eigenvalue histogram for N=500. Cross terms represent the eigenvalues of the matrix sum $(\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{G}^H + \mathbf{G}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H)$ and the non-cross terms are the eigenvalues of the matrix sum $(\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H + \mathbf{G}\mathbf{G}^H)$}
+\label{irs_figure}
+\end{figure}
+
+\subsection{Impact of Phases on total Capacity}
+It is hypothesized that in the asymptotic limit, the phases will not impact the capacity. In order to check this numerically I evaluated the capacity while holding the channel values constant for different values for the IRS phases. Here statistics are shown for 50 random realizations of the phases at the IRS. 
+Phases, $e^{j\phi}$, are generated using a uniform distribution of $\phi \in \text{Uniform}[0,2\pi]$ and.
+\begin{itemize}
+\item 
+Capacity variance:
+ 8.968116152773685e-06
+\item 
+Capacity average:
+ 1.9860953144228657
+\item 
+Capacity min:
+ 1.9783515328782062
+\item 
+Capacity max:
+ 1.993849732554225
+\end{itemize}
+
+
+
+
+
+
+
+	
+
+	
+	
+
+
+
+\bibliography{bibliography}
+\end{document}

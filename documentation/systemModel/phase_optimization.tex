@@ -1,0 +1,67 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Phase Optimization}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+%\tableofcontents
+%\section{Solution Outline} 
+Given that a zero-forcing receiver is selected, optimize the phases with respect to the total signal power at the receiver. 
+\\
+	The detected signal is
+	 \begin{equation}
+		\mathbf{r} = \mathbf{F}\mathbf{H}_{Total}\mathbf{x}
+	\end{equation}
+	with $Trace(\mathbf{x} \mathbf{x}^H) = \mathbf{I}$, $ \mathbf{H}_{Total} = \mathbf{H}_{2}\boldsymbol{\Phi}
+	\mathbf{H}_{1} $
+	and $F$ chosen such that the rows of $F$ are orthogonal to the 
+	columns of the channel matrix $ \mathbf{H}_{Total}$
+	\begin{equation}
+		\tilde{\mathbf{f}}_i \mathbf{h}_j = 0 , i\neq j 
+	\end{equation}
+	 where $\tilde{\mathbf{f}}_i$ are the rows of $\mathbf{F}$.
+	The phase matrix is chosen according to the following optimization problem
+	    \begin{equation}
+    \begin{array}{ll}
+    \underset{\boldsymbol{\Phi}, \mathbf{F}}{\text{maximize }}   & \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P_{\text{Total}}}{N_T \sigma_n}\mathbf{F}\mathbf{H}_{Total}\mathbf{H}_{Total}^H\mathbf{F}^H|\right)\right]
+    \\
+    \mbox{subject to } & \|\phi_i\|^2 = 1
+        \\
+    \mbox{} & \tilde{\mathbf{f}}_i \mathbf{h}_j = 0, \; i\neq j, \; \forall i,j \in N
+    \end{array}
+    \label{general_irs_opt}
+    \end{equation} 
+    Since $\mathbf{F}$ is chosen such that $\mathbf{F}\mathbf{H}_{Total}$ is a diagonal matrix, this problem is 	
+    equivalent to 
+    	    \begin{equation}
+    \begin{array}{ll}
+    \underset{\boldsymbol{\Phi}, \mathbf{F}}{\text{maximize }}  
+     & \sum_{i=1}^{N}\Log\left(1+ \|\tilde{\mathbf{f}}_i \mathbf{h}_i\|^2
+    \right)
+    \\
+    \mbox{subject to } & \|\phi_i\|^2 = 1
+    \\
+        \mbox{} & \tilde{\mathbf{f}}_i \mathbf{h}_j = 0, \; i\neq j, \; \forall i,j \in N
+    \end{array}
+    \label{general_irs_opt}
+    \end{equation} 
+    However, in general $\mathbf{F}$ will be dependent upon the final channel matrix (which includes
+     $\boldsymbol{Phi}$) and
+    therefore $\|\tilde{\mathbf{f}}_i \mathbf{h}_i\|^2$ will generally be convex in both $\mathbf{f}_i$ and 
+    $\phi_i$.
+    
+    
+
+\end{document}

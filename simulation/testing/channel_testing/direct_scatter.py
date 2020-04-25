@@ -106,13 +106,13 @@ print(f"theoretic capacity: {theoretic_capacity}")
 #   Plot results
 fig, ax = plt.subplots()
 plt.title("IRS and Line of Sight: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
-ax.bar(bins_irs[1::], irs_AED/rows, label='total: AED')
+ax.bar(bins_irs[1::], irs_AED/rows, label='simulated AED')
 # ax.bar(bins_irs_svd[1::], irs_SVD/rows, label='total: ASD')
-ax.plot(x_values, normalize(theoretic_pdf), label='theoretical distribution', c='r')
+ax.plot(x_values, normalize(theoretic_pdf), label='normalized theoretical aed', c='r')
 
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)
-# plt.show()
+plt.show()
 
 

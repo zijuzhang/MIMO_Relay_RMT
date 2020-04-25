@@ -53,12 +53,12 @@ Assuming asymptotically large antenna arrays, and given the distribution for the
 Again assuming $P_{\text{Total}}$ is distributed equally across transmit antennas such that $\mathbf{Q}_{xx} = \frac{P_{\text{Total}}}{N_t}\mathbf{I}_{N_t}$, and that both the legitimate user and eavesdropper have sufficient antennas such that $N_r > N_t$ and $N_e >N_t$,  this can be written as 
 
 \begin{gather}\label{secrecy_capacity}
-\Capacity{(\mathbf{H})} = \Expect\left[N_r \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\lambda \right) -
+\Capacity{(\mathbf{H})} = \Expect\left[N_r \Log\left(1+\frac{P_{\text{Total}}}{N_T \sigma_n}\lambda \right) -
 N_e \Log\left(1+\frac{P^{\text{Total}}}{N_T \sigma_n}\hat{\lambda} \right) \right]
 \end{gather}
 or equivalently 
 \begin{gather}\label{secrecy_capacity}
-\Capacity{(\mathbf{H})} = \Expect\left[\frac{N_r}{N_T }\Log\left(\frac{1+\frac{P^{\text{Total}}}{\sigma_n}\lambda }{1+\frac{P^{\text{Total}}}{\sigma_n}\hat{\lambda} }\right) \right]
+\Capacity{(\mathbf{H})} = \Expect\left[\frac{N_r}{N_T }\Log\left(\frac{1+\frac{P_{\text{Total}}}{\sigma_n}\lambda }{1+\frac{P^{\text{Total}}}{\sigma_n}\hat{\lambda} }\right) \right]
 \end{gather}
 
 in which $\lambda$ and $\hat{\lambda}$ denote the eigenvalues of $\mathbf{H}\mathbf{H}^H$ and $\hat{\mathbf{H}}\hat{\mathbf{H}}^H$ respectively. 
