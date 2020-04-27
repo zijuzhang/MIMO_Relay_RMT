@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from src.lin_alg import *
 import seaborn
 
-size = 100
-n_t = 4
-n_r = 4
+size = 1000
+n_t = 500
+n_r = 500
 rows = size
 cols = size
 bins = int(size/2)

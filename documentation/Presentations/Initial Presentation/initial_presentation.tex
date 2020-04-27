@@ -1,9 +1,10 @@
 \documentclass[10pt,tgadventor, onlymath]{beamer}
 
-\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork}
+\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork, fontawesome}
 
 %\input defs.tex
 \graphicspath{ {./figures/} }
+\input defs.tex
 
 %% formatting
 
@@ -83,9 +84,9 @@
 
 	\begin{itemize}
 		\item 			
-			Relays vs. base-stations
+			Relays vs. Base Stations (Not attached to core network? Why minimize this?)
 		\item 
-			Different modes of operation (Decode and forward, amplify and forward ...)
+			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
 		\item 
 			Extending wireless coverage is relevant to high frequencies used in 5G +
 	\end{itemize}
@@ -95,93 +96,123 @@
 \frametitle{Intelligent Reflective surface: Under the Hood}
 \begin{columns}
 \begin{column}{0.5\linewidth}
-	Mode 1
-	\begin{figure}
-%			\centering
-		\includegraphics[scale=1]{irs}
-	\end{figure}\end{column}
-\begin{column}{0.5\linewidth}
-	Information Assumptions
+	Relay: Amplify and Forward
+	\begin{equation*}
+	\mathbf{y} = (\mathbf{H}_2\mathbf{F}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
+	\end{equation*}
+	with $\mathbf{F}$ as the amplification factor
+	\begin{itemize}
+	\item 
+		Can often ignore line of sight
+	\item 
+		Still requires expensive hardware
+	\end{itemize}
+\end{column}
 
+\begin{column}{0.5\linewidth}
+	IRS:
+	\begin{equation*}
+	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
+	\end{equation*}
+	with $\boldsymbol{\Phi}$ as diagonal matrix with elements $|\ \phi_i \| =1$.
+	\begin{itemize}
+	\item 
+		No RF chain required (low cost)
+	\item
+		Shorter distances -> keep LOS
+	\item 
+		Current number of reflectors on models
+	\end{itemize}
 \end{column}
 \end{columns}
 \end{frame}
 
 
+%\begin{frame}
+%\frametitle{IRS: Modes of Operation}
+%\begin{columns}
+%\begin{column}{0.5\linewidth}
+%	Mode 1
+%	\begin{figure}
+%%			\centering
+%		\includegraphics[scale=1]{irs}
+%	\end{figure}\end{column}
+%\begin{column}{0.5\linewidth}
+%	Mode 2 (The one we will use)
+%\end{column}
+%\end{columns}
+%\end{frame}
 \begin{frame}
-\frametitle{IRS: Modes of Operation}
-\begin{columns}
-\begin{column}{0.5\linewidth}
-	Mode 1
-	\begin{figure}
-%			\centering
-		\includegraphics[scale=1]{irs}
-	\end{figure}\end{column}
-\begin{column}{0.5\linewidth}
-	Mode 2 (The one we will use)
-
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Resulting Impact on Signal}
+\frametitle{System Model}
 \centering
 \begin{equation}
-\mathbf{y} = \mathbf{H}_2\boldsymbol{\Theta}\mathbf{H}_1\mathbf{F}\mathbf{x}
+	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
 \end{equation}
+with 
+$\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \times S}, \mathbf{G} \in \mathbb{C}_{R \times T}$ and $\boldsymbol{\Phi}$ as diagonal matrix with elements $|\ \phi_i \| =1 $.
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Relays vs. IRS}
-\begin{itemize}
-\item difference
-\end{itemize}
-\end{frame}
+\frametitle{Channel Capacity}
+\begin{equation*}
+	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
+\end{equation*}
 
-
-\subsubsection{Relevant MIMO Information Theory}
-\begin{frame}
-\frametitle{Multiple Scattering}
-System Model
+Capacity is given by 
+\begin{equation}\label{capacity}
+\underset{\mathbf{Q}_{x}, \boldsymbol{\Phi} }{\mathrm{max}}
+\Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{1}{\sigma_n}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]\mathbf{Q}_x[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]^H|\right)\right].
+\end{equation}
+Using 
 \begin{equation}
-t
+\mathbf{H}_{\text{Total}} = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}
 \end{equation}
+and simplifying, \ref{capacity} becomes
+\begin{equation}
+\underset{\mathbf{Q}_{x}, \boldsymbol{\Phi} }{\mathrm{max}}
+N\Expect\left[\Log\left(1+\frac{1}{\sigma_n} + \lambda\right)\right]
+\end{equation}
+Need Asymptotic Eigenvalue Distribution $p(\lambda)$ (AED) to evaluate the expectation.
+\end{frame}
+
+
+\subsubsection{Previous Work + Free Probability}
+\begin{frame}
+\frametitle{Free Probability}
+Introduce the SVD AED relationship.
+\end{frame}
+
+\begin{frame}
+\frametitle{Free Probability}
+Show how to solve for individual covariance matrices and point out that phases cancel.
 Asymptotic analysis
-
 \end{frame}
 
-\begin{frame}
-\frametitle{Concatenated Scattering}
-\begin{equation}
-t
-\end{equation}
-\end{frame}
 
 \section{Goals}
 \begin{frame}
 \frametitle{Project Goals}
 \begin{enumerate}
 \item
-	Find capacity of asymptotic IRS systems with random IRS phases (equivalent to scattering)
-\item 
-	Find capacity with phases optimized according to what objective function
+	Find capacity of asymptotic IRS systems
 \item
-	Extend random phase results to secrecy capacity
-\item
-	Investigate optimizing phases for maximizing secrecy capacity
+	Extend results to secrecy capacity
 \item 
-	Confirm findings with numerical results
+	Confirm findings with numerical results throughout
 \end{enumerate}
 \end{frame}
 
 \section{Current Status}
-
-
-
 \begin{frame}
-\frametitle{Next Steps}
+\frametitle{Current Status}
+\begin{enumerate}
+\item
+	Find capacity of asymptotic IRS systems: \faCheck
+\item
+	Extend results to secrecy capacity: TODO
+\item 
+	Confirm findings with numerical results throughout
+\end{enumerate}
 
 \end{frame}
 
