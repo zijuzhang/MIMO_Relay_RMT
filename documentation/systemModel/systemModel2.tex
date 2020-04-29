@@ -77,16 +77,15 @@ C_{1} = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
 \end{equation}
 we get 
 \begin{equation}
-\tilde{C}_{1} \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
+\tilde{C}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
 \end{equation}
 with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$.
 
 From this we can conclude that for $R,S,T \rightarrow \infty $ the only impact of the IRS comes from the aspect ratio
 $\chi_N$ but the actual phases of the IRS do not impact the final AED.
-The results shown in \cite{zhang2019capacity} do not reflect the result only because 
-the values $R = 4, S = 100 , T = 4$ are chosen so these asymptotic results do not apply. 
-These results can be seem in 
-
+The results shown in \cite{zhang2019capacity} do not reflect that the phases play no role in capacity because 
+the matrix dimensions chosen, $R = 4, S = 100 , T = 4$ are not applicable to asymptotic analysis. 
+These results can be seen in 
 \section{Optimization}
 For the system
 \begin{equation}
@@ -122,10 +121,10 @@ covariance matrix given by
 \begin{equation}
 \mathbf{H}_{Total}\mathbf{H}_{Total}^H = 
 \underbrace{
-\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{G}^H + \mathbf{G}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H}_{\text{cross terms}}
+\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{G}^H + \mathbf{G}\mathbf{G}^H}_{\text{cross terms}}
 + 
 \underbrace{
-\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H + \mathbf{G}\mathbf{G}^H}_{\text{non-cross terms}}.
+\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H + \mathbf{G}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H}_{\text{non-cross terms}}.
 \end{equation} 
 Here we wanted to see if the final AED is influenced by the cross terms. The case in which elements of the channel matrices are zero-mean with variance  $\frac{1}{N}$ is shown in \ref{cross}. In this case, the cross terms appear to have symmetry such that they will not influence the final AED.
 
@@ -162,7 +161,7 @@ Capacity min:
 Capacity max:
  1.9986482518130326
 \end{itemize}
-Similarly, the results for $T = 500 R = 500$ and $S = 1000$ are shown 
+Similarly, the results for $T = 500$, $ R = 500$ and $S = 1000$ are shown 
 \begin{itemize}
 \item
 Capacity variance:

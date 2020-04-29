@@ -1,6 +1,6 @@
 \documentclass[10pt,tgadventor, onlymath]{beamer}
 
-\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork, fontawesome, xcolor}
+\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork, fontawesome}
 
 %\input defs.tex
 \graphicspath{ {./figures/} }
@@ -84,9 +84,9 @@
 
 	\begin{itemize}
 		\item 			
-			Base Stations Vs. Relay $\rightarrow$ reduced core network footprint/cost
-%		\item 
-%			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
+			Relays vs. Base Stations -> reduced core network footprint/cost
+		\item 
+			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
 		\item 
 			Extending wireless coverage is relevant to high frequencies used in 5G +
 	\end{itemize}
@@ -129,7 +129,9 @@
 	\item 
 		No RF chain required (low cost)
 	\item
-		Shorter distances $\leftarrow$ keep LOS
+		Shorter distances -> keep LOS
+	\item 
+		Current number of reflectors on models
 	\item 
 		Inherently full-duplex
 	\end{itemize}
@@ -174,12 +176,12 @@ $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \tim
 \begin{enumerate}
 \item
 	Find capacity of asymptotic IRS systems
-	\begin{itemize}
+	\begin{enumerate}
 	\item 
 		Optimize phase matrix
 	\item
 		Generalize results
-	\end{itemize}
+	\end{enumerate}
 
 \item 
 	Confirm findings with numerical results throughout
@@ -198,8 +200,9 @@ $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \tim
 	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
 \end{equation*}
 
-With $\mathbf{x}\mathbf{x}^H = \mathbf{I}$ and fixed $\boldsymbol{\Phi}$, capacity is given by 
+Assume $\mathbf{x}\mathbf{x}^H = \mathbf{I}$. Capacity is given by 
 \begin{equation}\label{capacity}
+\underset{\boldsymbol{\Phi} }{\mathrm{max}}
 \Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P_{\text{Total}}}{T \sigma_n}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}][\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]^H|\right)\right].
 \end{equation}
 Using 
@@ -208,10 +211,11 @@ Using
 \end{equation}
 and simplifying, \ref{capacity} becomes
 \begin{equation}
-N \int_0^{\infty}\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} + \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right) p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda) d\lambda
+\underset{\boldsymbol{\Phi} }{\mathrm{max}}
+\Expect\left[N\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} + \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right)\right]
 \end{equation}
-with $N$ = rank($\mathbf{H}_{\text{Total}}$).
-Need Asymptotic Eigenvalue Distribution (AED).
+with $N$ as ???.
+Need Asymptotic Eigenvalue Distribution (AED) $p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda)$.
 \end{frame}
 
 
@@ -242,35 +246,30 @@ Free probability provides a set of tools to find the AED of polynomials in free,
 }_
 {\color{red}{\text{not free}}}
 \end{equation*}
-%Need to show that these are not free!
+Need to show that these are not free!
 \end{frame}
 
 \begin{frame}
 \frametitle{Free Probability}
 Introduce the SVD AED relationship.
-\begin{equation}
-\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H 
-=
-[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}][\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]^H
-\end{equation}
-
 \begin{equation}\label{svd_aed_property}
-\tilde{G}_{H}(s) = sG_{HH^{\dagger}}(s^2).
+\tilde{G}_{B}(s) = sG_{BB^{\dagger}}(s^2).
 \end{equation}
-Additive free convolution still applies for singular values.
-We only need the self-adjoint terms of the polynomial!
+Show that ultimately we will look to get the Stieltjes transform of both of these terms
 \end{frame}
 
 \begin{frame}
-\frametitle{Free Probability: Canceling Phase Terms}
+\frametitle{Free Probability}
+Show how to solve for individual covariance matrices and point out that phases cancel.
+Asymptotic analysis
 Say 
 \begin{equation}
 C_2 = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H
 \end{equation}
 and a rotated version 
 \begin{equation}
-\tilde{C}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H.
-\end{equation}
+\tilde{C}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H
+\end{equation}. 
 Use property 
 \begin{equation}\label{rotation_property}
 S_{C_2}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_2}(\frac{z}{\chi_2}).
@@ -281,87 +280,23 @@ C_{1} = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
 \end{equation}
 we get 
 \begin{equation}
-\tilde{C}_{1} = \textcolor{red}{\boldsymbol{\Phi}\boldsymbol{\Phi}^H}\mathbf{H}_{2}^H\mathbf{H}_{2}
+\tilde{C}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
 \end{equation}
 with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$.
 \end{frame}
-
-
-
-\begin{frame}
-	\frametitle{Capacity of constant channels with random phase $(N=1000)$}
-\begin{columns}
-\begin{column}{0.5\linewidth}
-\centering
-Asymptotic case \\ $T = 100$, $ R = 100$ and $S = 100$
-\begin{itemize}
-\item
-Capacity variance:
- 0.00031899954828354404
- \item
-Capacity average:
- 1.975393493587653
- \item
-Capacity min:
- 1.912389039251327
- \item
-Capacity max:
- 2.042759283938688
-\end{itemize}
-%\textcolor{red}{\chi_N}}
-
-
-\end{column}
-\begin{column}{0.5\linewidth}
-\centering
-Non-asymptotic case\\ $T = R = 4$ and $S = 100$
-
-\begin{itemize}
-  \item
- Capacity variance:
- 0.05275097522665486
-  \item
-
-Capacity average:
- 1.600623052049091
-  \item
-
-Capacity min:
- 0.8194531090057893
-  \item
-
-Capacity max:
- 2.405767071172762
-\end{itemize}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Numerical Results 2}
-	Confirm that distribution using the equation.
-\end{frame}
-
 
 
 \begin{frame}
 \frametitle{Current Status}
 \begin{enumerate}
 \item
-	Find capacity of asymptotic IRS systems  \faCheck
-	\begin{itemize}
-	\item 
-		Optimize phase matrix	\faQuestion
-	\item
-		Generalize results
-	\end{itemize}
-
+	Find capacity of asymptotic IRS systems: \faCheck
+\item
+	Extend results to secrecy capacity: TODO
 \item 
 	Confirm findings with numerical results throughout
-	
-\item
-	* Time permitting - Consider secrecy capacity of IRS system
 \end{enumerate}
+
 \end{frame}
 
 

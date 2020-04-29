@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from src.lin_alg import *
 import seaborn
 
-size = 1000
-n_t = 500
-n_r = 500
+size = 100
+n_t = 4
+n_r = 4
 rows = size
 cols = size
 bins = int(size/2)
@@ -16,7 +16,7 @@ capacities = []
 cross_sum = 0
 main_sum = 0
 
-average = 50
+average = 1000
 H_1 = c_rand(size, n_t)
 H_2 = c_rand(n_r, size)
 G = c_rand(n_r, n_t)
