@@ -1,13 +1,13 @@
 import numpy as np
 
 # capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix)) #   Returns complex residual
-capacity = lambda matrix, snr: np.sum(np.log(1 + snr*np.linalg.eigvalsh(matrix)))
+capacity = lambda matrix, snr: np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
 
 
 def aed_capacity(x_value, value_probability, step, snr, number_receivers):
     probabilities = value_probability*step
     check = np.sum(probabilities)
-    return number_receivers*np.sum(np.log(1 + snr*x_value)*probabilities)
+    return number_receivers*np.sum(np.log2(1 + snr*x_value)*probabilities)
 
 
 c_rand = lambda rows, cols: (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)

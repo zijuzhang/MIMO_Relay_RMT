@@ -208,7 +208,7 @@ Using
 \end{equation}
 and simplifying, \ref{capacity} becomes
 \begin{equation}
-N \int_0^{\infty}\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} + \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right) p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda) d\lambda
+N \int_0^{\infty}\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} + \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right) \textcolor{red}{p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda)} d\lambda
 \end{equation}
 with $N$ = rank($\mathbf{H}_{\text{Total}}$).
 Need Asymptotic Eigenvalue Distribution (AED).
@@ -340,6 +340,20 @@ Capacity max:
 \begin{frame}
 	\frametitle{Numerical Results 2}
 	Confirm that distribution using the equation.
+\begin{columns}
+\begin{column}{0.5\linewidth}
+\centering
+\begin{figure}
+\includegraphics[width= 8cm, height = 5cm]{attenuation}
+\end{figure}
+\end{column}
+\begin{column}{0.5\linewidth}
+\centering
+\begin{figure}
+\includegraphics[width= 8cm, height = 5cm]{los}
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 
