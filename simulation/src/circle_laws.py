@@ -17,8 +17,10 @@ def normalize(x):
 # Quarter Circle Related
 st_quarter_circle_eigen = lambda s: 1/2 * np.sqrt(1-4/s) - 1/2
 st_quarter_circle = lambda s: 2*np.sqrt(4-np.power(s, 2))/np.pi * np.log((2+np.sqrt(4-np.power(s, 2)))/(-s))-s/2-2/np.pi
-marcenko_st = lambda s, phi: np.sqrt(np.power((1-phi), 2)/(4*np.power(s, 4)) - (1+phi)/(2*np.power(s, 2))
+marcenko_st2 = lambda s, phi: np.sqrt(np.power((1-phi), 2)/(4*np.power(s, 4)) - (1+phi)/(2*np.power(s, 2))
                    + 1/4) - 1/2 - (1-phi)/(2*np.power(s, 2))
+
+marcenko_st = lambda s, phi: 1/2 + (1-phi)/(2*s) + np.sqrt(np.power(1-phi,2)/(4*np.power(s,2))-(1+phi)/(2*s)+1/4)
 
 #Semi-Circle law related equations
 

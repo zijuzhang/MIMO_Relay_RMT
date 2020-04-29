@@ -4,11 +4,10 @@ import numpy as np
 capacity = lambda matrix, snr: np.sum(np.log(1 + snr*np.linalg.eigvalsh(matrix)))
 
 
-def aed_capacity(value, value_probability, step, snr, number_receivers):
+def aed_capacity(x_value, value_probability, step, snr, number_receivers):
     probabilities = value_probability*step
     check = np.sum(probabilities)
-    check1 = np.sum(np.log(1 + snr*value)*probabilities)
-    return number_receivers*np.sum(np.log(1 + snr*value)*probabilities)
+    return number_receivers*np.sum(np.log(1 + snr*x_value)*probabilities)
 
 
 c_rand = lambda rows, cols: (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)

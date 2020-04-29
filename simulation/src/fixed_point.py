@@ -12,7 +12,8 @@ def decontamination(G_k, s, K):
 
 def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, attempt_tol=5,func_param=None, unique_half_plane=False):
     """
-
+    NOTE that I do not do this function on the entire array in order to better track convergence of the fixed point
+    equation
     :param fixed_point_function:
     :param s_vector:
     :param iterations:
