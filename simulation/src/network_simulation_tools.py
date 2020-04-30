@@ -94,7 +94,7 @@ class IRS:
 
 
 
-def water_filling(channel_matrix, power_constraint, sigma_square=1e-2):
+def water_filling(channel_matrix, power_constraint, sigma_square=1):
     """
     May not be using cvx correctly but currently this only works for very small problems
     :param covariance_matrix:

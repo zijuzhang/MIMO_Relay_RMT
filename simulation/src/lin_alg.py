@@ -2,6 +2,7 @@ import numpy as np
 
 # capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix)) #   Returns complex residual
 capacity = lambda matrix, snr: np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
+capacity_water_filled = lambda matrix: np.sum(np.log2(1 + np.linalg.eigvalsh(matrix)))
 
 
 def aed_capacity(x_value, value_probability, step, snr, number_receivers):
