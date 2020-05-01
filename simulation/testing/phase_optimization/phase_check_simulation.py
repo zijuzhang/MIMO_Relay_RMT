@@ -5,8 +5,8 @@ from src.lin_alg import *
 import seaborn
 
 size = 100
-n_t = 4
-n_r = 4
+n_t = 100
+n_r = 100
 rows = size
 cols = size
 bins = int(size/2)
@@ -17,10 +17,12 @@ cross_sum = 0
 main_sum = 0
 
 average = 1000
-H_1 = c_rand(size, n_t)
-H_2 = c_rand(n_r, size)
+# H_1 = c_rand(size, n_t)
+H_1 = c_rand(size, n_t, var=1/np.sqrt(n_r*size))
+H_2 = c_rand(n_r, size, var=1/np.sqrt(n_r*size))
+# H_1 = c_rand(size, n_t)
+# H_2 = c_rand(n_r, size)
 G = c_rand(n_r, n_t)
-F = c_rand(rows, cols)
 for i in range(average):
     H = H_2 @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size))) @ H_1
     # F = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)

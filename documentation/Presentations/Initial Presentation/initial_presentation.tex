@@ -65,8 +65,7 @@
 %% begin presentation
 
 \title{\large \bfseries Asymptotic Capacity of Systems with Intelligent Reflective Surfaces}
-
-\author{Peter Hartig\\[3ex]}
+\author{Peter Hartig \\ \and Supervisor: Saba Asaad}
 
 \date{\today}
 
@@ -129,7 +128,7 @@
 	\item 
 		No RF chain required (low cost)
 	\item
-		Shorter distances $\leftarrow$ keep LOS
+		Shorter distances $\rightarrow$ keep LOS
 	\item 
 		Inherently full-duplex
 	\end{itemize}
@@ -289,7 +288,15 @@ with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$.
 
 
 \begin{frame}
-	\frametitle{Capacity of constant channels with random phase $(N=1000)$}
+	\frametitle{Capacity of constant channels with random phase
+	}
+	\centering 
+	$\mathbf{H}_{2} \in \mathbb{C}_{R \times T}$, 
+	$\mathbf{H}_{1} \in \mathbb{C}_{S \times T}$, with $\mathcal{CN}(0,\frac{1}{\sqrt{RS}})$
+	and $ \mathbf{G} \in \mathbb{C}_{R \times T}$ with $\mathcal{CN}(0,\frac{1}{R})$. 
+	Statistics from $1000$ random realizations of phases $\boldsymbol{\Phi}$.
+	\bigskip
+	
 \begin{columns}
 \begin{column}{0.5\linewidth}
 \centering
@@ -297,41 +304,35 @@ Asymptotic case \\ $T = 100$, $ R = 100$ and $S = 100$
 \begin{itemize}
 \item
 Capacity variance:
- 0.00031899954828354404
+ 0.0038458296727919886
  \item
 Capacity average:
- 1.975393493587653
+ 6.764651253343401
  \item
 Capacity min:
- 1.912389039251327
+ 6.574540172102809
  \item
 Capacity max:
- 2.042759283938688
+ 6.98960781887363
 \end{itemize}
 %\textcolor{red}{\chi_N}}
-
-
 \end{column}
 \begin{column}{0.5\linewidth}
 \centering
 Non-asymptotic case\\ $T = R = 4$ and $S = 100$
-
 \begin{itemize}
-  \item
- Capacity variance:
- 0.05275097522665486
-  \item
-
+\item
+Capacity variance:
+ 0.4157628312024758
+ \item
 Capacity average:
- 1.600623052049091
-  \item
-
+ 4.014673474337778
+ \item
 Capacity min:
- 0.8194531090057893
-  \item
-
+ 2.146914646653352
+ \item
 Capacity max:
- 2.405767071172762
+ 6.130275960052021
 \end{itemize}
 \end{column}
 \end{columns}

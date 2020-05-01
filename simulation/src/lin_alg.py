@@ -11,7 +11,12 @@ def aed_capacity(x_value, value_probability, step, snr, number_receivers):
     return number_receivers*np.sum(np.log2(1 + snr*x_value)*probabilities)
 
 
-c_rand = lambda rows, cols: (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
+def c_rand(rows, cols, var=None):
+    if var is not None:
+        return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))*np.sqrt(var)
+    else:
+        return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
+
 c_rand_mean = lambda rows, cols: 1e-1 + 1j*1e-1 + (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
 
 c_rand_2 = lambda rows, cols:  (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(cols*rows)

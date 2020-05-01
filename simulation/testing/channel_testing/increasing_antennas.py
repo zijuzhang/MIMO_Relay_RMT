@@ -17,7 +17,9 @@ phi = 1    # phi=1 is full rank line of sight.  L/T
 
 numeric_capacity_list = []
 water_fill_capacity = []
-param_list = [100, 200, 300, 400, 500]
+G_fill_capacity = []
+H_fill_capacity = []
+param_list = [1, 10, 50, 100, 200, 300]
 
 
 for val in param_list:
@@ -26,11 +28,13 @@ for val in param_list:
     irs = []
     irs_svd = []
     water_capacity = []
+    H_capacity = []
+    G_capacity = []
     capacities = []
     cross_sum = 0
     main_sum = 0
     los_rank_matrix = reduced_rank(rows, phi)
-    average = 3
+    average = 5
     for i in range(average):
         # H = sigma*c_rand(rows, cols) @random_phase(rows)@ c_rand(rows, cols)
         H = sigma*c_rand(rows, cols) @ c_rand(rows, cols)
@@ -56,10 +60,20 @@ for val in param_list:
         capacities.append(capacity(total_irs, 1/cols))
         water_capacity.append(capacity_water_filled(total_channel@Q_x@hermetian(total_channel)))
 
+        Q_H = water_filling(H, 1)
+        Q_G = water_filling(G, 1)
+        H_capacity.append(capacity_water_filled(H@Q_H@hermetian(H)))
+        G_capacity.append(capacity_water_filled(G@Q_G@hermetian(G)))
+
+
+
+
 
 #   Compare Estimated to True Capacity
     numeric_capacity_list.append(np.average(capacities))
     water_fill_capacity.append(np.average(water_capacity))
+    G_fill_capacity.append(np.average(G_capacity))
+    H_fill_capacity.append(np.average(H_capacity))
 
 #   Plot results
 fig, ax = plt.subplots()
@@ -67,6 +81,9 @@ plt.title("Capacity Vs. Num Antennas")
 # plt.title("Capacity Vs. IRS Path Attenuation")
 ax.plot(param_list, numeric_capacity_list, label='equal power', c='r')
 ax.plot(param_list, water_fill_capacity, label='water filled capacity', c='g')
+ax.plot(param_list, H_fill_capacity, label='IRS channel')
+ax.plot(param_list, G_fill_capacity, label='LOS channel')
+
 ax.set_ylabel('Capacity (Bits)')
 # ax.set_xlabel('Relative Attenuation Coefficient')
 ax.set_xlabel('Number Antennas')
