@@ -46,8 +46,8 @@ param_list = [0, .25 , .5 , 1]
 
 
 for val in param_list:
-    phi = val
-    # sigma = val
+    # phi = val
+    sigma = val
     parameters = [sigma, rho, phi]
     theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes_deformed, s_vector, 100, 1e-3, 3,
                                               func_param=parameters, unique_half_plane=True))
@@ -95,13 +95,13 @@ for val in param_list:
 
 #   Plot results
 fig, ax = plt.subplots()
-plt.title("Capacity Vs. Line of Sight Rank")
-# plt.title("Capacity Vs. IRS Path Attenuation")
-ax.plot(param_list, theoretic_capacity_list, label='theoretical capacity', c='g')
-ax.plot(param_list, numeric_capacity_list, label='numerical capacity (N=100)', c='r')
+# plt.title("Capacity Vs. Line of Sight Rank")
+plt.title("Capacity Vs. IRS Path Attenuation")
+ax.plot(param_list, theoretic_capacity_list, label='Asymptotic Expression', c='g')
+ax.plot(param_list, numeric_capacity_list, label='Numerical Capacity (N=100)', c='r')
 ax.set_ylabel('Capacity (Bits)')
-# ax.set_xlabel('Relative Attenuation Coefficient')
-ax.set_xlabel('Line of Sight Channel Rank')
+ax.set_xlabel('Relative Attenuation Coefficient')
+# ax.set_xlabel('Line of Sight Channel Rank')
 plt.legend(loc="upper left")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)
