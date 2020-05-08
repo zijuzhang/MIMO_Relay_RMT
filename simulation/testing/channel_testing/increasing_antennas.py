@@ -34,7 +34,7 @@ for val in param_list:
     cross_sum = 0
     main_sum = 0
     los_rank_matrix = reduced_rank(rows, phi)
-    average = 5
+    average = 1
     for i in range(average):
         # H = sigma*c_rand(rows, cols) @random_phase(rows)@ c_rand(rows, cols)
         H = sigma*c_rand(rows, cols) @ c_rand(rows, cols)
@@ -58,7 +58,7 @@ for val in param_list:
         irs.append(e_val_total_irs)
         irs_svd.append(s_val_total_irs)
         capacities.append(capacity(total_irs, 1/cols))
-        water_capacity.append(capacity_water_filled(total_channel@Q_x@hermetian(total_channel)))
+        water_capacity.append(capacity_water_filled(Q_x))
 
         Q_H = water_filling(H, 1)
         Q_G = water_filling(G, 1)
