@@ -1,12 +1,17 @@
-from src.circle_laws import *
-import numpy as np
-import matplotlib.pyplot as plt
+# About:
+#   This is a test to look at how much impact different selections for the phase values at the IRS will
+#   have on the capacity of the channel.
+# Takeaways:
+#   As expected from analytic results, the phases will have no impact on the capacity for the asymptotic limit.
+#   In contrast, there is significant impact when there are a low number of transmit or receive antennas (including
+#   the case in which only one of these dimensions is small)
+
+
 from src.lin_alg import *
-import seaborn
 
 size = 100
-n_t = 100
-n_r = 100
+n_t = 3
+n_r = 3
 rows = size
 cols = size
 bins = int(size/2)

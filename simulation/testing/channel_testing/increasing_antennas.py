@@ -1,7 +1,5 @@
-from src.circle_laws import *
-import numpy as np
+
 import matplotlib.pyplot as plt
-from src.lin_alg import *
 import seaborn
 from src.network_simulation_tools import *
 
@@ -65,11 +63,7 @@ for val in param_list:
         H_capacity.append(capacity_water_filled(H@Q_H@hermetian(H)))
         G_capacity.append(capacity_water_filled(G@Q_G@hermetian(G)))
 
-
-
-
-
-#   Compare Estimated to True Capacity
+# Compare Estimated to True Capacity
     numeric_capacity_list.append(np.average(capacities))
     water_fill_capacity.append(np.average(water_capacity))
     G_fill_capacity.append(np.average(G_capacity))

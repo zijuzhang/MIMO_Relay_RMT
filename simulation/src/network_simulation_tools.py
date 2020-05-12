@@ -1,5 +1,4 @@
-import copy
-from src.circle_laws import *
+#   A collection of tools for generating simulation environments for MIMO, IRS networks
 import cvxpy as cp
 from src.lin_alg import *
 
@@ -93,10 +92,10 @@ class IRS:
             self.phases = np.diag(-1j*1j*np.ones(self.size))
 
 
-
 def water_filling(channel_matrix, power_constraint, sigma_square=1):
     """
-    May not be using cvx correctly but currently this only works for very small problems
+    Use of CVX to solve the convex water-filling problem for power allocation in a MIMO channel with CSI at
+    the transmitter.
     :param covariance_matrix:
     :param power_constraint:
     :param sigma_square:

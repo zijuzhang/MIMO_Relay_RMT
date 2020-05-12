@@ -1,5 +1,13 @@
+#   About:
+#   This test compares the free probability based analytic results for the IRS asymptotic eigenvalue distribution
+#   to numerical results of the AED. This comparison is found by comparing the capacity found using the
+#   analytic aed to those just generated numerically.
+#   Takeaways:
+#   The analytic results are close except for the case in which the asymptotic assumption no longer holds.
+
+
 from src.circle_laws import *
-import numpy as np
+from src.stieltjes_eqn import *
 import matplotlib.pyplot as plt
 from src.lin_alg import *
 import seaborn
@@ -12,26 +20,6 @@ sigma = 1   # Relative attenuation of IRS portion
 rho = 1     # S/R
 phi = 1    # phi=1 is full rank line of sight.  L/T
 #   Plot Theoretical Distribution and find corresponding capacity
-
-
-def arg_function(s_val, g_k, sigma=1, rho=1):
-    x_s = np.sqrt(s_val)
-    return x_s - (pow(sigma, 2)*rho*x_s*g_k)/(rho-pow(sigma, 2)*s_val*np.power(g_k, 2))
-
-
-def final_stieltjes_deformed(s_values, g_k, func_params):
-    sigma = func_params[0]
-    rho = func_params[1]
-    phi = func_params[2]
-    x_arg = arg_function(s_values, g_k, sigma=sigma, rho=rho)
-    # Correct
-    G_BB = 1/2 + (1-phi)/(2*np.power(x_arg, 2)) -\
-           np.sqrt(np.power((1-phi), 2)/(4*np.power(x_arg, 4)) - (1+phi)/(2*np.power(x_arg, 2)) + 1/4)
-    # Correct
-    # G_BB = np.sqrt(np.power((1-phi), 2)/(4*np.power(x_arg, 4)) - (1+phi)/(2*np.power(x_arg, 2))
-    #                + 1/4) - 1/2 - (1-phi)/(2*np.power(x_arg, 2))
-    return (1/np.sqrt(s_values))*x_arg*G_BB
-
 
 
 

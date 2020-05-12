@@ -4,15 +4,19 @@ import numpy as np
 def estimated_pdf(x):
     return 1/np.pi * np.imag(x)
 
+
 def decontamination(G_k, s, K):
     val = -s
     for k in range(K):
         val += (1 * s * G_k) / (1 - s * np.power(G_k, 2))
     return val
 
-def fixed_point(fixed_point_function, s_vector, iterations, tolerance=1e-5, attempt_tol=5,func_param=None, unique_half_plane=False):
+
+def fixed_point(fixed_point_function, s_vector, iterations,
+                tolerance=1e-5, attempt_tol=5,func_param=None, unique_half_plane=False):
     """
-    NOTE that I do not do this function on the entire array in order to better track convergence of the fixed point
+    NOTE that I do not do perform the function concurrently. This allows for better
+    tracking of the fixed-point convergence.
     equation
     :param fixed_point_function:
     :param s_vector:

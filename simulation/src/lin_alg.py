@@ -1,3 +1,5 @@
+#   About: A collection of functions uses often throughout this work.
+
 import numpy as np
 
 # capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix)) #   Returns complex residual

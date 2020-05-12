@@ -1,5 +1,10 @@
-from src.circle_laws import *
-import numpy as np
+# About:
+#   Test comparing the AED of the different terms from a scattering/LOS channel.
+# Takeaways
+#   While the mixed terms matrix sum has real eigenvalues, in the zero-mean case they do not impact the final AED.
+
+
+
 import matplotlib.pyplot as plt
 from src.lin_alg import *
 import seaborn

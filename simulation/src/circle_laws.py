@@ -22,10 +22,11 @@ marcenko_st2 = lambda s, phi: np.sqrt(np.power((1-phi), 2)/(4*np.power(s, 4)) - 
 
 marcenko_st = lambda s, phi: 1/2 + (1-phi)/(2*s) + np.sqrt(np.power(1-phi,2)/(4*np.power(s,2))-(1+phi)/(2*s)+1/4)
 
-#Semi-Circle law related equations
+# Semicircle law related equations
 
 def st_half_circle(s):
     return (s / 2) * np.sqrt(1 - 4 / np.power(s, 2)) - s / 2
+
 
 def semi_cicle_aed(x):
     return 1 / (2 * np.pi)*np.sqrt(4-np.power(x, 2))
@@ -35,8 +36,10 @@ def half_circle_gamma_s_recip_wrong(s, gamma_z_recip_s):
     check = np.sqrt(gamma_z_recip_s)
     return s*(np.sqrt(gamma_z_recip_s) - 1/s)
 
+
 def half_circle_gamma_s_recip(s, gamma_z_recip_s):
     return 1/(s*(np.power(gamma_z_recip_s, -1/2) - 1/s))
+
 
 def half_circle_stieltjes_gamma(s_vector, iterations):
     return -(1/s_vector)*(fixed_point(half_circle_gamma_s_recip, s_vector, iterations)+1)

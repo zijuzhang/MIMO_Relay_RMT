@@ -1,3 +1,8 @@
+# A test for looking at impact of adding correlation through concatenated channels on the channel capacity
+# Takeaway:
+# If power is allocated equally the total capacity doesn't seem to be affected. However if waterfilling
+# is used then the correlated channels seem to have increasing capacity as correlation increases
+#
 import matplotlib.pyplot as plt
 from src.fixed_point import *
 from src.lin_alg import *
@@ -31,11 +36,11 @@ for i in range(average):
     e_val_total_irs = np.linalg.eigvalsh(total_irs)
     irs.append(np.real(e_val_total_irs))
 
-    H_cor = c_rand(size, 1)@np.ones((1, size))
-    # H_cor = np.eye(size)
-    # correlations = 100
-    # for i in range(correlations):
-    #     H_cor = c_rand(size, size)@H_cor
+    # H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
+    H_cor = np.eye(size)
+    correlations = 10
+    for i in range(correlations):
+        H_cor = c_rand(size, size)@H_cor
     HH_cor = H_cor @ np.conj(H_cor.T)
     e_val_cor = np.linalg.eigvalsh(HH_cor)
     irs_cor.append(np.real(e_val_cor))
@@ -43,11 +48,14 @@ for i in range(average):
     t1 = np.trace(GG)
     t2 = np.trace(HH)
     t3 = np.trace(HH_cor)
+
     # G_cap.append(capacity(GG, 1/size))
+    # cor_cap.append(capacity(HH_cor, 1/size))
+    # irs_cap.append(capacity(HH, 1/size))
+
     G_cap.append(capacity_water_filled(water_filling(G, 1)))
-    cor_cap.append(capacity_water_filled(water_filling(HH_cor, 1)))
+    cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
     irs_cap.append(capacity_water_filled(water_filling(H, 1)))
-    print("check")
 
 
 irs_AED, bins_irs = np.histogram(np.asarray(irs), bins=bins)
@@ -59,7 +67,7 @@ print(f"los {G_cap_ave}, std: {np.var(G_cap)}")
 H_cap_ave = np.average(irs_cap)
 print(f"IRS {H_cap_ave}, std: {np.var(irs_cap)}")
 H_cor_cap_ave = np.average(cor_cap)
-print(f"correlated ave: {H_cor_cap_ave}, std: {np.var(cor_cap)}")
+print(f"Correlated: {H_cor_cap_ave}, std: {np.var(cor_cap)}")
 
 fig, ax = plt.subplots()
 plt.title("IRS Channels Components: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")

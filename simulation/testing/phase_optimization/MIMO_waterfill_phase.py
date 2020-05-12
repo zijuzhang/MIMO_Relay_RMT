@@ -39,10 +39,6 @@ for num_irs in [4]:
 print(f"water filling phase 1{capacity_water} \n")
 print(f"water filling phase 2 {capacity_water_phase} \n")
 
-
-
-
-
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)
