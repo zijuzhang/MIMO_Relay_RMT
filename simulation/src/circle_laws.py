@@ -20,7 +20,30 @@ st_quarter_circle = lambda s: 2*np.sqrt(4-np.power(s, 2))/np.pi * np.log((2+np.s
 marcenko_st2 = lambda s, phi: np.sqrt(np.power((1-phi), 2)/(4*np.power(s, 4)) - (1+phi)/(2*np.power(s, 2))
                    + 1/4) - 1/2 - (1-phi)/(2*np.power(s, 2))
 
-marcenko_st = lambda s, phi: 1/2 + (1-phi)/(2*s) + np.sqrt(np.power(1-phi,2)/(4*np.power(s,2))-(1+phi)/(2*s)+1/4)
+marcenko_st = lambda s, phi: 1/2 + (1-phi)/(2*s) + np.sqrt(np.power(1-phi, 2)/(4*np.power(s, 2))-(1+phi)/(2*s)+1/4)
+
+
+#   Deformed quarter circle
+
+def quarter_gamma4 (z, previous, alpha):
+    return np.sqrt((previous-z*(alpha+(1+alpha)*previous))/z)
+
+def quarter_gamma_fixed (z, alpha):
+    return fixed_point(quarter_gamma4, z, 100, func_param=alpha)
+
+def st_dquarter_gamma_based(s, alpha):
+    return (-1/s)*(1+quarter_gamma_fixed(1/s, alpha))
+
+#   Quarter cirlce
+def quarter_gamma_s(z, previous):
+    return np.sqrt(previous/z) - 1
+
+def quarter_gamma_s_fixed(z):
+    return fixed_point(quarter_gamma_s, z, 1000)
+
+def st_quarter_gamma_based(s, alpha):
+    return (-1/s)*(1+quarter_gamma_s_fixed(1/s))
+
 
 # Semicircle law related equations
 

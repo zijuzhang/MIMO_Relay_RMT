@@ -13,7 +13,7 @@ def decontamination(G_k, s, K):
 
 
 def fixed_point(fixed_point_function, s_vector, iterations,
-                tolerance=1e-5, attempt_tol=5,func_param=None, unique_half_plane=False):
+                tolerance=1e-5, attempt_tol=5, func_param=None, unique_half_plane=False):
     """
     NOTE that I do not do perform the function concurrently. This allows for better
     tracking of the fixed-point convergence.

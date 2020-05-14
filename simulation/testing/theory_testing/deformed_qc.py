@@ -2,29 +2,48 @@ import numpy as np
 import matplotlib.pyplot as plt
 from src.circle_laws import *
 from src.lin_alg import *
-rows = 500
-cols = 500
+rows = 512
+# alpha_list = [.1, .5, .8, 1]
+# alpha_list = [.1]
+alpha_list = [1]
 bins = 50
-alpha = cols/rows
-beta = rows/cols
 los_rank = 1
-los_rank_matrix = reduced_rank(rows, los_rank)
-H_los = c_rand(rows, cols)@los_rank_matrix
-H_scatter = .25*c_rand(rows, cols)@c_rand(rows, cols)
-total = H_los@np.conj(H_los).T
-# svd = np.linalg.svd(H_scatter+H_los)
-# eigen_value, bins = np.histogram(svd[1], bins=bins)
-evd = np.linalg.eigvalsh(total)
-eigen_value, bins = np.histogram(evd, bins=bins)
-values, step = np.linspace(1e-2, 4, 100, retstep=True)
-distribution = deformed_qc_eigen(values, alpha)
-st_distribution = estimated_pdf(st_quarter_circle_eigen(values+1j*1e-6))
-print(f" simulation capacity: {capacity(total,1/cols)}")
-print(f"theoretic capacity: {aed_capacity(values, st_distribution, step, 1/cols, rows)}")
+average = 10
 plt.figure()
+for alpha in alpha_list:
+    eigen_values = []
+    cols = int(rows * alpha)
+    for i in range(average):
+        los_rank_matrix = reduced_rank(rows, los_rank)
+        H_los = c_rand(rows, cols, 1/(2*rows))
+        total = H_los@np.conj(H_los).T
+        # svd = np.linalg.svd(H_los)
+        # eigen_value, bins = np.histogram(svd[1], bins=bins)
+        eigen_values.append(np.linalg.eigvalsh(total))
+
+    eigen_value_vec, bins = np.histogram(np.asarray(eigen_values), bins=bins)
+    # plt.plot(bins[:-1], eigen_value_vec/rows, label=f"{alpha}")
+
+    x_values, step = np.linspace(1e-2, 4, 100, retstep=True)
+    distribution = deformed_qc_eigen(x_values, alpha)
+
+    y = 1e-9
+    s_vector = x_values + 1j * y
+    st_vals = st_quarter_gamma_based(s_vector, alpha)
+    second_distribution = estimated_pdf(st_vals)
+
+    st_vals = st_dquarter_gamma_based(s_vector, alpha)
+    third_distribution = estimated_pdf(st_vals)
+    plt.plot(x_values, distribution, label=f"true {alpha}")
+    plt.plot(x_values, second_distribution, label=f"gamma qc {alpha}")
+    plt.plot(x_values, third_distribution, label=f"gamma dqc {alpha}")
+
+
+# st_distribution = estimated_pdf(st_quarter_circle_eigen(values+1j*1e-6))
+print(f" simulation capacity: {capacity(total,1/cols)}")
+# print(f"theoretic capacity: {aed_capacity(values, st_distribution, step, 1/cols, rows)}")
 plt.title("deformed quarter circle")
-plt.plot(values, st_distribution)
-plt.plot(values, distribution)
-plt.plot(bins[1::], eigen_value/rows)
+# plt.plot(values, st_distribution)
+plt.legend(loc="upper right")
 plt.show()
 

@@ -1,8 +1,9 @@
 # A test for looking at impact of adding correlation through concatenated channels on the channel capacity
 # Takeaway:
-# If power is allocated equally the total capacity doesn't seem to be affected. However if waterfilling
+# If power is allocated equally the ave capacity doesn't seem to be affected however variance increase
+# with increasing correlation. However if water-filling
 # is used then the correlated channels seem to have increasing capacity as correlation increases
-#
+
 import matplotlib.pyplot as plt
 from src.fixed_point import *
 from src.lin_alg import *
@@ -63,11 +64,11 @@ AED_cor, bins_cor = np.histogram(np.asarray(irs_cor), bins=bins)
 AED_G, bins_G = np.histogram(np.asarray(no_irs), bins=bins)
 
 G_cap_ave = np.average(G_cap)
-print(f"los {G_cap_ave}, std: {np.var(G_cap)}")
+print(f"los ave: {G_cap_ave}, var: {np.var(G_cap)}")
 H_cap_ave = np.average(irs_cap)
-print(f"IRS {H_cap_ave}, std: {np.var(irs_cap)}")
+print(f"IRS ave: {H_cap_ave}, var: {np.var(irs_cap)}")
 H_cor_cap_ave = np.average(cor_cap)
-print(f"Correlated: {H_cor_cap_ave}, std: {np.var(cor_cap)}")
+print(f"Correlated ave: {H_cor_cap_ave}, var: {np.var(cor_cap)}")
 
 fig, ax = plt.subplots()
 plt.title("IRS Channels Components: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
