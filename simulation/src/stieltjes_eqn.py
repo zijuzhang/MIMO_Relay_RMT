@@ -1,6 +1,14 @@
 # A collection of equations for different analytic results
 import numpy as np
 
+def estimated_pdf(x):
+    """
+    Get PDF at COMPLEX value x +jy  from stieljes transform. y -> 0.
+    :param x:
+    :return:
+    """
+    return 1/np.pi * np.imag(x)
+
 #   The equations corresponding to the LOS + Scattering Stieltjes Transform
 def arg_function(s_val, g_k, sigma=1, rho=1):
     x_s = np.sqrt(s_val)

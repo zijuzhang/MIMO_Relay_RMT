@@ -1,9 +1,6 @@
 
 import numpy as np
 
-def estimated_pdf(x):
-    return 1/np.pi * np.imag(x)
-
 
 def decontamination(G_k, s, K):
     val = -s
@@ -26,7 +23,11 @@ def fixed_point(fixed_point_function, s_vector, iterations,
     :param unique_half_plane: Inidicates if the fixed point is only unique in the upper half plane.
     :return:
     """
-    ret_vec = -1j*1j*np.ones(s_vector.shape)
+    if type(s_vector) is complex:
+        ret_vec = -1j*1j*np.zeros((1, 1))
+        s_vector = [s_vector]
+    else:
+        ret_vec = -1j*1j*np.zeros(s_vector.shape)
     epsilons = []
     for ind, s in enumerate(s_vector):
         epsilon = []
@@ -46,6 +47,8 @@ def fixed_point(fixed_point_function, s_vector, iterations,
                     val = fixed_point_function(s, G_k)
                 if unique_half_plane and np.imag(val) < 0:
                     val = np.conj(val)
+                if np.isinf(val) or np.isinf(val):
+                    print("nan/inf")
                 epsilon.append(np.abs(G_k - val))
                 G_k = val
                 check.append(val)

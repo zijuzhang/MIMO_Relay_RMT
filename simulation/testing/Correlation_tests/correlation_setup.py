@@ -9,21 +9,22 @@ from src.fixed_point import *
 from src.lin_alg import *
 from src.network_simulation_tools import water_filling
 import seaborn
+from scipy.linalg import toeplitz
 
-
-size = 100
-rows = 100
-cols = 100
+size = 200
+rows = 200
+cols = 200
 bins = int(size/2)
 no_irs = []
 irs = []
 irs_cor = []
 rank = 100
 phi = rank/rows
-average = 5
 G_cap = []
 cor_cap = []
 irs_cap = []
+
+average = 10
 for i in range(average):
     G = c_rand(rows, cols)
     GG = G @ np.conj(G.T)
@@ -39,10 +40,21 @@ for i in range(average):
 
     # H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
     H_cor = np.eye(size)
-    correlations = 10
+    correlations = 1
     for i in range(correlations):
         H_cor = c_rand(size, size)@H_cor
     HH_cor = H_cor @ np.conj(H_cor.T)
+    # check = np.linalg.eigh(HH_cor)
+    # e_vec = check[1][:, -1]  # why is the first value of this always entirely real?
+    H_cor = c_rand(rows, cols)
+    block = toeplitz(np.array((1, .5)))
+    correlation_matrix = block_matrix(block, H_cor.shape[0], normalize=True)
+    CC = correlation_matrix@hermetian(correlation_matrix)
+    check1 = np.linalg.eigvalsh(CC)
+    HH_cor = correlation_matrix@H_cor @ hermetian(H_cor) @hermetian(correlation_matrix)
+    check1 = np.linalg.eigvalsh(HH_cor)
+
+
     e_val_cor = np.linalg.eigvalsh(HH_cor)
     irs_cor.append(np.real(e_val_cor))
 
@@ -79,7 +91,7 @@ ax.plot(bins_G[:-1], AED_G/rank, label='No IRS')
 
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
-seaborn.despine(ax=ax, offset=0)  # the important part here
-plt.show()
+seaborn.despine(ax=ax, offset=0)
+# plt.show()
 
 

@@ -36,14 +36,14 @@ def st_dquarter_gamma_based(s, alpha):
 
 #   Quarter cirlce
 def quarter_gamma_s(z, previous):
-    return np.sqrt(previous/z) - 1
+    return np.power(previous/z, 1/2) - 1
+    # return np.power(previous/z, 1/3) - 1
 
 def quarter_gamma_s_fixed(z):
     return fixed_point(quarter_gamma_s, z, 1000)
 
 def st_quarter_gamma_based(s, alpha):
     return (-1/s)*(1+quarter_gamma_s_fixed(1/s))
-
 
 # Semicircle law related equations
 

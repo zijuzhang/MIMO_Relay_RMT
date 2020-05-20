@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from src.circle_laws import *
 from src.fixed_point import *
 from src.lin_alg import *
 import seaborn
