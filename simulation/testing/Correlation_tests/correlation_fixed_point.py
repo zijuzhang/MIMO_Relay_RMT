@@ -36,7 +36,7 @@ def gamma_c_fixed(s, gamma_s):
     for eigen_val in e_val_correlation:
         total += (1/num)*(1/(eigen_val-1/gamma_s))
     total /= (-(1+s))
-    if np.isnan(total) or np.isinf(total) or total <= 1e-6:
+    if np.isnan(total) or np.isinf(total):
         print("nan")
     return total
 
@@ -58,7 +58,7 @@ def gammavals(s_values):
     ret = fixed_point(gammafixed, s_values, 100)
     return ret
 
-stieltjes_values = -1/(s_values)*(1+gammavals(s_values))
+stieltjes_values = (-1/s_values)*(1+gammavals(1/s_values))
 pdf = estimated_pdf(stieltjes_values)
 
 fig, ax = plt.subplots()

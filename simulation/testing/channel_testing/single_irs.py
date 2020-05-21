@@ -1,3 +1,7 @@
+"""
+This test is to check the fixed point expression for the concatenated channel from the IRS.
+"""
+
 import matplotlib.pyplot as plt
 from src.circle_laws import *
 from src.fixed_point import *
@@ -7,10 +11,11 @@ import seaborn
 
 def gamma(z, gamma_z):
     return np.power(gamma_z/z, 1/3) - 1
+
 y = 1e-6
-x = np.linspace(0.01, 30, 1000)
+x = np.linspace(0.01, 10, 1000)
 s_vector = x + 1j*y
-steiltjes_values = (-1/s_vector)*(fixed_point(gamma, 1/s_vector, 20, 1e-2)+1)
+steiltjes_values = (-1/s_vector)*(1+fixed_point(gamma, 1/s_vector, 100, 1e-2))
 aed = estimated_pdf(steiltjes_values)
 
 
@@ -22,7 +27,7 @@ main_terms = []
 no_irs = []
 irs = []
 
-average = 1
+average = 10
 for i in range(average):
     H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     HH = H @ np.conj(H.T)
@@ -35,8 +40,8 @@ irs_AED, bins_irs = np.histogram(np.asarray(irs), bins=bins)
 
 fig, ax = plt.subplots()
 plt.title("IRS Channels Components: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
-ax.plot(bins_irs[1::], irs_AED/rows, label='total: with IRS')
-ax.plot(x, aed, label='Theoretic AED')
+ax.plot(bins_irs[1::], irs_AED/(rows*average), label='total: with IRS')
+ax.plot(x, aed/np.linalg.norm(aed), label='Theoretic AED')
 
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
