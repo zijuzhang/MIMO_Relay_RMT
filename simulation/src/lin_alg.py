@@ -19,6 +19,7 @@ def c_rand(rows, cols, var=None, mean=0):
     else:
         return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows) + mean
 
+
 def block_matrix(block, size, normalize=False):
     """
     Create correlation matrices with repeated correlation blocks
@@ -45,7 +46,14 @@ def normalize_matrix(matrix, rows=False):
         return ret_mat
 
 
+def normalize(x):
+    normalized = x/np.linalg.norm(x)
+    check = np.linalg.norm(normalized)
+    return normalized
+
+
 c_rand_mean = lambda rows, cols: 1e-1 + 1j*1e-1 + (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
+
 
 c_rand_2 = lambda rows, cols:  (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(cols*rows)
 
@@ -53,7 +61,9 @@ c_rand_2 = lambda rows, cols:  (np.random.randn(rows, cols) + 1j*np.random.randn
 
 random_phase = lambda size: np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size)))
 
+
 hermetian = lambda x: np.conj(x.T)
+
 
 def reduced_rank(rows, rank):
     los_rank_vector = 1j*np.ones(rows)
@@ -82,3 +92,6 @@ def is_orthonormal(matrix):
 
     return np.alltrue(np.asarray(orthonormal))
 
+#Other Useful Functions
+pos = lambda x: (x > 0)*x
+delta = lambda x: x == 0

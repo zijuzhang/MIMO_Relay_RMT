@@ -1,17 +1,7 @@
 import numpy as np
 from src.fixed_point import *
-#Other Useful Functions
-pos = lambda x: (x > 0)*x
-delta = lambda x: x == 0
 
 #General Definitions
-estimated_pdf = lambda x: 1/np.pi * np.imag(x)
-
-def normalize(x):
-    normalized = x/np.linalg.norm(x)
-    check = np.linalg.norm(normalized)
-    return normalized
-
 
 
 # Quarter Circle Related

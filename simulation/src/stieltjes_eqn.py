@@ -9,6 +9,16 @@ def estimated_pdf(x):
     """
     return 1/np.pi * np.imag(x)
 
+
+# Move from a gamma function to the Stieltjes domain
+def steiltjes_from_gamma(s, gamma_function):
+    return (-1/s)*(1+gamma_function(1/s))
+
+
+# Move from inverse gamme to s-transform
+def s_transform_inverse_gamme(z, inverse_gamma):
+    return ((1+z)/z)*inverse_gamma(z)
+
 #   The equations corresponding to the LOS + Scattering Stieltjes Transform
 def arg_function(s_val, g_k, sigma=1, rho=1):
     x_s = np.sqrt(s_val)

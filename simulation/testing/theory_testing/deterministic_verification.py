@@ -1,6 +1,6 @@
 import numpy as np
 from src.lin_alg import *
-from src.stieltjes_eqn import estimated_pdf
+from src.stieltjes_eqn import *
 import matplotlib.pyplot as plt
 from src.fixed_point import *
 from scipy.linalg import toeplitz
@@ -23,22 +23,15 @@ def inverse_gamma(z_vector):
     check = fixed_point(inv_gamme_fixed, z_vector, 100, unique_half_plane=True)
     return check
 
-def s_transform(z):
-    check = ((1+z)/z)*inverse_gamma(z)
-    return check
-
 def gamma_fixed(z, gamma_z):
     # check = (gamma_z + 1)*z/s_transform(z)
-    check = gamma_z*s_transform(z) - z
+    check = gamma_z*s_transform_inverse_gamme(z, inverse_gamma) - z
     return check
 
 def gamma(z):
     check = fixed_point(gamma_fixed, z, 100)
     return check
 
-def steiltjes_from_gamma(s):
-    check = (-1/s)*(1+gamma(1/s))
-    return check
 
 #   First Generate a deterministic matric
 cols = 100
@@ -51,7 +44,7 @@ x_vals = np.linspace(1e-6, 3, 300)
 # x_vals  = e_val_correlation
 s_vals = x_vals + 1j*1e-6
 pdf = estimated_pdf(deterministic_stieltjes(s_vals))
-fixed_pdf = estimated_pdf(steiltjes_from_gamma(s_vals))
+fixed_pdf = estimated_pdf(steiltjes_from_gamma(s_vals, gamma))
 irs_AED, bins_irs = np.histogram(e_val_correlation, bins=50)
 
 fig = plt.figure()
