@@ -1,4 +1,5 @@
 from src.circle_laws import *
+from src.stieltjes_eqn import *
 import numpy as np
 import matplotlib.pyplot as plt
 from src.lin_alg import *
@@ -41,7 +42,7 @@ parameters = [sigma, rho, phi]
 theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes_deformed, s_vector, 100, 1e-3, 3,
                                           func_param=parameters, unique_half_plane=True))
 # theoretic_pdf = estimated_pdf(marcenko_st(s_vector, phi))
-theoretic_capacity = aed_capacity(x_values, theoretic_pdf, step, 1/cols, rows)
+theoretic_capacity = aed_capacity(x_values, theoretic_pdf, 1/cols, rows, step=step)
 
 
 #   Now check histogram of simulations

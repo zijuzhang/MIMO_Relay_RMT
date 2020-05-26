@@ -10,7 +10,7 @@ def decontamination(G_k, s, K):
 
 
 def fixed_point(fixed_point_function, s_vector, iterations,
-                tolerance=1e-3, attempt_tol=5, func_param=None, unique_half_plane=False):
+                tolerance=1e-1, attempt_tol=1, func_param=None, unique_half_plane=False):
     """
     NOTE that I do not do perform the function concurrently. This allows for better
     tracking of the fixed-point convergence.
@@ -47,16 +47,16 @@ def fixed_point(fixed_point_function, s_vector, iterations,
                     val = fixed_point_function(s, G_k)
                 if unique_half_plane and np.imag(val) < 0:
                     val = np.conj(val)
-                if np.isinf(val) or np.isinf(val):
+                if np.isinf(val) or np.isinf(val) or np.isclose(0, val):
                     print("nan/inf")
                 epsilon.append(np.abs(G_k - val))
                 G_k = val
                 check.append(val)
+                ret_vec[ind] = G_k
                 if epsilon[-1] <= tolerance:
-                    ret_vec[ind] = G_k
                     epsilons.append(epsilon[-1])
                     tol_met = True
-                    break
+                    # break
             check1 = np.asarray(check)
             attempt += 1
         if tol_met:

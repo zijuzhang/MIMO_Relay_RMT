@@ -2,15 +2,20 @@
 
 import numpy as np
 
-# capacity = lambda matrix: np.log(np.linalg.det(np.eye(matrix.shape[0]) + matrix)) #   Returns complex residual
-capacity = lambda matrix, snr: np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
-capacity_water_filled = lambda matrix: np.sum(np.log2(1 + np.linalg.eigvalsh(matrix)))
+def capacity(matrix, snr):
+    return np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
+
+def capacity_water_filled(matrix):
+    return np.sum(np.log2(1 + np.linalg.eigvalsh(matrix)))
 
 
-def aed_capacity(x_value, value_probability, step, snr, number_receivers):
-    probabilities = value_probability*step
-    check = np.sum(probabilities)
+def aed_capacity(x_value, value_probability, snr, number_receivers, step=None):
+    if step is not None:
+        probabilities = value_probability*step
+    else:
+        probabilities = value_probability
     return number_receivers*np.sum(np.log2(1 + snr*x_value)*probabilities)
+
 
 
 def c_rand(rows, cols, var=None, mean=0):
@@ -48,9 +53,12 @@ def normalize_matrix(matrix, rows=False):
 
 def normalize(x):
     normalized = x/np.linalg.norm(x)
-    check = np.linalg.norm(normalized)
     return normalized
 
+
+def normalize_pdf(x):
+    normalized = x / np.sum(x)
+    return normalized
 
 c_rand_mean = lambda rows, cols: 1e-1 + 1j*1e-1 + (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows)
 

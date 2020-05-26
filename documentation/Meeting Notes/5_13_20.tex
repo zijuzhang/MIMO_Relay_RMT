@@ -1,0 +1,120 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Current Questions}
+\begin{enumerate}
+\item 
+System Model for Correlation 
+	 \begin{equation}\label{system_model}
+		\mathbf{r} = \mathbf{H}_{Total}\mathbf{x}.
+	\end{equation}
+	for 
+%	\begin{equation}
+%	\mathbf{H}_{Total} =  \underbrace{\mathbf{C}_{2}\mathbf{H}_{2}\mathbf{P}_{2}\boldsymbol{\Phi}\mathbf{C}_{1}\mathbf{H}_{1}\mathbf{P}_{1}}_{\text{IRS}} + \underbrace{\mathbf{C}_{3}\mathbf{G}\mathbf{P}_{3}}_{\text{LOS} }
+%	\end{equation}
+	\begin{equation}
+	\mathbf{H}_{Total} =  \underbrace{\mathbf{C}_{2}\mathbf{H}_{2}\mathbf{P}_{2}\boldsymbol{\Phi}\mathbf{C}_{1}\mathbf{H}_{1}\mathbf{P}_{1}}_{\text{IRS}} + \underbrace{\mathbf{D}}_{\text{LOS} }
+	\end{equation}
+	with $\mathbf{P}_{2}\in \mathbb{C}_{R \times S}, \mathbf{P}_{1}\in \mathbb{C}_{S \times T}$ 
+%	and $\mathTbf{P}_{3}\in \mathbb{C}_{R \times T} $ 
+	as rectangular projection matrices such that 
+	$\mathbf{H}_{1}\in \mathbb{C}_{S \times S}, \mathbf{H}_{2} \in \mathbb{C}_{R \times R}$ 
+%	and $  \mathbf{G} \in \mathbb{C}_{R \times R}$
+	 are square matrices.
+	 A deterministic Line of Sight portion of the channel is represented by the matrix $\mathbf{D}$.
+	Correlations between antennas/surfaces are represented using deterministic, \emph{hermetian?} matrices
+	 $\mathbf{C}_{2} $ and $\mathbf{C}_{1} $. 
+	 Finally $\boldsymbol{\Phi}$ as a diagonal matrix with elements $e^{j\phi_i}$ representing the IRS.
+
+So far, I have considered two, different paths to obtain the AED of $\Expect{[\mathbf{H}_{Total} \mathbf{H}_{Total}^H}]$. 
+\begin{enumerate}
+\item 
+The first option is to use the fixed point subordination equation
+\begin{equation}
+\tilde{G}_{\text{Total}}(s) = \tilde{G}_{\text{LOS}}(s - \tilde{R}_{\text{IRS}}( - \tilde{G}_{\text{Total}}(s))
+\end{equation} (Note that for this method the IRS component and LOS component can be swapped).
+Because this equation is in fixed point, both $\tilde{G}_{\text{LOS}}(s)$ and $\tilde{R}_{\text{IRS}}(w)$ need to be given in close form, otherwise this is an infinite recursion. 
+\item 
+The second option is to find $\tilde{R}_{\text{Total}}(w) = \tilde{R}_{\text{IRS}}(w) + \tilde{R}_{\text{LOS}}(w)$, then use
+$R(w) = G^{-1}(-w) - \frac{1}{w}$ and $\tilde{G}_{\mathbf{H}_{Total}}(s) = sG_{\mathbf{H}_{Total}\mathbf{H}_{Total}^H}(s^2)$ to find the true Stieltjes transform, $G_{\mathbf{H}_{Total}\mathbf{H}_{Total}^H}(s)$. In general, however, given $R(w)$ the corresponding steiltjes transform, $G(w)$ will be given in the form of a fixed-point equation. This means we must find both $\tilde{R}_{\text{IRS}}(w)$ and $\tilde{R}_{\text{LOS}}(w)$ in closed form.
+In general, however, the S-Tranform is needed in order to find $\tilde{R}_{\text{IRS}}(w)$
+This gives the same problem as case 1 because t
+\end{enumerate}
+
+ \item 
+Incorporate correlation it the channel using 
+	\begin{equation}
+	\mathbf{H}_{1} =  \prod_{i=1}^{M} \mathbf{H}_{1,i}
+	\end{equation}
+ with $\mathbf{H}_{1}\in \mathbb{C}_{S \times S} $ with elements of variance $\frac{1}{S}$.
+ 
+ \item
+ Is is reasonable to handing low rank LOS matrices using a correlation matrix with all $\frac{1}{N}$
+ 
+ \item 
+Can handle by attenuation in general by jusing using the scaling laws of S-Transform
+ 
+ \item
+ Incorporating a ricean component to the LOS channel. If we were just considering the LOS portion, this could be
+ easily handled because whatever mean we add, this will always just result in a single large eigenvalue corresponding to the normalized all ones vector. From simulation it does not seem like adding this mean affects the cross terms in the IRS path case as long as the IRS is zero mean (any non-zero mean components should be considered LOS).
+ So if the result is essentially the sum of the two aeds then we can just add in the large eigenvalue for the LOS after but mathematically this is not allowed. One other important question is if I can model the reduction in rank by simply adding another correlation matrix since this is the method through which the rank would be reduced. In fact I think that the correlation method is the right way to do it because it properly represents that fact that there not the diversity but there is still increased power from multiple channels here.
+ 
+\item 
+To begin, I want to consider whether or not the elements in 
+\begin{equation}
+\underbrace{\mathbf{C}_{2}\mathbf{H}_{2}\mathbf{P}_{2}\boldsymbol{\Phi}\mathbf{C}_{1}\mathbf{H}_{1}\mathbf{P}_{1}}_{\text{IRS}} + \underbrace{\mathbf{D}}_{\text{LOS} }
+\end{equation}
+are free. In order to use the singular value value/eigenvalue relationship.
+Slide 76 of the lecture slides seems to show this but I need verification.
+
+\item
+In order to find full aed, I will need to consider the stieltjes transform of a deterministic matrix, $\mathbf{D}\mathbf{D}^H$. 
+First I want to check the that current fixed point/capacity calculations work for this setup.
+Finding the stieltjes transform and then inverting this seems to work although there is a slight issue with normalization of the pdf.
+\par
+Next I want to consider the case in which I first the S-Transform and then invert to find the AED. Being able to do this is important since I will eventually need to do this in order to find the aed of a matrix such as
+$mathbf{C}\mathbf{H}$ in which $mathbf{C}$ is deterministic but $\mathbf{H}$ is random. 
+This includes the following steps
+\begin{itemize}
+\item 
+\begin{equation}
+G_{\mathbf{C}\mathbf{C}^H}(s) = \frac{-1}{s}(1+\gamma(\frac{1}{s}))
+\end{equation}
+\item
+Solve for $\gamma(z)$ using fixed point.
+\begin{equation}
+\gamma^{-1}(\gamma(z)) = z = \frac{\gamma(z)}{1+\gamma(z)} S(\gamma(z))
+\end{equation}
+\item
+For each value of $S(\gamma(z))$ in the above iteration, solve
+for 
+\begin{equation}
+S(z) = \frac{1}{1+z} \gamma^{-1}(z)
+\end{equation}
+\item 
+Solve for $\gamma^{-1}(z)$ using the fixed point equation.???
+\begin{equation}
+\gamma(\gamma^{-1}(z)) = z = -1 - \frac{G_{\mathbf{C}\mathbf{C}^H}(\frac{1}{\gamma^{-1}(z)})}{\gamma^{-1}(z)}
+\end{equation}
+\end{itemize}
+\end{enumerate}
+At the moment, however, this is not converging for me. 
+\bibliography{bibliography}
+\end{document}

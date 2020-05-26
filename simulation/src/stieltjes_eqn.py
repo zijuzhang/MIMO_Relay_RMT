@@ -1,5 +1,6 @@
 # A collection of equations for different analytic results
 import numpy as np
+from src.fixed_point import *
 
 def estimated_pdf(x):
     """
@@ -11,18 +12,23 @@ def estimated_pdf(x):
 
 
 # Move from a gamma function to the Stieltjes domain
-def steiltjes_from_gamma(s, gamma_function):
-    return (-1/s)*(1+gamma_function(1/s))
+def steiltjes_from_gamma(s_vector, gamma_function, itr=200):
+    return (1/s_vector)*(1+fixed_point(gamma_function, 1/s_vector, itr, 1e-2))
 
 
 # Move from inverse gamme to s-transform
-def s_transform_inverse_gamme(z, inverse_gamma):
+def s_transform_inverse_gamma(z, inverse_gamma):
     return ((1+z)/z)*inverse_gamma(z)
 
 #   The equations corresponding to the LOS + Scattering Stieltjes Transform
 def arg_function(s_val, g_k, sigma=1, rho=1):
     x_s = np.sqrt(s_val)
     return x_s - (pow(sigma, 2)*rho*x_s*g_k)/(rho-pow(sigma, 2)*s_val*np.power(g_k, 2))
+
+#   Eigenvalue distribution given singular value distribution (for covariance matrices)
+def aed_from_svd(s, g_tilde):
+    return (1/np.sqrt(s))*g_tilde(np.sqrt(s))
+
 
 
 def final_stieltjes_deformed(s_values, g_k, func_params):

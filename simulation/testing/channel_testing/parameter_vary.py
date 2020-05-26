@@ -40,7 +40,7 @@ for val in param_list:
     theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes_deformed, s_vector, 100, 1e-3, 3,
                                               func_param=parameters, unique_half_plane=True))
     # theoretic_pdf = estimated_pdf(marcenko_st(s_vector, phi))
-    theoretic_capacity = aed_capacity(x_values, theoretic_pdf, step, 1/cols, rows)
+    theoretic_capacity = aed_capacity(x_values, theoretic_pdf, 1/cols, rows, step=step)
 
 
     #   Now check histogram of simulations
@@ -94,5 +94,3 @@ plt.legend(loc="upper left")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)
 plt.show()
-
-
