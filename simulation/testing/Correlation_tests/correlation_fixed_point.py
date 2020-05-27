@@ -65,9 +65,9 @@ def gammafixed(z, gamma_z):
     check = S_ch(gamma_z)
     if np.isinf(check) or np.isnan(check):
         print("inf/nan")
-    # return np.power(gamma_z/z, 1 / 2) - 1
+    return np.power(gamma_z/z, 1 / 2) - 1
     # return np.power(gamma_z / z, 1 / 4) - 1
-    return (check*gamma_z)/z-1
+    # return (check*gamma_z)/z-1
     # return z*(1+gamma_z)/check
 
 def f_solve_fun(gamma_z, z_val):

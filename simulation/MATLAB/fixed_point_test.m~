@@ -1,3 +1,9 @@
+rows = 100
+cols = 100
 x_values = linspace(.01, 10, 100);
+step = top-
 s_values = x_values + 1j*1e-6;
-stieltjes_values = (1./s_values)*(1+gamma_s(1./s_values))
+stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values));
+pdf = 1/pi .* imag(stieltjes_values);
+asymptotic_capacity  = aed_capacity(x_values, pdf, 1/cols, rows, step);
+plot(x_values, stieltjes_values)
