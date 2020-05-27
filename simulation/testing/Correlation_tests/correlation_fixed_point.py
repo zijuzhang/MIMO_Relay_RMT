@@ -10,6 +10,8 @@ from src.stieltjes_eqn import *
 import seaborn
 from scipy.linalg import toeplitz
 from src.circle_laws import *
+from scipy.optimize import *
+from scipy.optimize import fsolve
 
 rows = 100
 cols = 100
@@ -67,6 +69,20 @@ def gammafixed(z, gamma_z):
     # return np.power(gamma_z / z, 1 / 4) - 1
     return (check*gamma_z)/z-1
     # return z*(1+gamma_z)/check
+
+def f_solve_fun(gamma_z, z_val):
+    # return (S_ch(gamma_z)*gamma_z)/z_val-1
+    return z_val*(1+gamma_z)/S_ch(gamma_z)
+
+
+def built_in_fixed(values, function):
+    for val in values:
+        init = np.random.uniform(0, 1) + 1j * np.random.uniform(0, 1)
+        attempt = root(f_solve_fun, init, args=val)
+        print(attempt)
+    init = np.random.uniform(0, 1, values.shape) + 1j * np.random.uniform(0, 1, values.shape)
+    attempt = root(function, init, args=values)
+    return attempt.x
 
 stieltjes_values = steiltjes_from_gamma(s_values, gammafixed)
 pdf = estimated_pdf(stieltjes_values)
