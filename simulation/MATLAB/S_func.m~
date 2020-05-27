@@ -1,0 +1,5 @@
+function val = S_func(z, det_ev)
+    val = 1./power((1+z),2);
+end
+
+function
