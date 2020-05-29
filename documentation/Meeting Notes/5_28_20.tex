@@ -1,0 +1,75 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\subsection{Questions}
+\begin{itemize}
+\item 
+For the channel model given by 
+	\begin{equation}
+	\mathbf{H}_{Total} =  \underbrace{\mathbf{C}_{2}\mathbf{H}_{2}\mathbf{P}_{2}\boldsymbol{\Phi}\mathbf{C}_{1}\mathbf{H}_{1}\mathbf{P}_{1}}_{\text{IRS}} + \underbrace{\mathbf{D}}_{\text{LOS} }
+	\end{equation}
+should the power added by the correlation matrix be normalized such that rows of matrix $\mathbf{C}_{i}$ have norm 1?
+This ensure that the elements would still have the same variance despite being correlated. 
+\item 
+I notice that for the correlated channels (normalized) that if I perform water-filling the power allocation, the capacity is greater than for 
+the iid channel. Is this correct? This result seems strange. 
+
+\item 
+In order to test the method discussed during our last meeting, I am using the following method to find the AED of the channel given by 
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{C}\mathbf{H}
+	\end{equation}
+	with C as a normalized correlation matrix with "blocks of correlation" and H is an iid gaussian matrix. 
+	The fsolve function in matlab does not converge unless I use a closed form of the s-transform in which case the expected aed is found. This may be a result of having a distribution with delta masses*. If $\mathbf{C}$ is substituted with another gaussian iid matrix $\mathbf{H}_2 $, and I use the quarter circle stieltjes this method also does not work. This makes me think that something is wrong with equation \eqref{S_Stieltjes} below.
+\begin{enumerate}
+\item 
+	\begin{equation}
+	p(x) = \frac{1}{\pi} \underset{y \rightarrow \infty}{lim} \; Img(G(x+jy))
+	\end{equation}
+	
+\item 
+	\begin{equation}
+	G(s)=  \frac{1}{s} (1+\gamma\left(\frac{1}{s}\right))
+	\end{equation}
+		
+\item 
+	\begin{equation}
+	\gamma(z) =  \frac{z(1+\gamma(z))}{S(\gamma(z))}
+	\end{equation}
+\item 
+	\begin{equation}
+	S(z) = S_{\text{correlation}}(z) S_{\text{rayleigh}}(z)
+	\end{equation}
+	
+	\item 
+	\begin{equation}\label{S_Stieltjes}
+	S_{\text{correlation}}(z)  = \frac{z+1}{z} \gamma^{-1}(z)
+	\end{equation}
+
+\item 
+	\begin{equation}
+	\gamma^{-1}(z) = \frac{-G(\frac{1}{\gamma^{-1}(z))}}{z+1})
+	\end{equation}
+	In this case I am using the known AED of the correlation matrix to find $G_{\text{correlation}}(s)$ using
+	\begin{equation}
+	G(s) = \int \frac{1}{x-s} dPx
+	\end{equation}
+	
+\end{enumerate}
+\end{itemize}
+
+\end{document}

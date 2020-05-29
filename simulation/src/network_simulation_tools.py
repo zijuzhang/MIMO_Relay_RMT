@@ -111,4 +111,5 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1):
     prob = cp.Problem(cp.Maximize(cp.sum(utility)), constraint)
     prob.solve()
     covariance_matrix = hermetian(V_H)@np.diag(variables.value)@V_H
+    check = np.trace(covariance_matrix)
     return channel_matrix@covariance_matrix@hermetian(channel_matrix)

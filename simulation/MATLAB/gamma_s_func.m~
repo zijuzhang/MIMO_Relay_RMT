@@ -1,7 +1,0 @@
-function x = gamma_s_func(gamma_z, z)
-x0 = [0,0];
-x = fsolve(@root2d,x0);
-      function F = root2d(x)
-          F = (gamma_z./(1+gamma_z))*S_func(gamma_z)- z;
-      end
-end

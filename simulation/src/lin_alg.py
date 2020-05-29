@@ -39,15 +39,25 @@ def block_matrix(block, size, normalize=False):
         return normalize_matrix(mat, rows=True)
 
 
+def exponential_correlation(size, r):
+    ret_mat = np.ones((size, size))
+    for row in range(ret_mat.shape[0]):
+        for col in range(ret_mat.shape[1]):
+            ret_mat[row, col] *= pow(r, abs(col-row))
+    for row in range(ret_mat.shape[0]):
+        ret_mat[row, :] /= np.linalg.norm(ret_mat[row, :], 2)
+    return ret_mat
+
+
 def normalize_matrix(matrix, rows=False):
     ret_mat = matrix
     if not rows:
         for col in range(matrix.shape[1]):
-            matrix[:, col]/np.linalg.norm(matrix[:, col])
+            ret_mat[:, col]/np.linalg.norm(matrix[:, col], 2)
         return ret_mat
     else:
         for row in range(matrix.shape[0]):
-            matrix[row, :] /= np.linalg.norm(matrix[row, :])
+            ret_mat[row, :] /= np.linalg.norm(matrix[row, :], 2)
         return ret_mat
 
 

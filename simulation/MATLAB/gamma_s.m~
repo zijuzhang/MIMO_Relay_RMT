@@ -1,6 +1,0 @@
-function output = gamma_s(input)
-    for i = 1:length(input)
-        init_points = rand(size(input)) + 1j*rand(size(input));
-        output[i] =  fsolve(gamma_s_func, init_points, input);
-    end
-end

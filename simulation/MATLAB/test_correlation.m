@@ -1,0 +1,13 @@
+rows = 100;
+cols = 100;
+steps = 100;
+bottom = .01;
+top = 10; 
+channel = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
+block_size = 2;
+block = toeplitz(ones(1,rows/block_size));
+correlation = kron(eye(block_size), block);
+correlation = normr_la(correlation);
+% correlation = correlation*correlation';
+total_cov = (correlation*(channel*channel')*correlation');
+num_capacity = MIMO_capacity(total_cov, 1/cols)
