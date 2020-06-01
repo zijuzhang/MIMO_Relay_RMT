@@ -10,6 +10,9 @@ def estimated_pdf(x):
     """
     return 1/np.pi * np.imag(x)
 
+# Move from an R-Transform function to the Stieltjes domain
+def steiltjes_from_r_transform(s_vector, R_Transform, itr=200):
+    return fixed_point(R_Transform, s_vector, itr, 1e-3)
 
 # Move from a gamma function to the Stieltjes domain
 def steiltjes_from_gamma(s_vector, gamma_function, itr=200):

@@ -18,6 +18,139 @@
 \maketitle
 \tableofcontents
 
-\section{}
-\
+\section{Channel Model}
+In this update I detail the channel model I am using as well as the current issue I am having in finding the resulting channel AED. 
+\par
+This IRS channel considered includes correlation at the transmitter, receiver and IRS, as well as a LOS component with a non-zero mean. First, I describe the general channel. Then I will begin with a simple channel in order to investigate the calculation of the AED as each component (correlation, IRS, LOS) is introduced. 
+
+\begin{enumerate}
+\item 
+The general channel is given by 
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}(\underbrace{\mathbf{H}_{2}\mathbf{P}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}\mathbf{H}_{1}\mathbf{P}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}
+	\end{equation}
+	with $\mathbf{R}_{R}$, $\mathbf{R}_{T}$ and $\mathbf{R}_{S}$ representing deterministic correlation matrices at the receiver, transmitter and IRS, $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ have i.i.d zero mean Gaussian elements, $\mathbf{G}$ has \emph{non-zero} mean i.i.d Gaussian elements and $\boldsymbol{\Phi}$ representing the IRS phases.
+	This simplify notation, at this stage I will consider all matrices to have dimension $N \times N$. 
+
+\item 
+In order to evaluate the impact of correlation on the system capacity, the power of the correlation matrices , $\mathbf{R}_{R}$, $\mathbf{R}_{T}$ and $\mathbf{R}_{S}$ must be normalized to prevent adding power to the received signal.
+If $\mathbf{H}$ has elements with variance $\frac{1}{N}$ then the channel $\mathbf{G} = \mathbf{R}\mathbf{H}$ with correlation $\mathbf{R}$ must also have elements with variance $\frac{1}{N}$. Elements of $\mathbf{G}$ are given by  $g_{i,j} = \bar{\mathbf{r}}^T_i \mathbf{h}_j$ in which $\bar{\mathbf{r}}^T_i$ is the $i^{\text{th}}$ row of $\mathbf{R}$.
+ Normalizing these \emph{rows} such that $\| \bar{\mathbf{r}}_i \| ^2_2 = 1$ ensures that $E[\|g_{i,j}\|^2] = 
+ E[\text{trace}(\mathbf{h}_j^T \bar{\mathbf{r}}_i \bar{\mathbf{r}}^T_i \mathbf{h}_j)] 
+ =  \frac{1}{N}E[\text{trace}(\bar{\mathbf{r}}_i \bar{\mathbf{r}}^T_i)]= \frac{1}{N}$.
+ For the case in which the correlation is a pre-multiplication, $\mathbf{G} = \mathbf{H}\mathbf{R}$, the \emph{columns} of 
+ $\mathbf{R}$ should be normalized to such that  $\|\mathbf{r}_j\| ^2_2 = 1$
+
+\item 
+	Before considering the general channel,  I will go through the calculation of the AED for an 
+	asymptotically large  MIMO channel with correlation given by
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}\mathbf{G}
+	\end{equation}
+	in which $\mathbf{R}_{R}$ is some row-normalized, deterministic matrix describing the correlation and
+	elements $\mathbf{g}_{i,j}$ are zero mean iid.
+	The following steps and equations are used to find the AED of $\mathbf{C} = \mathbf{H}_{Total} \mathbf{H}_{Total}^H$.
+	\begin{enumerate}
+	\item 
+		Find AED from the stieltjes transform.
+		\begin{equation}
+		p(x) = \frac{1}{\pi} \underset{y \rightarrow \infty}{\text{lim}} \; \text{Img}(G(x+jy))
+		\end{equation}
+	\item 
+		Find Stieltjes transform from $\gamma\left(\right)$
+		\begin{equation}
+		G(s)=  \frac{1}{s} (1+\gamma\left(\frac{1}{s}\right))
+		\end{equation}
+	\item 
+		To find an expression for $\gamma(z)$, evaluate the equation
+		\begin{equation}
+		\gamma^{-1}(z) =  \frac{z}{1+z} S(z)
+		\end{equation}
+		at $z= \gamma(z)$
+		to get the fixed point equation
+		\begin{equation}
+		\gamma(z) = \frac{z(1+ \gamma(z))}{S(\gamma(z))}
+		\end{equation}
+		From this point I can find the AED so long as I can evaluate $S(z)$ is in closed form. 
+		In general, however, this is not the case (e.g when $S(z)$ includes a deterministic correlation matrix). 
+	\item 
+		To find an expression for evaluating $S(z)$ with a correlated channel, use the property
+		\begin{equation}\label{rotation_property}
+		S_{\mathbf{C}}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{\mathbf{C}}}\left(\frac{z}{\chi_2}\right).
+		\end{equation}
+		with the rotated channel $\tilde{\mathbf{C}} = \mathbf{R}_{R}^H\mathbf{R}_{R}\mathbf{G}\mathbf{G}^H$
+		to get
+		\begin{equation}
+		S_{\tilde{\mathbf{C}}}\left( z \right) = S_ {\mathbf{R}_{Rx}^H\mathbf{R}_{Rx}}(z)
+		\underbrace{S_ {\mathbf{G}\mathbf{G}^H}(z)}_{\text{closed form}}.
+		\end{equation}
+	\item 
+		To find the S-Transform of the correlation matrix, $S_ {\mathbf{R}_{R}^H\mathbf{R}_{R}}(z)$,
+		use the property 
+		\begin{equation}
+		 S(z) = \gamma^{-1}(z)\frac{1+z}{z}.
+		\end{equation}
+	\item
+		Now find an expression for $\gamma^{-1}(z)$ using the known Steiltjes transform of the deterministic
+		 correlation matrix. 
+		 \par
+		 If I use the procedure shown in the following, the value of $S(z)$ is 
+		generally not correct when compared to known S-Transforms (e.g. when I try this procedure for the 
+		quarter circle and compare it to the known S-Transform, it is not correct).
+	\item
+		Evaluate the the equation 
+		\begin{equation}
+		G(s)=  -\frac{1}{s} (1+\gamma\left(\frac{1}{s}\right))
+		\end{equation}
+		at $s = \gamma^{-1}(z)$ 
+		to find the fixed point equation
+		 \begin{equation}
+		\gamma^{-1}(z) = \frac{-G(\frac{1}{\gamma^{-1}(z)})}{z+1}
+		\end{equation}
+		* When I try this in MATLAB, I get a the error that fsolve does not converge
+		(possibly because $\gamma^{-1}(z))$ could have discontinuities?).
+	\item 
+		For the case of deterministic matrices 
+		\begin{equation}
+		G(s) = \int \frac{1}{x-s} dPx
+		\end{equation}
+		becomes 
+		\begin{equation}
+		G(s) = \sum_{i=1}^{N} \frac{1}{N (\lambda_i - s)}.
+		\end{equation}	
+	\item
+		Until I can handle this case I cannot move to a more general channel model. As I haven't been able to solve
+		 the above issue, I went onto develop the model so that once the above issue is resolved the next step
+		 will be in place. 
+	\end{enumerate}
+
+\item
+The next step the correlated LOS component with non-zero mean is added. 
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}\mathbf{G}
+	\end{equation}
+	with 
+	\begin{equation}
+	\mathbf{G} = \underbrace{\mathbf{H}}_{\mathcal{NC}(0,\sigma)} + \underbrace{\alpha\mathbf{I}}_{\text{scaled identity}}
+	\end{equation}
+	\begin{enumerate}
+	\item
+	Using the property 
+		\begin{equation}\label{svd_aed_property}
+		G_{\lambda\lambda}(s) = \frac{1}{\sqrt{s}}\tilde{G}_{\lambda}(\sqrt{s})
+		\end{equation}
+	avoids having to work with non-hermetian and non-free terms in the covariance polynomial $\mathbf{H}_{Total}\mathbf{H}_{Total}^H$. 
+	\item 
+		Next obtain the symmetrized singular value from the corresponding R-Transform using
+		\begin{equation}
+		\tilde{G}_{\lambda}(\sqrt{s}) = \frac{1}{\tilde{R}(-\tilde{G}_{\lambda}(\sqrt{s})) - s}
+		\end{equation}
+		and 
+			\begin{equation}
+			\tilde{R}(w) = \tilde{R}_{\mathbf{R}\mathbf{H}}(w) + \tilde{R}_{\alpha\mathbf{R}\mathbf{I}}(w)
+			\end{equation}
+	\item 
+		In order to find the 
+	\end{enumerate}	
+\end{enumerate}
 \end{document}

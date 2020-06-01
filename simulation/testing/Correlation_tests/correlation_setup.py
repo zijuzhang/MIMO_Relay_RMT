@@ -59,14 +59,14 @@ for i in range(average):
     irs_trace.append(np.trace(HH))
 
 
-    # G_cap.append(capacity(GG, 1/size))
-    # irs_cap.append(capacity(HH, 1/size))
-    # cor_cap.append(capacity(HH_cor, 1/size))
+    G_cap.append(capacity(GG, 1/size))
+    irs_cap.append(capacity(HH, 1/size))
+    cor_cap.append(capacity(HH_cor, 1/size))
 
-
-    G_cap.append(capacity_water_filled(water_filling(G, 1)))
-    irs_cap.append(capacity_water_filled(water_filling(H, 1)))
-    cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
+    #
+    # G_cap.append(capacity_water_filled(water_filling(G, 1)))
+    # irs_cap.append(capacity_water_filled(water_filling(H, 1)))
+    # cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
 
 irs_AED, bins_irs = np.histogram(np.asarray(irs), bins=bins)
 AED_cor, bins_cor = np.histogram(np.asarray(irs_cor), bins=bins)

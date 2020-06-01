@@ -37,10 +37,7 @@ def fixed_point(fixed_point_function, s_vector, iterations,
         # non_negative = True
         # Use different initialization points if not converging fast enough
         while not tol_met and attempt < attempt_tol:
-            # Fixed point is unique in the upper half complex plane so initialize in this region
             G_k = np.random.uniform(0, 1) + 1j*np.random.uniform(0, 1)
-            G_k = G_k / np.linalg.norm(G_k) # Check to see if this is needed for convergenece
-            # G_k = .1
             for step in range(iterations):
                 if func_param is not None:
                     val = fixed_point_function(s, G_k, func_param)
@@ -50,11 +47,12 @@ def fixed_point(fixed_point_function, s_vector, iterations,
                     val = np.conj(val)
                 if np.isinf(val) or np.isinf(val) or np.isclose(0, val):
                     print("nan/inf")
+                check = np.abs(G_k - val)
                 epsilon.append(np.abs(G_k - val))
                 G_k = val
-                check.append(val)
-                ret_vec[ind] = G_k
                 if epsilon[-1] <= tolerance:
+                    check.append(val)
+                    ret_vec[ind] = G_k
                     epsilons.append(epsilon[-1])
                     tol_met = True
                     # break
