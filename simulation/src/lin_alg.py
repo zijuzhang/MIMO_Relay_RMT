@@ -25,7 +25,7 @@ def c_rand(rows, cols, var=None, mean=0):
         return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows) + mean
 
 
-def block_matrix(block, size, normalize=False):
+def block_matrix(block, size, rows=True):
     """
     Create correlation matrices with repeated correlation blocks
     :param block:
@@ -33,27 +33,22 @@ def block_matrix(block, size, normalize=False):
     """
     dim = size//block.shape[1]
     mat = np.kron(np.eye(dim), block)
-    if not normalize:
-        return mat
-    else:
-        return normalize_matrix(mat, rows=True)
+    return normalize_matrix(mat, rows=rows)
 
 
-def exponential_correlation(size, r):
+def exponential_correlation(size, r, rows=True):
     ret_mat = np.ones((size, size))
     for row in range(ret_mat.shape[0]):
         for col in range(ret_mat.shape[1]):
             ret_mat[row, col] *= pow(r, abs(col-row))
-    for row in range(ret_mat.shape[0]):
-        ret_mat[row, :] /= np.linalg.norm(ret_mat[row, :], 2)
-    return ret_mat
+    return normalize_matrix(ret_mat, rows)
 
 
 def normalize_matrix(matrix, rows=False):
     ret_mat = matrix
     if not rows:
         for col in range(matrix.shape[1]):
-            ret_mat[:, col]/np.linalg.norm(matrix[:, col], 2)
+            ret_mat[:, col] /= np.linalg.norm(matrix[:, col], 2)
         return ret_mat
     else:
         for row in range(matrix.shape[0]):

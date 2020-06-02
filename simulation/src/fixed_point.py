@@ -47,7 +47,6 @@ def fixed_point(fixed_point_function, s_vector, iterations,
                     val = np.conj(val)
                 if np.isinf(val) or np.isinf(val) or np.isclose(0, val):
                     print("nan/inf")
-                check = np.abs(G_k - val)
                 epsilon.append(np.abs(G_k - val))
                 G_k = val
                 if epsilon[-1] <= tolerance:

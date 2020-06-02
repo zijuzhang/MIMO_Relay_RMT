@@ -8,10 +8,12 @@
 
 
 from src.lin_alg import *
+from scipy.linalg import toeplitz
+
 
 size = 100
-n_t = 3
-n_r = 3
+n_t = 100
+n_r = 100
 rows = size
 cols = size
 bins = int(size/2)
@@ -22,6 +24,9 @@ cross_sum = 0
 main_sum = 0
 
 average = 1000
+block = toeplitz(np.ones(int(rows / 5)))
+correlation_matrix = block_matrix(block, rows, normalize=True)
+# correlation_matrix = exponential_correlation(size, .5)
 # H_1 = c_rand(size, n_t)
 H_1 = c_rand(size, n_t, var=1/np.sqrt(n_r*size))
 H_2 = c_rand(n_r, size, var=1/np.sqrt(n_r*size))
@@ -29,8 +34,8 @@ H_2 = c_rand(n_r, size, var=1/np.sqrt(n_r*size))
 # H_2 = c_rand(n_r, size)
 G = c_rand(n_r, n_t)
 for i in range(average):
-    H = H_2 @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size))) @ H_1
-    # F = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
+    # H = H_2 @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size))) @ H_1
+    H = H_2 @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, size))) @ correlation_matrix @ H_1
     GG = G @ np.conj(G.T)
     HH = H @ np.conj(H.T)
     GH = G @ np.conj(H.T)

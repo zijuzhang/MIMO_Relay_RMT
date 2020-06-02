@@ -38,7 +38,7 @@ for i in range(average):
     HH = H @ np.conj(H.T)
     e_val_total_irs = np.linalg.eigvalsh(HH)
     irs.append(np.real(e_val_total_irs))
-    # H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
+    H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
     # for ind, correlation_level in enumerate(correlation_block_sizes):
     # H_cor = np.eye(size)
     # correlations = 1
@@ -46,10 +46,11 @@ for i in range(average):
     #     H_cor = c_rand(size, size)@H_cor
     # HH_cor = H_cor @ np.conj(H_cor.T)
     # block = toeplitz(np.array((5, .5, .5, .5)))
-    block = toeplitz(np.ones(int(rows / 1)))
-    correlation_matrix = block_matrix(block, rows, normalize=True)
-    correlation_matrix = exponential_correlation(size, .5)
-    H_cor = correlation_matrix@c_rand(rows, cols)
+    block = toeplitz(np.ones(int(rows / 2)))
+    correlation_matrix = block_matrix(block, rows, rows=True)
+    # correlation_matrix = exponential_correlation(size, .5, rows=False)
+    check = hermetian(correlation_matrix)@correlation_matrix
+    # H_cor = correlation_matrix@G
     HH_cor = H_cor@hermetian(H_cor)
     e_val_cor = np.linalg.eigvalsh(HH_cor)
     irs_cor.append(np.real(e_val_cor))
@@ -63,7 +64,7 @@ for i in range(average):
     irs_cap.append(capacity(HH, 1/size))
     cor_cap.append(capacity(HH_cor, 1/size))
 
-    #
+
     # G_cap.append(capacity_water_filled(water_filling(G, 1)))
     # irs_cap.append(capacity_water_filled(water_filling(H, 1)))
     # cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
