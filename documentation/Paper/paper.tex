@@ -30,23 +30,96 @@ This work investigates the impact of passive reflective surfaces on the capacity
 \section{Notation}
 The following notation is used throughout the remainder. 
 $E\{x\}$ is the expected value of a random variable $x$.
-Vectors are denoted by bold font, lower-case letters ($\mathbf{x}$) and are assumed to be column vectors.
-Matrices are denoted by bold font, upper-case letters ($\mathbf{X}$). The transpose and hermetian of $\mathbf{X}$ are denoted by $\mathbf{X}^T$ and $\mathbf{X}^H$ respectively.
+Vectors are denoted by bold font, lower-case letters ($\vx$) and are assumed to be column vectors.
+Matrices are denoted by bold font, upper-case letters ($\mX$). The transpose and hermetian of $\mX$ are denoted by $\mX^T$ and $\mX^H$ respectively.
 $\mathbf{I}$ denotes the identity matrix.
 
 \section{Outline}
 The following sections are now previewed. In section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
 \chapter{System Model}\label{system_model}
-\section{Outline}
+\section{The Correlated IRS Channel}
 
 
+\section{Mutual Information}
+A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel information is known at the receiver, this is given by 
+\begin{equation}
+I(\vy;\vx) = h(\vy) - h(\vy|\vx).
+\end{equation}
+If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} $h(\vy) = \Log(|\pi e \mathbf{Q}_{y}|)$ with $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
+
+For a given transmit covariance matrix, $\mathbf{Q_x}$, the mutual information is given by 
+\begin{equation}\label{mut_inf}
+\Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
+\end{equation}
+Using the model for $\mHt$ from the previous section, and maximizing with respect to the
+transmit covariance matrix and the phases at the IRS gives and expression for the capacity of the system
+
+\begin{equation}\label{capacity}
+\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
+\end{equation}
+Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of $h(\vx) $ and $h(\vn)$.
+
+If $\mHt$ is not known at the transmitter, the transmit power can be allocated
+equally such that $\mQ_x = \mathbf{I}$. This allows for simplifying equation \eqref{capacity} to 
+\begin{equation}\label{no_csi_capacity}
+\mathbb{C} = \underset{\phase}{\mathop{max}} = N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)]
+\end{equation}
+where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
+
+Note that because $\Log$ is a concave function, we can upper bound the mutual information with
+\begin{equation}\label{mut_inf}
+\Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda_i])
+\end{equation}
+Now discuss capacity and consider equal power but optimize over phase
+We now want to consider the case in 
 
 \section{Proof of Freeness}
+\begin{itemize}
+
+\item 
+	Brief introduction to free probability.
+	Use the example of a degenerate matrix with rank 1 being multiplied by a random matrix. 
+	In this case the resulting pdf is not just the convolution of the original distributions. 
+	In order to introduce the tools that will be used in the following, an example is now given to
+	exhibit this case in which classic probability (commutative probability) no longer holds.
+	Consider the Gaussian i.i.d. matrix $\mH$ with $ h_{i,j} \in \CN$ and the diagonal matrix $\mP$ with 
+	$p_{i,i} = 1$ for $i = 1 \cdots K$ with $K \leq N$ and both matrices of dimension $N \times N$. 
+	We are interested the AED for $\mP\mH \mH^H \mP^H$ and immediately note  that the matrices
+	$ \mP^H \mP \mH \mH^H = \mP \mH \mH^H$ have the same non-zero eigenvalues (show why!). 
+	Given that both $ \mP$ and  $\mH \mH^H$ have converging AEDs as $N \rightarrow \infty$
+	classical probability would tell us that the AED for $\mP \mH \mH^H$ is the convolution of the two AEDs. 
+	This, however, is not the case non-commutative distributions. This can be seen without the tools of free probability by noting
+	that the resulting product has $\Rank = \min[\Rank(\mP), \Rank(\mH \mH^H)]$. In the case that $\Rank(\mP) = 1$
+	the resulting product must have rank 1 (i.e a single non-zero eigenvalue) with corresponding AED
+	$p_{\mP}(x) = \frac{1}{N-1}\delta(x)  + \frac{1}{N}\delta(x-1)$. Following classical probability, the convolution of 
+	a general AED with $p_{\mP}(x)$, however, can be continuous. 
+	\par 
+	Now describe with S-Transform and show that it can have a singular distribution in the limit at we go to rank 1. 
+		
+\item 
+	Show that at least for uncorrelated case, the matrices in the sum are free. 
+	
+	
+\end{itemize}
 
 
-\chapter{Proofs etc. }\label{Results}
+\chapter{Results}\label{Results}
+\begin{itemize}
+\item 
+	Show that in the asymptotic case where free probability holds, the phase matrix no longer matters
+	We first show that under assumptions of the channel which allow for use of free probability, $\phase$
+	cancels out of \eqref{capacity}.
+	
+\item
+	Show that numerical agrees with theoretical for uncorrelated 
+\item
+	Now consider the case where the assumptions of free probability no longer apply 
+	Show how numerical has larger deviation from theoretic for the case of the correlated channel and perhaps 
+	look at methods of phase optimization that can help counter this loss. Also need to show proof that for the
+	correlated case, free probability assumptions no longer hold. 
+\end{itemize}
 
-\chapter{Numerical Results}\label{numerical}
+
 
 \chapter{Conclusion}
 

@@ -21,9 +21,6 @@ rho = 1     # S/R
 phi = 1    # phi=1 is full rank line of sight.  L/T
 #   Plot Theoretical Distribution and find corresponding capacity
 
-
-
-
 x_values, step = np.linspace(1e-2, 10, 100, retstep=True)
 y = 1e-9
 s_vector = x_values + 1j*y

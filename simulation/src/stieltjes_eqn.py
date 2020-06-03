@@ -45,6 +45,7 @@ def final_stieltjes_deformed(s_values, g_k, func_params):
     # Correct
     # G_BB = np.sqrt(np.power((1-phi), 2)/(4*np.power(x_arg, 4)) - (1+phi)/(2*np.power(x_arg, 2))
     #                + 1/4) - 1/2 - (1-phi)/(2*np.power(x_arg, 2))
+    G_BB_tilde = 0
     return (1/np.sqrt(s_values))*x_arg*G_BB
 
 

@@ -24,8 +24,8 @@ cross_sum = 0
 main_sum = 0
 
 average = 1000
-block = toeplitz(np.ones(int(rows / 5)))
-correlation_matrix = block_matrix(block, rows, normalize=True)
+block = toeplitz(np.ones(int(rows / 1)))
+correlation_matrix = block_matrix(block, rows)
 # correlation_matrix = exponential_correlation(size, .5)
 # H_1 = c_rand(size, n_t)
 H_1 = c_rand(size, n_t, var=1/np.sqrt(n_r*size))
