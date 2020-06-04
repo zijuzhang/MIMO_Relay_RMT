@@ -1,6 +1,7 @@
 #   About: A collection of functions uses often throughout this work.
 
 import numpy as np
+from scipy.stats import bernoulli
 
 def capacity(matrix, snr):
     return np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
@@ -16,6 +17,9 @@ def aed_capacity(x_value, value_probability, snr, number_receivers, step=None):
         probabilities = value_probability
     return number_receivers*np.sum(np.log2(1 + snr*x_value)*probabilities)
 
+
+def c_bernoulli(rows, cols, p):
+    return np.random.randint(0, 2, (rows, cols))
 
 
 def c_rand(rows, cols, var=None, mean=0):
