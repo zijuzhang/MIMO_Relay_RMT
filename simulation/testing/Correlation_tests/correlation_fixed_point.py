@@ -17,7 +17,7 @@ rows = 100
 cols = 100
 H_cor = c_rand(rows, cols)
 block = toeplitz(np.array((1, .5)))
-correlation_matrix = block_matrix(block, H_cor.shape[0], normalize=True)
+correlation_matrix = block_matrix(block, H_cor.shape[0])
 correlation_matrix = np.sqrt(correlation_matrix)
 e_val_correlation = np.linalg.eigvalsh(correlation_matrix)
 # H_cor = correlation_matrix@H_cor
@@ -62,27 +62,12 @@ def S_ch(z):
     return check
 
 def gammafixed(z, gamma_z):
-    # check = S_ch(gamma_z)
+    check = S_ch(gamma_z)
     # if np.isinf(check) or np.isnan(check):
     #     print("inf/nan")
-    return np.power(gamma_z/z, 1 / 2) - 1
-    # return np.power(gamma_z / z, 1 / 3) - 1
+    # return np.power(gamma_z/z, 1 / 2) - 1   #Plugging in known s-transform to gamma function
     # return (check*gamma_z)/z-1
-    # return z*(1+gamma_z)/check
-
-def f_solve_fun(gamma_z, z_val):
-    # return (S_ch(gamma_z)*gamma_z)/z_val-1
-    return z_val*(1+gamma_z)/S_ch(gamma_z)
-
-
-def built_in_fixed(values, function):
-    for val in values:
-        init = np.random.uniform(0, 1) + 1j * np.random.uniform(0, 1)
-        attempt = root(f_solve_fun, init, args=val)
-        print(attempt)
-    init = np.random.uniform(0, 1, values.shape) + 1j * np.random.uniform(0, 1, values.shape)
-    attempt = root(function, init, args=values)
-    return attempt.x
+    return z*(1+gamma_z)/check
 
 stieltjes_values = steiltjes_from_gamma(s_values, gammafixed)
 pdf = estimated_pdf(stieltjes_values)

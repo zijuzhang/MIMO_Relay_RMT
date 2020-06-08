@@ -171,6 +171,42 @@ In \cite[Section II Eqn. 4]{muller2012channel} it is mentioned that correlation 
 %		I will omit the next steps until I have a solution to the basic correlated channel because the basic
 %		correlated channel needs to be solved to handle this case. 
 %	\end{enumerate}	
+
+\section{A note on correlation}
+The capacity of the seems to have a higher variance if there is correlation.
+This might motivate considering the rate of convergence towards the AED. If correlated channels approach this slowly, it motivates the use of phase optimization. 
+Without correlation (N=1000)
+\begin{itemize}
+\item
+Capacity variance:
+ 0.0036801195330893642
+ \item
+Capacity average:
+ 6.798435661685981
+ \item
+Capacity min:
+ 6.601426890868061
+\item
+Capacity max:
+ 6.989762012296481
+\end{itemize}
+
+With correlation (Rank = 4) (N=1000)
+\begin{itemize}
+\item
+Capacity variance:
+ 0.021175917522394564
+ \item
+Capacity average:
+ 5.401856644539409
+ \item
+Capacity min:
+ 4.976408104173949
+ \item
+Capacity max:
+ 5.882360991047958
+\end{itemize}
+
 \bibliography{bibliography}
 
 \end{document}

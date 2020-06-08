@@ -4,32 +4,52 @@ steps = 100;
 bottom = .01;
 top = 10; 
 channel = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
-block_size = 2;
-block = toeplitz(ones(1,rows/block_size));
-correlation = kron(eye(block_size), block);
-correlation = normr_la(correlation);
+% block_size = 2;
+% block = toeplitz(ones(1,rows/block_size));
+% correlation = kron(eye(block_size), block);
+% correlation = normr_la(correlation);
 % correlation = correlation*correlation';
-% total_cov = (correlation*(channel*channel')*correlation');
-total_cov = (channel*channel');
+rho = .9;
+correlation = exponential_correlation(rows, rho);
+total_cov = (correlation*(channel*channel')*correlation');
+% total_cov = (channel*channel');
 det_eigen_values = eig(correlation);
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
-s_values = x_values + 1i*1e-4;
-stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, det_eigen_values));
+s_values = x_values + 1i*1e-6;
+% stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, det_eigen_values));
+stieltjes_values = (1./s_values).*(1+gamma_s(s_values));
 pdf = 1/pi .* imag(stieltjes_values);
 num_capacity = MIMO_capacity(total_cov, 1/cols)
 asymptotic_capacity  = aed_capacity(x_values, pdf, 1/cols, rows, step_size)
 plot(x_values, pdf)
 title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)])
 
-function output = gamma_s(input, eval)
+function output = gamma_s(input)
     out = zeros(size(input), 'like', input);
     for i = 1:length(input)
-        out(i) =  gamma_s_func(input(i), eval);
+%         out(i) =  gamma_s_func(input(i), eval);
+        out(i) =  new(input(i));
     end
     output = out;
 end
 
+function x = inverse_gamma_cor(eval_point)
+    rho = .9;
+    alpha = (1+rho^2)/(1-rho^2);
+    val = (alpha*z^2 + z*sqrt(alpha^2*z^2 - (z^2 -1)))/((z^2-1)*(z+1))
+end
+
+function x = new(eval_point)
+init_point = rand() + .1j*rand();
+rho = .9;
+alpha = (1+rho^2)/(1-rho^2);
+x = fsolve(@root1,init_point);
+    function F = root1(gamma_inv_s)
+        F = ((gamma_inv_s + 1)^2*(gamma_inv_s^2 - 1))/(eval_point^2) ...
+            - gamma_inv_s^2*(2*alpha*(gamma_inv_s + 1)/eval_point - 1);
+    end
+end
 
 function x = gamma_s_func(eval_point, evals)
 init_point = rand() + 1j*rand();
@@ -42,11 +62,15 @@ end
 
 
 function val = S_func(z, evals)
-    val = S_from_inv_gamma(z, evals) % Includes quarter circle
-    true = 1./(1+z)
-%     val = val./(1+z);
-%     val = 1./(1+z);
-    end
+%     val = S_from_inv_gamma(z, evals) % Includes quarter circle
+%     val = 1./(1+z)
+    wishart = 1./(1+z);
+    rho = .9;
+    alpha = (1+rho^2)/(1-rho^2);
+    correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/((z-1)*(1+z))
+    val = wishart*correlation;
+%     val = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/((z-1)*(1+z));
+end
 
 function val = S_from_inv_gamma(z, evals)
     val = inv_gamma(z, evals).*(z+1)./z;

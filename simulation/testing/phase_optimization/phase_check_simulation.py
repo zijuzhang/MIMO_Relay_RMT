@@ -24,7 +24,7 @@ cross_sum = 0
 main_sum = 0
 
 average = 1000
-block = toeplitz(np.ones(int(rows / 1)))
+block = toeplitz(np.ones(int(rows / 4)))
 correlation_matrix = block_matrix(block, rows)
 # correlation_matrix = exponential_correlation(size, .5)
 # H_1 = c_rand(size, n_t)
@@ -42,7 +42,8 @@ for i in range(average):
     HG = H @ np.conj(G.T)
     cross = GH + HG
     main = HH + GG
-    total_irs = cross + main
+    # total_irs = cross + main
+    total_irs = HH
     # total_irs = GG
     capacities.append(capacity(total_irs, 1/n_t))
 

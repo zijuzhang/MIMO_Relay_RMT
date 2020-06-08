@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
 \usepackage{float}
 \input defs.tex
 \bibliographystyle{alpha}
@@ -25,7 +26,8 @@ This work investigates the impact of passive reflective surfaces on the capacity
 
 \chapter{Introduction}
 Wireless communication has progressively moved to higher frequencies in recent standards in order to utilize large bands of unoccupied resource
-and to enable increased antenna density (CITE). One hurdle to higher frequencies is increased radio frequency energy (power) attenuation (CITE). 
+and to enable increased antenna density \cite{akyildiz2018combating}. A primary hurdle towards communicating over higher frequencies is the increased radio frequency energy (power) attenuation. For frequency bands relevant for upcoming wireless standards , freq power attenuation due to path loss  molecular absorption loss
+has been shown to exceed y. Given that increasing current wireless communication capacity and reliability rely on moving to these high frequencies, mitigating or countering these power losses on the order of 100 dB is highly relevant.
 In past generations of wireless communication, this problem of (power) attenuation has been alleviated by reducing the effective transmission distance 
 and supplementing the transmission power using relays (CITE). Two key costs to deploying relays are the radio frequency chains used for receiving and transmitter, and the power used for transmission. (Would be nice to cite some actual costs here). As the power attenuation problem has been increased by X-Fold moving from freq1 to freq2, new solutions have been considered. One solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
 \par
@@ -47,21 +49,28 @@ $\Expect[x]$ is the expected value of a random variable $x$.
 Bold font, lower-case letters ($\vx$) and upper-case letters ($\mX$) denote vector and matrices respectively and all vectors are assumed to be column vectors unless noted otherwise. 
 The transpose and hermetian of $\mX$ are denoted by $\mX^T$ and $\mX^H$ respectively.
 $\mI_N$ denotes the identity matrix of dimension $N$.
+For square $\mX$ with dimension $N\times N$ the normalized trace is denoted by $\Tr(\mX)  = \underset{N \rightarrow \infty}{\text{lim}}
+\Expect[\frac{1}{N}\sum_{i=1}^N x_{i,i}]$
 
 \section{Outline}
 The following sections are now previewed. In section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
+
 \chapter{System Model}\label{system_model}
 \section{The Correlated IRS Channel}
 
-
-\section{Mutual Information}
-A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel information is known at the receiver, this is given by 
-\begin{equation}
+\section{Mutual Information}\label{sectiond:mut_info}
+A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel $\mHt$ is known at the receiver, the mutual information is given by 
+\begin{equation}\label{mut_ent}
 I(\vy;\vx) = h(\vy) - h(\vy|\vx).
 \end{equation}
-If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} $h(\vy) = \Log(|\pi e \mathbf{Q}_{y}|)$ with $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
+If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} 
+\begin{equation}\label{entropy}
+h(\vy) = \Expect[\Log(|\pi e \mathbf{Q}_{y}|)]
+\end{equation}
+ for $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
 
-For a given transmit covariance matrix, $\mathbf{Q_x}$, the mutual information is given by 
+For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect[\vn\vn^H] = \mI$, substituting equation \eqref{entropy} into equation
+\eqref{mut_ent} gives
 \begin{equation}\label{mut_inf}
 \Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
 \end{equation}
@@ -71,7 +80,7 @@ transmit covariance matrix and the phases at the IRS gives and expression for th
 \begin{equation}\label{capacity}
 \mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
 \end{equation}
-Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of $h(\vx) $ and $h(\vn)$.
+Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of $h(\vx) $ and $h(\vn)$.
 
 If $\mHt$ is not known at the transmitter, the transmit power can be allocated
 equally such that $\mQ_x = \mathbf{I}$. This allows for simplifying equation \eqref{capacity} to 
@@ -79,6 +88,11 @@ equally such that $\mQ_x = \mathbf{I}$. This allows for simplifying equation \eq
 \mathbb{C} = \underset{\phase}{\mathop{max}} = N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)]
 \end{equation}
 where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
+Expanding the expectation gives the expression
+\begin{equation}\label{no_csi_capacity_aed}
+\mathbb{C} = \underset{\phase}{\mathop{max}} = N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda_i)p_{\lambda\lambda^H}(x) dx
+\end{equation}
+in which the bounds of the integral represent the range for the eigenvalues of a positive semidefinite matrix. 
 
 Note that because $\Log$ is a concave function, we can upper bound the mutual information with
 \begin{equation}\label{mut_inf}
@@ -87,20 +101,99 @@ Note that because $\Log$ is a concave function, we can upper bound the mutual in
 Now discuss capacity and consider equal power but optimize over phase
 We now want to consider the case in 
 
+\section{Motivation for AED as a projection of Matrices}
+Equation \ref{no_csi_capacity_aed} shows that the capacity of a communication channel can be found using the AED of the channel covariance matrix.
+For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = Expect[\Tr{(mHt \mHt^H})] = $.
+One property that will be useful in the following is the relationship between the eigenvalues of a channel covariance matrix and the singular values of
+the channel.
+For a general matrix $\mH \in \complex^{n \times m}$ the singular values are given by 
+\begin{equation}\label{sigular_eigen}
+\sigma(\mH)_i = \sqrt{\lambda({\mH\mH^H}_i)}.
+\end{equation}
+This also gives the relationship between the pdf for the singular and and eigenvalues $p_{\sigma}(x^2) = p_{\lambda}(x)$
 \section{Proof of Freeness}
 \begin{itemize}
 
 \item 
 	A brief introduction to free probability.
-	In order to introduce the tools that will be used in the following, an example of non-commutative probability now given to
-	exhibit a case in which the tools of classic probability are not sufficient for finding a probability density function (pdf).
 	\par 
-	Free probability is the counterpart to classical probability for the case in which the random variables (in this case random matrices) do 
+	Free probability is the counterpart to classical probability for the case in which random variables (in this case random matrices) do 
 	not commute. In the same way that classical free probability provides methods to find the pdf for the products and sums of commuting random
-	 variables, free probability provides tools to find the pdfs for products and sums of non-commuting random variables (It is important to note here
-	 that by changing this nature of the random variables from commutative to non-commutive (is this embedded in kolmogorov's axioms?) 
-	In the following work, a number of tools from free probability will be used. These tools are now introduced with appropriate context 
-	but for a thorough coverage of these topics, see \cite{tulino2004random} and \cite{mingo2017free}.
+	 variables, free probability provides tools to find the pdfs for products and sums of non-commuting random variables. It is important to note
+	 that non-commutativity of matrices affects not only the pdf of matrix multiplications but also matrix sums. 
+	In the following work, a number of tools from free probability will be used. These tools are now introduced with appropriate context and intuition 
+	for this investigation but for a thorough coverage of these topics, see \cite{tulino2004random} and \cite{mingo2017free}.
+	 \begin{itemize}
+	 \item 
+	 	The cornerstone of free probability is the concept freeness of two random variables in the context of a projection. In our case, freeness between two 
+	 	matrices is given by 
+	 	We now introduce useful tools from free probability  that can be applied to free random variables.
+
+	 	\item 
+	 	Stieltjes Transform: 
+	 	Generally, the projection of matrix is not given in closed form. The projection can be uniquely represented using
+		\begin{equation}\label{stieltjes}
+		G(s) = \int{-\infty}^{\infty} \frac{dp(x)}{(x - s)} \; \text{for} \; \img(s) > 0
+		\end{equation}	
+		This representation will allow us to find the projection of the sum and project of matrices using addition and multiplication.
+		\item 
+		R-Transform:
+		Mention self-adjoint
+		Given the Stieltjes transform of a RV, the corresponding R-Transform given by 
+		X. 
+		The R-Transform of the sum of two, free RVs can be found using
+		Y
+		This process use known as free additive convolution.
+		\item
+		S-Transform:
+		Mention self-adjoint
+		Similarly, given the Stieltjes transform of a RV, the S-Transform given by 
+		X, X;
+		The S-Transform of the product of two, free RVs can be found using
+		Y
+		This process is known as free multiplicative convolution.
+	 	\item 
+	 	If there is a case in which finding the singular value distribution is easier than the eigenvalue distribution we can use equation  
+	 	 \eqref{sigular_eigen} to move between the two. Considering a symmetric function of the singular value distribution
+	 	 \begin{equation}\label{symmetric}
+	 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2}
+	 	 \end{equation}
+	 	 the definition of the Steiltjes transform gives the following steps, leading to a relationship between the Stieltjes transforms. 
+	 	 \begin{align*}
+	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}
+	 	 \\&  =  
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
+	 	 \\&  =  
+	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
+	  	 \\&  =  
+	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
+ 	 	  	 \\&  =  
+ 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
+ 	 	 \\&  =  
+			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
+	 	 \\&  = 
+	 	 	-s G_{\lambda}(s^2)
+	 	 \end{align*}
+	 	\item 
+	 		Another useful property that will be used is the relationship between the eigenvalues of a matrix and its rotation.
+	 		Specifically, consider the covariance matrix given by $\mH_2\mH_1 \mH1^H \mH2^H$.
+	 		By the rotational property of the trace, 
+	 		\begin{align*}
+	 		trace({\mH_2\mH_1 \mH1^H \mH2^H }) = \trace({\mH_1^H \mH_2^H \mH_2 \mH_1 }).
+	 		\end{align*}
+	 		... Not sure if I need to prove this here.  
+	 	\item 
+	  	build up to show that phases cancel via s-transform
+	 	Stieltjes of AED (IE for hermetian matrices)
+	 	Stieltjes of SVD (when they are components covariance matrix)
+	 	Getting Steiltes of SVD using R-Transform
+	 	Finding R-Transform of Individual components
+	 	Using Stieltjes of individuals to get R-transforms
+	 	Using aed stieltjes to get svd individual
+	 	Using S-transform to get stieltjes of individual aed.
+	\end{itemize}	 	
+	
 	Now describe with S-Transform and show that it can have a singular distribution in the limit at we go to rank 1. 
 		
 \item 
@@ -109,13 +202,21 @@ We now want to consider the case in
 \item 
 	Give proofs in an appendix?
 	
-	
 \end{itemize}
 
 
 \chapter{Results}\label{Results}
+\section{Canceling Phases}
+We first consider the case in which all components of the channel given by (ref) are free. As shown in (Appendix), in this case the 
+phase shifts at the RIS, $\phase$, cancels out of the AED expression. 
+By considering the case in which a single transmitter and receiver communicate over the channel $\mathbf{h}_r^T \phase \mathbf{h}_t$ it is clear that
+the impact of the phase matrix must diminish under the assumptions of free probability, \ie  as the number of antennas at transmitter and receiver increase asymptotically and that the component matrices of the channel are free. 
+\par
+While the realized capacity of the asymptotic channel converge towards the asymptotic capacity, the rate of this convergence is particularly relevant in this application as this implies the number of rf-chains at the transmitter and receiver approach infinity. One notable observation is that this rate
+decreases as the correlation in the channel increase. Under these circumstances, it may still be beneficial to perform some optimization of the phases at the IRS. 
 \begin{itemize}
 \item 
+	
 	Show that in the asymptotic case where free probability holds, the phase matrix no longer matters
 	We first show that under assumptions of the channel which allow for use of free probability, $\phase$
 	cancels out of \eqref{capacity}.
