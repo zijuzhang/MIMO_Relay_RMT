@@ -1,29 +1,22 @@
 rows = 100;
 cols = 100;
 steps = 100;
-bottom = .01;
+bottom = .001;
 top = 10; 
 channel = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
-% block_size = 2;
-% block = toeplitz(ones(1,rows/block_size));
-% correlation = kron(eye(block_size), block);
-% correlation = normr_la(correlation);
-% correlation = correlation*correlation';
 rho = .9;
 correlation = exponential_correlation(rows, rho);
 total_cov = (correlation*(channel*channel')*correlation');
-% total_cov = (channel*channel');
-det_eigen_values = eig(correlation);
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-6;
-% stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, det_eigen_values));
-stieltjes_values = (1./s_values).*(1+gamma_s(s_values));
+% stieltjes_values = (1./s_values).*(1+gamma_s(s_values));
+stieltjes_values = marcenko_pastur(s_values,1);
 pdf = 1/pi .* imag(stieltjes_values);
 num_capacity = MIMO_capacity(total_cov, 1/cols)
 asymptotic_capacity  = aed_capacity(x_values, pdf, 1/cols, rows, step_size)
 plot(x_values, pdf)
-title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)])
+title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
 
 function output = gamma_s(input)
     out = zeros(size(input), 'like', input);
@@ -42,7 +35,7 @@ end
 
 function x = new(eval_point)
 init_point = rand() + .1j*rand();
-rho = .9;
+rho = .5;
 alpha = (1+rho^2)/(1-rho^2);
 x = fsolve(@root1,init_point);
     function F = root1(gamma_inv_s)

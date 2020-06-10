@@ -34,11 +34,11 @@ for i in range(average):
     GG = G @ np.conj(G.T)
     e_val_G = np.linalg.eigvalsh(GG)
     no_irs.append(e_val_G)
-    H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
+    H = c_rand(rows, cols) @ random_phase(rows) @ c_rand(rows, cols)
     HH = H @ np.conj(H.T)
     e_val_total_irs = np.linalg.eigvalsh(HH)
     irs.append(np.real(e_val_total_irs))
-    H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
+    # H_cor = c_rand(size, 1)@np.ones((1, size))    # Test keyhole model channel for completely correlated channel
     # for ind, correlation_level in enumerate(correlation_block_sizes):
     # H_cor = np.eye(size)
     # correlations = 1
@@ -46,11 +46,11 @@ for i in range(average):
     #     H_cor = c_rand(size, size)@H_cor
     # HH_cor = H_cor @ np.conj(H_cor.T)
     # block = toeplitz(np.array((5, .5, .5, .5)))
-    block = toeplitz(np.ones(int(rows / 2)))
-    correlation_matrix = block_matrix(block, rows, rows=True)
-    # correlation_matrix = exponential_correlation(size, .5, rows=False)
-    check = hermetian(correlation_matrix)@correlation_matrix
-    # H_cor = correlation_matrix@G
+    # block = toeplitz(np.ones(int(rows / 2)))
+    # correlation_matrix = block_matrix(block, rows, rows=True)
+    t_correlation_matrix = exponential_correlation(size, .98)
+    r_correlation_matrix = exponential_correlation(size, .98)
+    H_cor = r_correlation_matrix@G@t_correlation_matrix
     HH_cor = H_cor@hermetian(H_cor)
     e_val_cor = np.linalg.eigvalsh(HH_cor)
     irs_cor.append(np.real(e_val_cor))

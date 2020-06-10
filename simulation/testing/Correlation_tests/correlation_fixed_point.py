@@ -69,7 +69,8 @@ def gammafixed(z, gamma_z):
     # return (check*gamma_z)/z-1
     return z*(1+gamma_z)/check
 
-stieltjes_values = steiltjes_from_gamma(s_values, gammafixed)
+# stieltjes_values = steiltjes_from_gamma(s_values, gammafixed)
+stieltjes_values = marcenko_st(s_values, 1)
 pdf = estimated_pdf(stieltjes_values)
 print(f"asymptotic capacity: {aed_capacity(x_values, pdf, 1/rows, rows, step=step)}")
 print(f"true capacity: {capacity(HH, 1/rows)}")
@@ -77,7 +78,7 @@ print(f"true capacity: {capacity(HH, 1/rows)}")
 fig, ax = plt.subplots()
 plt.title("IRS Channels Components: i.i.d, $\mathbb{N}(0,1/N), H = H_1 \Phi H_2$")
 ax.plot(x_values, pdf, label='asymptotic')
-ax.plot(bins[:-1], AED/rows, label='total: with IRS')
+# ax.plot(bins[:-1], AED/rows, label='total: with IRS')
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)

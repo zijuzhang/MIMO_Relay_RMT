@@ -2,6 +2,7 @@
 
 import numpy as np
 from scipy.stats import bernoulli
+from scipy.linalg import sqrtm
 
 def capacity(matrix, snr):
     return np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
@@ -45,7 +46,11 @@ def exponential_correlation(size, r, rows=True):
     for row in range(ret_mat.shape[0]):
         for col in range(ret_mat.shape[1]):
             ret_mat[row, col] *= pow(r, abs(col-row))
-    return normalize_matrix(ret_mat, rows)
+    ret_mat = normalize_matrix(sqrtm(ret_mat), rows=rows)
+    check = ret_mat@hermetian(ret_mat)
+    return ret_mat
+    # return normalize_matrix(ret_mat, rows)
+
 
 
 def normalize_matrix(matrix, rows=False):
