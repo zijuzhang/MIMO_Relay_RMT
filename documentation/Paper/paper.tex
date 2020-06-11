@@ -25,23 +25,42 @@ This work investigates the impact of passive reflective surfaces on the capacity
 
 
 \chapter{Introduction}
-Wireless communication has progressively moved to higher frequencies in recent standards in order to utilize large bands of unoccupied resource
-and to enable increased antenna density \cite{akyildiz2018combating}. A primary hurdle towards communicating over higher frequencies is the increased radio frequency energy (power) attenuation. For frequency bands relevant for upcoming wireless standards , freq power attenuation due to path loss  molecular absorption loss
-has been shown to exceed y. Given that increasing current wireless communication capacity and reliability rely on moving to these high frequencies, mitigating or countering these power losses on the order of 100 dB is highly relevant.
+\section{Background}\label{Background}
+The spectrum of electromagnetic frequencies used by wireless communication has expanded to progressively higher frequencies with new standards, projected to reach even the Terahertz range by the 6G standard (CITE). This expansion is motivated by large bands of currently unused frequency
+and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. A primary hurdle towards efficient communication at these frequencies is the increased radio frequency (power) attenuation. For frequency bands relevant for upcoming wireless standards , freq power attenuation due to path loss  molecular absorption loss
+has been shown to exceed 100 dB. With increases in current wireless system capacity and reliability relying on the use of these high frequencies, mitigating or countering this power loss  is highly relevant.
+\par
 In past generations of wireless communication, this problem of (power) attenuation has been alleviated by reducing the effective transmission distance 
-and supplementing the transmission power using relays (CITE). Two key costs to deploying relays are the radio frequency chains used for receiving and transmitter, and the power used for transmission. (Would be nice to cite some actual costs here). As the power attenuation problem has been increased by X-Fold moving from freq1 to freq2, new solutions have been considered. One solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
+and supplementing the transmission power using relays (CITE). Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying this solution on a scale to counter
+the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
 \par
 The motivating use for the RIS is to alleviate the power attenuation problem without incurring the costs of an rf-chain and transmission power 
-associated with a relay. The absence of an rf-chain in the RIS offers additional benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum. Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on a relay. 
+associated with a relay. The absence of an rf-chain in the RIS offers additional benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on a relay. 
 The thorough review in \cite{basar2019wireless} provides rigorous motivation of the use of RISs and a few notable points are included here.
-For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?).
+For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?).
 For frequencies used in the current 5G standard, 30 GHz, an RIS with $100$ elements would have dimensions $1$ $\text{m}^2$.
 (Why can we just ignore the fact that we might be able to change the reflection angle? In \cite{basar2019wireless} they introduce the idea with the ability to optimize the angle by then ignore it?).
 Example of how these surfaces are implemented (Cite).
 Discuss how it has be looked at from MISO and MIMO perspective.
 \par
-One area that has not be investigated, (at least up to the author's knowledge) is the impact of the RIS for 
-asymptotically large MIMO systems. In the following, the impact of the RIS on a general MIMO system is explored. 
+Now discuss all of the previous work looking at the optimization of the phases. 
+General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
+Need to mention anyone who has considered correlation at end in order to transition. 
+\par
+Early investigation leading to the great interest in MIMO systems showed the key property of capacity in an $N \times N$ MIMO system scaling linearly in $N$ (teletar). While this scaling applies to many models for the channel (cite) one key property that can impact this scaling is correlation between channels of a MIMO system.
+In order to evaluate MIMO system performance in a real-world application, correlation between between the channels must be accounted for. In test data collected for (parameters) relevant to 3G and 4G wireless correlation between channels was shown to be as high as $0.5$ for a point-to-point, $4 \times 4$ system \cite{martin2000multiple} (corresponding capacity drop?). (Is this a bigger problem for higher frequencies?). Correlations cause reduction in the capacity of the system and often make the calculation of the capacity more difficult. However, with the possibility for arrays with (x) co-located antenna and RIS with (y) individually controlled reflective elements, the impact of channel correlation on system performance must be well understood before deployment. 
+\par
+Detail all of the work looking at correlated MIMO. 
+1. Looking at correlation for finite size systems.
+Explain why calculating capacity (even without correlation) for finite case is difficult/cumbersome. Describe early results for MIMO.
+2. Extending to asymptotic system sizes. 
+One method that has been shown to reduce the complexity of this calculation is the assumption that $N \rightarrow \infty$. This method has been used 
+extensively since. 
+Now list of the different types of channels/methods that have been used here. 
+\cite{loyka2001channel}
+\par
+From the above, it should be clear that investigating the RIS  system for 
+asymptotically large MIMO systems with correlation, an topic not yet explicitly investigated to the author's knowledge, is relevant to the design of upcoming wireless systems.
 
 \section{Notation}
 The following notation is used throughout the remainder. 
@@ -57,6 +76,11 @@ The following sections are now previewed. In section \ref{system_model} covers t
 
 \chapter{System Model}\label{system_model}
 \section{The Correlated IRS Channel}
+In the most general case we consider the channel given by 
+
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+	\end{equation}
 
 \section{Mutual Information}\label{sectiond:mut_info}
 A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel $\mHt$ is known at the receiver, the mutual information is given by 
@@ -133,7 +157,7 @@ This also gives the relationship between the pdf for the singular and and eigenv
 	 	Stieltjes Transform: 
 	 	Generally, the projection of matrix is not given in closed form. The projection can be uniquely represented using
 		\begin{equation}\label{stieltjes}
-		G(s) = \int{-\infty}^{\infty} \frac{dp(x)}{(x - s)} \; \text{for} \; \img(s) > 0
+		G(s) = \int_{-\infty}^{\infty} \frac{dp(x)}{(x - s)} \; \text{for} \; \img(s) > 0
 		\end{equation}	
 		This representation will allow us to find the projection of the sum and project of matrices using addition and multiplication.
 		\item 
@@ -204,15 +228,14 @@ This also gives the relationship between the pdf for the singular and and eigenv
 	
 \end{itemize}
 
-
 \chapter{Results}\label{Results}
-\section{Canceling Phases}
+\section{Asymptotic Results}
 We first consider the case in which all components of the channel given by (ref) are free. As shown in (Appendix), in this case the 
 phase shifts at the RIS, $\phase$, cancels out of the AED expression. 
 By considering the case in which a single transmitter and receiver communicate over the channel $\mathbf{h}_r^T \phase \mathbf{h}_t$ it is clear that
 the impact of the phase matrix must diminish under the assumptions of free probability, \ie  as the number of antennas at transmitter and receiver increase asymptotically and that the component matrices of the channel are free. 
 \par
-While the realized capacity of the asymptotic channel converge towards the asymptotic capacity, the rate of this convergence is particularly relevant in this application as this implies the number of rf-chains at the transmitter and receiver approach infinity. One notable observation is that this rate
+While the realized capacity of the asymptotic channel converge towards the asymptotic capacity as $nt$ and $nr$ increase, the rate of this convergence is particularly relevant in this application as this implies that the number of rf-chains at the transmitter and receiver approach infinity. One notable observation is that this rate
 decreases as the correlation in the channel increase. Under these circumstances, it may still be beneficial to perform some optimization of the phases at the IRS. 
 \begin{itemize}
 \item 
@@ -229,11 +252,15 @@ decreases as the correlation in the channel increase. Under these circumstances,
 	look at methods of phase optimization that can help counter this loss. Also need to show proof that for the
 	correlated case, free probability assumptions no longer hold. 
 \end{itemize}
+\subsection{Asymptotic Assumptions Under Correlation}
+First mention that for iid random matrices, convergence is very fast (numerical). Then mention show for correlation within matrix. 
 
-
+\section{Non-Asymptotic Results}
+In the previous section, two notable observations were made. First, that under the assumptions of Free Probability (Ref), the choice of $\phase$ at the 
+RIS has no impact on the capacity of the system. Second, that for matrices of random elements, the  convergence of matrix behavior towards that predicted by Free Probability is slowed by adding correlations between elements. As seen in \ref{Background} current large systems have been shown for 
+sizes (X). We now consider whether this size is reasonable under correlations realized in systems (NEED TO FIND and justify). 
 
 \chapter{Conclusion}
-
 \chapter{Appendix}
 Proofs
 \begin{enumerate}
@@ -241,8 +268,88 @@ Proofs
 	Prove freeness of the relevant points. 
 \item 
 	rotations have same non-zero eigenvalues
+\item 
+Proof of split using singular values.\\
+Consider the channel given by 
+\begin{equation}
+\mH_{Total} = \mH_{2} + \mH_{1}.
+\end{equation}
+with covariance matrix 
+\begin{equation}
+\mC =
+\mH_{2}\mathbf{H}_{2}^H + 
+\mH_{1}\mathbf{H}_{1}^H + 
+\mH_{2}\mathbf{H}_{1}^H +
+\mH_{1}\mathbf{H}_{2}^H .
+\end{equation}
+Because the components of this sum are not free (CITE) (and some are non-hermetian), additive free convolution cannot be used.
+We note that using the singular value decomposition $\mH_{Total} = \mU \boldsymbol{\Sigma} \mV^H$ we can
+see that the covariance matrix can be written 
+\begin{equation}
+\mC = \mU \boldsymbol{\Sigma}\boldsymbol{\Sigma}^H \mU^H
+= \mU \boldsymbol{\Lambda} \mU^H.
+\end{equation}
+With $\mC \succeq 0 \implies \lambda(\mC\mC)_i \geq 0$ we see that the definition of the singular values 
+$\sigma(\mC)_i = \sqrt{\lambda(\mC\mC)_i}$ leads to an expression relating the density function of the singular values of a channel matrix
+, $p_{\sigma}(x)$, and the eigenvalues of the channel covariance matrix, $ p_{\lambda}(x)$,  given by $p_{\sigma}(x^2) = p_{\lambda}(x)$.
+Defining a new, symmetric density function of the singular value distribution
+ 	 \begin{equation}\label{symmetric}
+ 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2},
+ 	 \end{equation}
+ 	 we now substitute $\tilde{p}_{\sigma}(x)$ into the definition of the Stieljes transform \eqref{stieltjes}
+ 	 to give the relationship
+ 	 	 	 \begin{align*}
+	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}dx
+	 	 \\&  =  
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
+	 	 \\&  =  
+	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
+	  	 \\&  =  
+	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
+ 	 	  	 \\&  =  
+ 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
+ 	 	 \\&  =  
+			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
+	 	 \\&  = 
+	 	 	-s G_{\lambda}(s^2)
+	 	 \end{align*}
+With the R-transform definition unchanged for the symmetric distribution, and the additional useful property (CITE)
+\begin{equation}
+\tilde{R}_{\mH_{Total}}(w) = \tilde{R}_{\mH_{2}}(w) + \tilde{R}_{\mH_{1}}
+\end{equation}
+We find that we only need the Stieltjes transform for the covariance matrix of each component of the sum which can in general be found using the tools
+of multiplicative free convolution.
+
+\item 
+Proof of canceling phases.\\
+Consider the channel given by 
+\begin{equation}
+\mathbf{H}_{Total} = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}.
+\end{equation}
+This product of matrices suggests the use of multiplicative free convolution to solve for the AED using the S-Transform. 
+Following the same procedure show in \cite{muller2002asymptotic}, we begin with the covariance matrix
+\begin{equation}
+\mC_2 = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H\boldsymbol{\Phi}^H\mathbf{H}_{2}^H
+\end{equation}
+and note that this has the same non-zero eigenvalues as the matrix (Proof)
+\begin{equation}
+\tilde{\mC}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H.
+\end{equation}
+The relationship between the S-Transform of $\mC_2$ and $\tilde{\mC}_2$ is given by 
+\begin{equation}\label{rotation_property}
+S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
+\end{equation}
+With \begin{equation}
+\mC_1 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
+\end{equation}
+we see that $S_{\tilde{\mC}_2}(z) = S_{\mC_1}(z) S_{\mathbf{H}_{1}\mathbf{H}_{1}^H}(z)$.  Repeating the above procedure on $\mC_1$ we find
+\begin{equation}
+\tilde{\mC}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
+\end{equation}
+with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$ we are left with 
+$S_{\mC_1}(z) =  S_{\mathbf{H}_{2}^H\mathbf{H}_{2}}(z)$. As a result we see that 
+the phase matrix cancels. The same canceling applies to any unitary matrix $\mathbf{A}$ such that   $\mathbf{A}\mathbf{A}^\dagger =\mathbf{A}^\dagger \mathbf{A} = \mI$.
 \end{enumerate}
-
-
 \bibliography{bibliography}
 \end{document}

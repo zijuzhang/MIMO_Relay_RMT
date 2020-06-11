@@ -24,18 +24,21 @@ fig = plt.figure()
 ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
 average = 100
-sizes = [10, 20, 50, 100]
+sizes = [5, 10, 20, 50, 100]
 correlations = [.5, .8, .9, .98]
 for cor_rho in correlations:
     capacity_variance = []
     capacity_average = []
     for size in sizes:
         t_correlation_matrix = exponential_correlation(size, cor_rho)
+        s_correlation_matrix = exponential_correlation(size, cor_rho)
         r_correlation_matrix = exponential_correlation(size, cor_rho)
         cor_cap = []
         for i in range(average):
             G = c_rand(size, size)
-            H_cor = r_correlation_matrix@G@t_correlation_matrix
+            G2 = c_rand(size, size)
+            # H_cor = r_correlation_matrix@G@t_correlation_matrix
+            H_cor = r_correlation_matrix@G2@s_correlation_matrix@G@t_correlation_matrix
             HH_cor = H_cor@hermetian(H_cor)
             # e_val_cor = np.linalg.eigvalsh(HH_cor)
             # irs_cor.append(np.real(e_val_cor))
@@ -45,12 +48,18 @@ for cor_rho in correlations:
         capacity_average.append(np.average(cor_cap))
         capacity_variance.append(np.var(cor_cap))
 
-    var_plt.plot(sizes, capacity_variance, '-o', label=f'Capacity Variance: {cor_rho}')
-    ave_plt.plot(sizes, capacity_average, '-o', label=f'Capacity Average: {cor_rho}')
+    var_plt.plot(sizes, capacity_variance, '-o', label=f'Correlation (rho): {cor_rho}')
+    ave_plt.plot(sizes, capacity_average, '-o', label=f'Correlation (rho): {cor_rho}')
 
 
 # ave_plt.title("Capacity Average")
 # plt.title("Capacity Variance")
+var_plt.set_ylabel("Capacity Variance")
+var_plt.set_xlabel("System Size")
+
+ave_plt.set_ylabel("Capacity Average (Bits/Symbol)")
+ave_plt.set_xlabel("System Size")
+
 ave_plt.grid(True, which='both')
 seaborn.despine(ax=ave_plt, offset=0)
 ave_plt.legend(loc="upper right")
