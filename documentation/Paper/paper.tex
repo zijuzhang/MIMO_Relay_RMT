@@ -45,22 +45,11 @@ Discuss how it has be looked at from MISO and MIMO perspective.
 \par
 Now discuss all of the previous work looking at the optimization of the phases. 
 General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
-Need to mention anyone who has considered correlation at end in order to transition. 
+
 \par
-Early investigation leading to the great interest in MIMO systems showed the key property of capacity in an $N \times N$ MIMO system scaling linearly in $N$ (teletar). While this scaling applies to many models for the channel (cite) one key property that can impact this scaling is correlation between channels of a MIMO system.
-In order to evaluate MIMO system performance in a real-world application, correlation between between the channels must be accounted for. In test data collected for (parameters) relevant to 3G and 4G wireless correlation between channels was shown to be as high as $0.5$ for a point-to-point, $4 \times 4$ system \cite{martin2000multiple} (corresponding capacity drop?). (Is this a bigger problem for higher frequencies?). Correlations cause reduction in the capacity of the system and often make the calculation of the capacity more difficult. However, with the possibility for arrays with (x) co-located antenna and RIS with (y) individually controlled reflective elements, the impact of channel correlation on system performance must be well understood before deployment. 
+\input{correlation_review}
 \par
-Detail all of the work looking at correlated MIMO. 
-1. Looking at correlation for finite size systems.
-Explain why calculating capacity (even without correlation) for finite case is difficult/cumbersome. Describe early results for MIMO.
-2. Extending to asymptotic system sizes. 
-One method that has been shown to reduce the complexity of this calculation is the assumption that $N \rightarrow \infty$. This method has been used 
-extensively since. 
-Now list of the different types of channels/methods that have been used here. 
-\cite{loyka2001channel}
-\par
-From the above, it should be clear that investigating the RIS  system for 
-asymptotically large MIMO systems with correlation, an topic not yet explicitly investigated to the author's knowledge, is relevant to the design of upcoming wireless systems.
+Motivated by the potential benefit of the RIS, we now investigate for the RIS system with correlation
 
 \section{Notation}
 The following notation is used throughout the remainder. 
@@ -112,6 +101,7 @@ equally such that $\mQ_x = \mathbf{I}$. This allows for simplifying equation \eq
 \mathbb{C} = \underset{\phase}{\mathop{max}} = N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)]
 \end{equation}
 where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
+Notice that in this form, the linear scaling of capacity with N is clear.
 Expanding the expectation gives the expression
 \begin{equation}\label{no_csi_capacity_aed}
 \mathbb{C} = \underset{\phase}{\mathop{max}} = N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda_i)p_{\lambda\lambda^H}(x) dx

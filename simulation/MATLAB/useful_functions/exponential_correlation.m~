@@ -1,7 +1,0 @@
-function [matrix] = exponential_correlation(rho)
-%EXPONENTIAL_CORRELATION Summary of this function goes here
-%   Detailed explanation goes here
-covariance = toeplitz(ones(1,rows/block_size));
-sqrtm(mat)
-end
-

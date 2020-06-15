@@ -1,0 +1,26 @@
+\par
+Investigation leading to the current interest in MIMO systems showed the key property that (with constant transmit power), capacity (and mutual information) in an $N \times N$ MIMO system with independent channels scales linearly in $N$ \cite{foschini1998limits}. However the assumption of independent channels between each pair of transmit and receive antennas is not generally reasonable. This prompted much investigation into the impact of correlation to this scaling. In the following, a number of studies on this are reviewed. The chosen works use for channel correlation models similar to the one we will develop for our system model. In particular, this models the correlation of a linear array for which correlation decreases exponentially with distance.
+\par
+1. Looking at correlation for finite size systems.
+In test data collected for (parameters) relevant to 3G and 4G wireless correlation between channels was shown to be as high as $0.5$ for a point-to-point, $4 \times 4$ system \cite{martin2000multiple} (corresponding capacity drop?). (Is this a bigger problem for higher frequencies?).
+Explain why calculating capacity (even without correlation) for finite case is difficult/cumbersome. Describe early results for MIMO.
+\par
+One method that has been shown to reduce the complexity of this calculation is the assumption that $N \rightarrow \infty$. 
+This is motivated by the observation that the eigenvalues of a channel covariance matrix converge to a deterministic distribution for many random 
+matrices as  $N \rightarrow \infty$. In the remainder, this will be referred to as the Asymptotic Eigenvalue Distribution (AED). 
+By making this assumption the impact of $N$ is only a scaling for some deterministic value. 
+\par
+In \cite{loyka2001channel}, an upper bound on the capacity is found using Jensen's inequality. For this upper bound, increasing correlation between antennas can be interpreted as a decrease in the average receiver SNR. 
+Similarly, \cite{skupch2005free} used multiplicative free convolution from free probability theory to analyze the exponential correlation model at either the transmitting or receiving antenna. Part of this result will be used in our analysis. 
+
+\cite{taricco2008asymptotic} analyzed the correlated ricean fading channel using the Replica Method. 
+In general it is observed that the slope of the linear scaling of (mutual information) is reduced by the addition of correlation. 
+One important point to note is that the above works do not consider the case of CSIT. When the water-filling capacity of the 
+correlated MIMO channel is considered,  \cite{chuah2002capacity} notes an exception to this trend. For the case with low
+SNR (what does this mean?) the water-filling capacity is actually increased with correlation.
+\par
+Before moving on to use any of these asymptomatic results, it is fitting to consider whether or not the assumption of  $N \rightarrow \infty$ is reasonable. Intuitively, we would expect that under correlation this convergence may occur only at very high $N$. This result was confirmed in  \cite{martin2004asymptotic} using the exponential correlation model at both the transmitter and receiver. 
+
+
+
+
