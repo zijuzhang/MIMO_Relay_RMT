@@ -1,0 +1,82 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Summary}
+I found a variety of different methods for considering correlation in the literature (especially for the exponential model). I will detail these methods in the next section. First I want to note 2 particular points that I think may be relevant. 
+\begin{enumerate}
+\item
+	Intuitively, adding correlation will slow the rate of convergence towards an asymptotic AED. 
+	In \cite[Fig. 2]{martin2004asymptotic} the asymptotic capacity for a MIMO channel with the exponential correlation model is found (by  using methods for estimating the AED of a sample covariance matrix) and compared with numerical results for systems of increasing size. The convergence of the numerical result to the asymptotic result is shown to slow significantly under realistic correlation values ($\rho = 0.7$ with the exponential model). This is important because even though I can show that the phase matrix at the IRS ,$\phase$, will cancel for the asymptotic case, the choice of $\phase$ will still be important for small system sizes or systems with high correlation.
+	It  might be useful to give an estimate for the system size needed in order for the asymptotic assumption to hold even when the channel is correlated with the exponential correlation model.
+	
+\item	
+	A second interesting note is from \cite{chuah2002capacity} which investigates a \emph{unitarily invariant} MIMO channel (eg $\CNO$) with the exponential correlation model. 
+	This work compares both the mutual information and capacity (with water-filling) of the system. It is shown that for a low SNR system, increasing the correlation ($\rho$)
+	actually increases the capacity. In contrast, increasing correlation always reduces capacity for equal power allocation and for the water-filling case with high SNR. 
+		
+\end{enumerate}
+\section{Methods for Analyzing Correlation}
+\subsection{Review of Empirical Results}
+First I reviewed MIMO correlation measurement studies to get some idea of realistic correlation coefficient that I can use to parameterize the exponential model. 
+\begin{enumerate}
+\item
+In test data collected for a point-to-point, $4 \times 4$ MIMO system  operating at 1.9 GHz (30 kHz bandwidth), \cite{martin2000multiple} showed correlation coefficient between channels could be as high as $0.5$. 
+The measurements in \cite{lee1973effects} show similar results for channels at 836 MHz over varying antenna spacing. This work indicates that the above correlation coefficient of $0.5$ is indeed reasonable and that much higher correlation coefficients are observed even when antennas are distanced by multiple wavelengths.
+
+\end{enumerate}
+To Discuss: I could not find correlation measurement results for the exponential model. There seems to be a lot of measurement work looking at the capacity with correlation and some that measure the correlation coefficients but I did not find work in which measurements were used to parameterize any correlation models.
+
+\subsection{Review of Asymptotic Results}
+Next I reviewed (and tried to simulate) works for asymptotic mutual information and capacity for the correlated MIMO channel. I've outlined some of the different approaches I case across below.
+\begin{enumerate}
+
+\item
+In \cite{loyka2001channel}, a deterministic and normalized channel with the exponential correlation model is investigated. An upper bound on the capacity is found using Jensen's inequality and an manipulated representation of the determinant. Using this upper bound, increasing correlation between antennas can be interpreted as a decrease in the average receiver SNR. 
+\par
+To Discuss: This would be an appropriate method to investigating just the impact of correlation but may not work for investigating other aspects of the system. 
+
+\item
+In \cite{skupch2005free} multiplicative free convolution from free probability theory is used to analyze the exponential correlation model at the transmitting or receiving antenna. In their free probability framework, \cite{skupch2005free} provides a closed form expression for the S-transform of the matrix representing the exponential correlation model (for a linear array). This should be exactly what I need. However, when I use this S-Transform equation I get inconsistent results. In particular, when I attempt to solve for $G(s)$ (the stieltjes transform) from $\gamma(s)$ using the inverse S-Transform, the results are clearly incorrect and not consistent with those in the paper. 
+\par
+To Discuss: Difference between my approach and what is used in the paper.
+
+\item 
+As mentioned above  \cite{chuah2002capacity} also considered the MIMO channel with unitarily invariant elements and the exponential correlation model at both the transmitter
+and receiver. The problem with this model is that it will not extend to the case of a LOS component since the channel elements would no longer be unitarily invariant.
+This approach is based primarily on results from random matrix theory for random determinants but also uses some concepts of free probability.
+
+\item 
+In \cite{taricco2008asymptotic} and \cite{moustakas2003mimo} the MIMO channel with correlated ricean (LOS) fading elements is analyzed using the Replica Method to find the first and second moments of the capacity. I haven't tried to repeat the results from either of these methods yet because they seem quite complicated. 
+
+\end{enumerate}
+To summarize, I can previous work for asymptotic results for similar system models but not my exact system model. 
+In the next section I detail a couple of resulting questions.
+\section{Questions to Discuss }
+\begin{enumerate}
+\item
+Since we can show that the IRS phase contribution will cancel out in any asymptotic system, the resulting channel is just a correlated MIMO channel with a set of scatterers and a LOS component that may be low rank. The problem is, none of the above results use this system model. Should I continue trying to find results for the correlated channel that is relevant to this system model even though there is no further insight to the IRS system?
+\item
+If power allocation becomes more important as the system size increases (for the low SNR case), is it worthwhile to find results for the equal power allocation case? 
+\item
+I noticed that in the works looking at IRS phase optimization, it is always assumed that power allocation can also be performed. Is it worthwhile to look at the realizable rates using phase optimization without power allocation and compare this to the asymptotic, equal power allocation case in which the phases cancel?
+\end{enumerate}
+\bibliography{bibliography}
+
+\end{document}

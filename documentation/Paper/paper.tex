@@ -17,22 +17,20 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This work investigates the impact of passive reflective surfaces on the capacity of MIMO systems. In particular, the system is analyzed in the asymptotic size domain in order to employ the tools of free probability. A system is considered first in the case of fully uncorrelated channels. In this case it is shown that the passive control of such a reflective surface has no impact on the capacity of the system. The system is then generalized to allow for correlation within the channel. In this case is it shown that the selection of the phases at the IRS still has an impact on the system. Finally we compare the capacity of the correlated channel with optimized phases at the IRS to the uncorrelated channel to show that....?
+\input{abstract}
 \end{abstract}
 %
 %\newpage
 \tableofcontents
-
-
 \chapter{Introduction}
 \section{Background}\label{Background}
-The spectrum of electromagnetic frequencies used by wireless communication has expanded to progressively higher frequencies with new standards, projected to reach even the Terahertz range by the 6G standard (CITE). This expansion is motivated by large bands of currently unused frequency
-and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. A primary hurdle towards efficient communication at these frequencies is the increased radio frequency (power) attenuation. For frequency bands relevant for upcoming wireless standards , freq power attenuation due to path loss  molecular absorption loss
-has been shown to exceed 100 dB. With increases in current wireless system capacity and reliability relying on the use of these high frequencies, mitigating or countering this power loss  is highly relevant.
+The spectrum of electromagnetic frequencies used by wireless communication has expanded to progressively higher frequencies with new standards. Industry research for 6G standard has already investigated 120, 200 and 340 GHz \cite{Koziol}. This expansion is motivated by large bands of currently unused frequency
+and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. A primary hurdle towards efficient communication at these frequencies is an increased attenuation of radio energy. For frequency bands relevant for upcoming wireless standards, energy attenuation due to free space path loss  molecular absorption loss
+has been shown to exceed 100 dB. Countering this loss is a key steps towards meeting the increased data rates and reliability required for future networks.
 \par
-In past generations of wireless communication, this problem of (power) attenuation has been alleviated by reducing the effective transmission distance 
-and supplementing the transmission power using relays (CITE). Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying this solution on a scale to counter
-the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
+In previous generations of wireless communications, the problem of (power) attenuation has been alleviated by reducing the effective transmission distance 
+and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying this solution on a scale to counter
+the attenuation levels relevant to new standards would pose impractical costs (why). One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
 \par
 The motivating use for the RIS is to alleviate the power attenuation problem without incurring the costs of an rf-chain and transmission power 
 associated with a relay. The absence of an rf-chain in the RIS offers additional benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on a relay. 
@@ -43,13 +41,18 @@ For frequencies used in the current 5G standard, 30 GHz, an RIS with $100$ eleme
 Example of how these surfaces are implemented (Cite).
 Discuss how it has be looked at from MISO and MIMO perspective.
 \par
-Now discuss all of the previous work looking at the optimization of the phases. 
-General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
-
+Need to show how many surfaces are needed in order to be on the same power gain order that is lost by the frequency increase (100dB).
+\par
+The previous section has shown that countering the increased attenuation of high frequencies using RIS and MIMO gains will requires systems 
+sizes on the order of x. Now motivate using asymptotic analysis.
 \par
 \input{correlation_review}
 \par
 Motivated by the potential benefit of the RIS, we now investigate for the RIS system with correlation
+
+\par
+Now discuss all of the previous work looking at the optimization of the phases. 
+General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
 
 \section{Notation}
 The following notation is used throughout the remainder. 

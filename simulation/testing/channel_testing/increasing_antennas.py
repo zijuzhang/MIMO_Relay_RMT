@@ -57,11 +57,8 @@ for val in param_list:
         irs_svd.append(s_val_total_irs)
         capacities.append(capacity(total_irs, 1/cols))
         water_capacity.append(capacity_water_filled(Q_x))
-
-        Q_H = water_filling(H, 1)
-        Q_G = water_filling(G, 1)
-        H_capacity.append(capacity_water_filled(H@Q_H@hermetian(H)))
-        G_capacity.append(capacity_water_filled(G@Q_G@hermetian(G)))
+        H_capacity.append(capacity_water_filled(water_filling(H, 1)))
+        G_capacity.append(capacity_water_filled(water_filling(G, 1)))
 
 # Compare Estimated to True Capacity
     numeric_capacity_list.append(np.average(capacities))
