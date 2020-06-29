@@ -23,12 +23,14 @@ los_path = []
 cross_sum = 0
 main_sum = 0
 
-average = 5
+average = 50
 for i in range(average):
     # H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     H = c_rand(rows, cols) @ np.diag(np.exp(1j * np.random.uniform(0, 2 * np.pi, rows))) @ c_rand(rows, cols)
     # G = c_rand(rows, cols, mean=.1)
-    G = c_rand(rows, cols)
+    G = np.ones((rows, cols))*.05   
+    # G = np.zeros((rows, cols))*-.01
+    # G = c_rand(rows, cols)
     GG = G @ np.conj(G.T)
     HH = H @ np.conj(H.T)
     GH = G @ np.conj(H.T)

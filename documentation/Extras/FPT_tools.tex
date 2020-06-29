@@ -1,0 +1,52 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\begin{document}
+\section{Free Probability Tools}
+\begin{equation}
+p(x) = \underset{y \rightarrow 0^+}{\text{lim}} \frac{1}{\pi}\textit{Img}( G(x + jy))
+\end{equation}
+\begin{equation}
+G(s) = \int_{-\infty}^{\infty} \frac{dPx}{x-s} \; \textit{Img} (s) > 0 
+\end{equation}
+\begin{equation}
+\gamma(s) =  -1 - \frac{G(\frac{1}{s})}{s}
+\end{equation}
+ 
+ \begin{equation}
+R(w) = G^{-1}(-s) - \frac{1}{w}
+\end{equation}
+ \begin{equation}
+S(z) = \frac{1+z}{z} \gamma^{-1}	(z)
+\end{equation}
+ \begin{equation}
+S_{\alpha X}(z) = \frac{1+z}{z} \gamma^{-1}	(z)
+\end{equation}
+ \begin{equation}
+S_{C_N}(z) = \frac{1+z}{z+\chi_N} S_{\tilde{C}_N}(z)
+\end{equation}
+
+ \begin{equation}
+\gamma_{C_N}	(z) = \chi_N \gamma_{\tilde{C}_N}	(z)
+\end{equation}
+
+\begin{equation}
+G_{C_N}	(s) = \frac{1}{s}  - \frac{\chi_N}{s} + \chi_N  G_{\tilde{C}_N}	(z)
+\end{equation}
+\begin{equation}
+R(z) = \frac{1}{S(zR(z))}
+\end{equation}
+\begin{equation}
+S(z) = \frac{1}{R(zS(z))}
+\end{equation}
+\end{document}
