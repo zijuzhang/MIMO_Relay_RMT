@@ -92,7 +92,7 @@ class IRS:
             self.phases = np.diag(-1j*1j*np.ones(self.size))
 
 
-def water_filling(channel_matrix, power_constraint, sigma_square=1):
+def water_filling(channel_matrix, power_constraint, sigma_square=1, vals=False):
     """
     Use of CVX to solve the convex water-filling problem for power allocation in a MIMO channel with CSI at
     the transmitter.
@@ -112,4 +112,7 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1):
     prob.solve()
     covariance_matrix = hermetian(V_H)@np.diag(variables.value)@V_H
     check = np.trace(covariance_matrix)
-    return channel_matrix@covariance_matrix@hermetian(channel_matrix)
+    if vals:
+        return variables.value
+    else:
+        return channel_matrix@covariance_matrix@hermetian(channel_matrix)

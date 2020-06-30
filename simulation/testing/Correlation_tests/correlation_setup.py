@@ -60,9 +60,9 @@ for i in range(average):
     irs_trace.append(np.trace(HH))
 
 
-    G_cap.append(capacity(GG, 1/size))
-    irs_cap.append(capacity(HH, 1/size))
-    cor_cap.append(capacity(HH_cor, 1/size))
+    # G_cap.append(capacity(GG, 1/size))
+    # irs_cap.append(capacity(HH, 1/size))
+    # cor_cap.append(capacity(HH_cor, 1/size))
 
 
     # G_cap.append(capacity_water_filled(water_filling(G, 1)))
@@ -90,6 +90,6 @@ ax.plot(bins_G[:-1], AED_G/rank, label='No IRS')
 plt.legend(loc="upper right")
 ax.grid(True, which='both')
 seaborn.despine(ax=ax, offset=0)
-# plt.show()
+plt.show()
 
 

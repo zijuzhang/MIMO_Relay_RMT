@@ -1,75 +1,85 @@
 rows = 100;
 cols = 100;
 steps = 100;
-bottom = .001;
+bottom = 1e-3;
 top = 10; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
-s_values = x_values + 1i*1e-6;
-rhos = linspace(.5,.99,5);
+% s_values = x_values + 1i*1e-6;
+s_values = x_values;
+% rhos = linspace(0,.9,3);
+rhos = linspace(0,1-1e-4,10);
 numeric_capacity = zeros(size(rhos));
 asymptotic_capacity = zeros(size(rhos));
+figure(1)
 for i = 1:length(rhos)
-    stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
-    % stieltjes_values = (1./s_values).*(1+gamma_s(s_values));
-    % stieltjes_values = marcenko_pastur(s_values,1);
+%     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
+    stieltjes_values = (1./s_values).*(1+gamma_s(s_values, rhos(i)));
+%     imag(stieltjes_values)
     pdf = 1/pi .* imag(stieltjes_values);
-    % pdf = imag(stieltjes_values);
-    numeric_capacity(i) = average_numeric_capacity(rows, cols, rhos(i), 20);
+    pdf = abs(pdf);
+    numeric_capacity(i) = average_numeric_capacity(rows, cols, rhos(i), 100);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
-%     plot(x_values, pdf)
-%     title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
+    plot(x_values, pdf)
+    title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
+    hold on
 end
 
-plot(rhos, numeric_capacity, '-s')
+figure(2)
+plot(rhos, numeric_capacity, '-s');
 hold on
-plot(rhos, asymptotic_capacity, '-o')
-legend('numeric_capacity','asymptotic_capacity')
+plot(rhos, asymptotic_capacity, '-o');
+legend('numeric capacity','asymptotic capacity');
 title('Numeric Vs. Asyptotic Correlated Capacity');
-
-
-
-
+xlabel('Exponential Correlation Value (rho)');
+ylabel('Capacity (bits)');
+f = gca;
+exportgraphics(f,'results\comparison.png')
+clear all;
 
 function output = gamma_s(input, rho)
     out = zeros(size(input), 'like', input);
     for i = 1:length(input)
-        out(i) =  gamma_s_func(input(i), rho);
-%         out(i) =  new(input(i));
+%         out(i) =  gamma_s_func(input(i), rho);
+        out(i) =  new(input(i), rho);
     end
     output = out;
 end
 
 
-function x = new(eval_point)
-init_point = rand() + 1j*abs(rand());
-rho = .1;
-alpha = (1+rho^2)/(1-rho^2);
-beta =1;
-x = fsolve(@root1,init_point);
+function x = new(eval_point, rho)
     function F = root1(z)
-%         F = eval_point*(1+z)/S_func(z) - z;
         F = (z+beta)^2*(z^2-1)/(eval_point^2) - z^2*(2*alpha*(z+beta)/eval_point - 1);
     end
+i = 0; 
+init_point = rand() + 1j*rand();
+alpha = (1+rho^2)/(1-rho^2);
+beta = 1; %Nt/Nr
+x = fsolve(@root1,init_point);
 end
 
 function x = gamma_s_func(eval_point, rho)
 init_point = rand() + 1j*rand();
-x = fsolve(@root1,init_point);
-    function F = root1(z)
-        F = z.*S_func(z, rho) - eval_point - z*eval_point;
-%         F = z - eval_point.*(1+z)./S_func(z);
-%         F = z - eval_point*power((1+z),2);
+% options = optimset('notify');
+    function F = root1(z);
+        %Problem here
+        F = z.*S_func(z, rho) - eval_point - z*eval_point; %more consistent
+%         F =  eval_point - S_func(z, rho)*z/(1+z);
     end
+x = fsolve(@root1,init_point); %TODO reject negative values
+% if imag(x) <= 0
+%     "check";
+% end
 end
 
 function val = S_func(z, rho)
-%     val = S_from_inv_gamma(z, evals) % Includes quarter circle
-    wishart = 1./power((1+z),2);
+%     wishart = 1./power((1+z),2);
+    wishart = 1./power((1+z),1);
     alpha = (1+rho^2)/(1-rho^2);
-    correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
+%     correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
+    correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
     val = wishart*correlation;
-%     val = 1./power((1+z),2)
+%     val = 1./power((1+z),1);
 end
 
 
@@ -95,6 +105,8 @@ function ave = average_numeric_capacity(rows, cols, rho, average)
         correlation = exponential_correlation(rows, rho);
         total_cov = (channel2*(correlation*(channel1*channel1')*correlation')*channel2');
 %         total_cov = (correlation*(channel*channel')*correlation');
+%         total_cov = (channel1*channel1');
+%         total_cov = (channel2*(channel1*channel1')*channel2');
         vals(i) = MIMO_capacity(total_cov, 1/cols);
     end
     ave = mean(vals);
