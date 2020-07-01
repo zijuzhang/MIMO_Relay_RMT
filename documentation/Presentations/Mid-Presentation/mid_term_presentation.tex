@@ -1,6 +1,6 @@
 \documentclass[10pt,tgadventor, onlymath]{beamer}
 
-\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork, fontawesome}
+\usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork, fontawesome, xcolor}
 
 %\input defs.tex
 \graphicspath{ {./figures/} }
@@ -65,8 +65,7 @@
 %% begin presentation
 
 \title{\large \bfseries Asymptotic Capacity of Systems with Intelligent Reflective Surfaces}
-
-\author{Peter Hartig\\[3ex]}
+\author{Peter Hartig \\ \and Supervisor: Saba Asaad}
 
 \date{\today}
 
@@ -84,9 +83,9 @@
 
 	\begin{itemize}
 		\item 			
-			Relays vs. Base Stations -> reduced core network footprint/cost
-		\item 
-			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
+			Base Stations Vs. Relay $\rightarrow$ reduced core network footprint/cost
+%		\item 
+%			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
 		\item 
 			Extending wireless coverage is relevant to high frequencies used in 5G +
 	\end{itemize}
@@ -94,7 +93,17 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Relay Vs. Intelligent Reflective Surface}
+\frametitle{The basic MIMO channel}
+Much easier if each channel has a constant frequency response over the relevant band.
+	\begin{itemize}
+		\item 			
+			
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Relay vs. Intelligent Reflective Surface}
 \begin{columns}
 \begin{column}{0.5\linewidth}
 \centering 
@@ -125,13 +134,11 @@
 	\end{equation*} 
 	\begin{itemize}
 	\item 
-		$\boldsymbol{\Phi}$ is diagonal with $|\ \phi_i \| =1$
+		$\boldsymbol{\Phi}$ is diagonal with $| \phi_i | =1$
 	\item 
 		No RF chain required (low cost)
 	\item
-		Shorter distances -> keep LOS
-	\item 
-		Current number of reflectors on models
+		Shorter distances $\rightarrow$ keep LOS
 	\item 
 		Inherently full-duplex
 	\end{itemize}
@@ -158,15 +165,15 @@
 \begin{frame}
 \frametitle{System Model}
 \centering
-\begin{equation}
+\begin{equation*}
 	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
-\end{equation}
+\end{equation*}
 with 
-$\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \times S}, \mathbf{G} \in \mathbb{C}_{R \times T}$ and $\boldsymbol{\Phi}$ as $S \times S$ diagonal matrix.
+$\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \times S}, \mathbf{G} \in \mathbb{C}_{R \times T}$ and $\boldsymbol{\Phi}$ as $S \times S$ a diagonal matrix with $| \phi_i | =1$.
 
 	\begin{figure}
 		\centering
-		\includegraphics[scale=1]{irs}
+		\includegraphics[scale=.3]{irs_correct}
 	\end{figure}
 \end{frame}
 
@@ -176,12 +183,12 @@ $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \tim
 \begin{enumerate}
 \item
 	Find capacity of asymptotic IRS systems
-	\begin{enumerate}
+	\begin{itemize}
 	\item 
 		Optimize phase matrix
 	\item
 		Generalize results
-	\end{enumerate}
+	\end{itemize}
 
 \item 
 	Confirm findings with numerical results throughout
@@ -200,22 +207,20 @@ $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \tim
 	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
 \end{equation*}
 
-Assume $\mathbf{x}\mathbf{x}^H = \mathbf{I}$. Capacity is given by 
-\begin{equation}\label{capacity}
-\underset{\boldsymbol{\Phi} }{\mathrm{max}}
-\Expect\left[\Log\left(|\mathbf{I}_{N_R}+\frac{P_{\text{Total}}}{T \sigma_n}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}][\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]^H|\right)\right].
-\end{equation}
+With $\mathbf{x}\mathbf{x}^H = \mathbf{I}$ and fixed $\boldsymbol{\Phi}$, capacity is given by 
+\begin{equation*}\label{capacity}
+\Expect\left[\Log\left(|\mathbf{I}_{R}+\frac{P_{\text{Total}}}{T \sigma_n}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}][\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}]^H|\right)\right].
+\end{equation*}
 Using 
-\begin{equation}
+\begin{equation*}
 \mathbf{H}_{\text{Total}} = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1} + \mathbf{G}
-\end{equation}
-and simplifying, \ref{capacity} becomes
-\begin{equation}
-\underset{\boldsymbol{\Phi} }{\mathrm{max}}
-\Expect\left[N\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} + \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right)\right]
-\end{equation}
-with $N$ as ???.
-Need Asymptotic Eigenvalue Distribution (AED) $p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda)$.
+\end{equation*}
+and simplifying, \eqref{capacity} becomes
+\begin{equation*}
+N \int_0^{\infty}\Log\left(1+\frac{P_{\text{Total}}}{T \sigma_n} \lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}\right) \textcolor{red}{p_{\lambda_{\mathbf{H}_{\text{Total}}\mathbf{H}_{\text{Total}}^H}}(\lambda)} d\lambda
+\end{equation*}
+with $N$ = rank($\mathbf{H}_{\text{Total}}$).
+Need Asymptotic Eigenvalue Distribution (AED).
 \end{frame}
 
 
@@ -246,57 +251,142 @@ Free probability provides a set of tools to find the AED of polynomials in free,
 }_
 {\color{red}{\text{not free}}}
 \end{equation*}
-Need to show that these are not free!
+%Need to show that these are not free!
 \end{frame}
 
 \begin{frame}
 \frametitle{Free Probability}
-Introduce the SVD AED relationship.
-\begin{equation}\label{svd_aed_property}
-\tilde{G}_{B}(s) = sG_{BB^{\dagger}}(s^2).
-\end{equation}
-Show that ultimately we will look to get the Stieltjes transform of both of these terms
+The symmetrized density function.
+\begin{equation*}
+\tilde{p}(x) = \frac{p(x) + p(-x)}{2}
+\end{equation*}
+The symmetrized singular value, eigenvalue relationship.
+\begin{equation*}\label{svd_aed_property}
+\tilde{G}_{H}(s) = sG_{HH^{\dagger}}(s^2).
+\end{equation*}
+Additive free convolution still applies for singular values.
+We only need the self-adjoint terms of the polynomial!
 \end{frame}
 
 \begin{frame}
-\frametitle{Free Probability}
-Show how to solve for individual covariance matrices and point out that phases cancel.
-Asymptotic analysis
+\frametitle{Free Probability: Canceling Phase Terms}
 Say 
-\begin{equation}
+\begin{equation*}
 C_2 = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}[\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}]^H
-\end{equation}
+\end{equation*}
 and a rotated version 
-\begin{equation}
-\tilde{C}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H
-\end{equation}. 
-Use property 
-\begin{equation}\label{rotation_property}
+\begin{equation*}
+\tilde{C}_2 = \underbrace{\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}}_{C_{1}}\mathbf{H}_{1}\mathbf{H}_{1}^H.
+\end{equation*}
+Use the property 
+\begin{equation*}\label{rotation_property}
 S_{C_2}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_2}(\frac{z}{\chi_2}).
-\end{equation}
-Applying the rotational property again to the term 
-\begin{equation}
+\end{equation*}
+\pause
+Repeat for
+\begin{equation*}
 C_{1} = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
-\end{equation}
-we get 
-\begin{equation}
-\tilde{C}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
-\end{equation}
+\end{equation*}
+\begin{equation*}
+\tilde{C}_{1} = \textcolor{red}{\boldsymbol{\Phi}\boldsymbol{\Phi}^H}\mathbf{H}_{2}^H\mathbf{H}_{2}
+\end{equation*}
 with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$.
 \end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Capacity of constant channels with random phase
+	}
+	\centering 
+	$\mathbf{H}_{2} \in \mathbb{C}_{R \times T}$, 
+	$\mathbf{H}_{1} \in \mathbb{C}_{S \times T}$, with $\mathcal{CN}(0,\frac{1}{\sqrt{RS}})$
+	and $ \mathbf{G} \in \mathbb{C}_{R \times T}$ with $\mathcal{CN}(0,\frac{1}{R})$. 
+	Statistics from $1000$ random realizations of $\boldsymbol{\Phi}$.
+	\bigskip
+	
+\begin{columns}
+\begin{column}{0.5\linewidth}
+\centering
+Asymptotic case \\ $T = 100$, $ R = 100$ and $S = 100$
+\begin{itemize}
+\item
+Capacity variance:
+ 0.0038458296727919886
+ \item
+Capacity average:
+ 6.764651253343401
+ \item
+Capacity min:
+ 6.574540172102809
+ \item
+Capacity max:
+ 6.98960781887363
+\end{itemize}
+%\textcolor{red}{\chi_N}}
+\end{column}
+\begin{column}{0.5\linewidth}
+\centering
+Non-asymptotic case\\ $T = R = 4$ and $S = 100$
+\begin{itemize}
+\item
+Capacity variance:
+ 0.4157628312024758
+ \item
+Capacity average:
+ 4.014673474337778
+ \item
+Capacity min:
+ 2.146914646653352
+ \item
+Capacity max:
+ 6.130275960052021
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Numerical Results: Asymptotic Capacity}
+	
+	\begin{equation*}
+	\mathbf{y} = (\mathbf{H}_2\underbrace{\boldsymbol{\Phi}}_{\text{IRS}}\mathbf{H}_1 + \underbrace{\mathbf{G}}_{\text{LOS: Rank $\leq 1$}})\mathbf{x}
+	\end{equation*} 
+\begin{figure}
+\includegraphics[width= .75\linewidth, height = 5.5cm]{los}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Numerical Results: Asymptotic Capacity}
+		\begin{equation*}
+	\mathbf{y} = (\underbrace{\sigma}_{\text{attenuation}}\mathbf{H}_2\underbrace{\boldsymbol{\Phi}}_{\text{IRS}}\mathbf{H}_1 + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{x}
+	\end{equation*} 
+\begin{figure}
+\includegraphics[width= .75\linewidth, height = 5.5cm]{attenuation}
+\end{figure}
+\end{frame}
+
 
 
 \begin{frame}
 \frametitle{Current Status}
 \begin{enumerate}
 \item
-	Find capacity of asymptotic IRS systems: \faCheck
-\item
-	Extend results to secrecy capacity: TODO
+	Find capacity of asymptotic IRS systems  \faCheck
+	\begin{itemize}
+	\item 
+		Optimize phase matrix	\faQuestion
+	\item
+		Generalize results
+	\end{itemize}
+
 \item 
 	Confirm findings with numerical results throughout
+	
+\item
+	* Time permitting - Consider secrecy capacity of IRS system
 \end{enumerate}
-
 \end{frame}
 
 
