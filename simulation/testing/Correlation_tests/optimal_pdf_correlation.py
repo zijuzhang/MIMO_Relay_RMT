@@ -24,6 +24,7 @@ for cor_rho in correlations:
         powers.append(water_filling(H_cor, 1, vals=True))
     density, power_bin = np.histogram(np.asarray(powers), bins=bins)
     plt.plot(power_bin[:-1], density/average, '-o', label='power allocation')
+plt.legend()
 plt.show()
 
 

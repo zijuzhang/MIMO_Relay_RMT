@@ -1,30 +1,30 @@
 rows = 100;
 cols = 100;
-steps = 100;
+steps = 400;
 bottom = 1e-3;
 top = 10; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
-% s_values = x_values + 1i*1e-6;
-s_values = x_values;
-% rhos = linspace(0,.9,3);
-rhos = linspace(0,1-1e-4,10);
+s_values = x_values + 1i*1e-3;
+% s_values = x_values;
+rhos = linspace(0, 0.8, 8);
+% rhos = linspace(0,1-1e-4,10);
 numeric_capacity = zeros(size(rhos));
 asymptotic_capacity = zeros(size(rhos));
-figure(1)
+% figure(1)
 for i = 1:length(rhos)
-%     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
-    stieltjes_values = (1./s_values).*(1+gamma_s(s_values, rhos(i)));
-%     imag(stieltjes_values)
+    numeric_capacity(i) = average_numeric_capacity(rows, cols, rhos(i), 100);
+    stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
+%     stieltjes_values = (1./s_values).*(1+gamma_s(s_values, rhos(i)));
     pdf = 1/pi .* imag(stieltjes_values);
     pdf = abs(pdf);
-    numeric_capacity(i) = average_numeric_capacity(rows, cols, rhos(i), 100);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
-    plot(x_values, pdf)
-    title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
-    hold on
+%     plot(x_values,pdf);
+%     title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
+%     hold on
 end
-
+numeric_capacity
+asymptotic_capacity
 figure(2)
 plot(rhos, numeric_capacity, '-s');
 hold on
@@ -40,60 +40,44 @@ clear all;
 function output = gamma_s(input, rho)
     out = zeros(size(input), 'like', input);
     for i = 1:length(input)
-%         out(i) =  gamma_s_func(input(i), rho);
-        out(i) =  new(input(i), rho);
+        out(i) =  gamma_s_func(input(i), rho);
+%         out(i) =  new(input(i), rho);
     end
     output = out;
 end
 
-
 function x = new(eval_point, rho)
+alpha = (1+rho^2)/(1-rho^2);
+beta = 1; %Nt/Nr
     function F = root1(z)
         F = (z+beta)^2*(z^2-1)/(eval_point^2) - z^2*(2*alpha*(z+beta)/eval_point - 1);
     end
-i = 0; 
 init_point = rand() + 1j*rand();
-alpha = (1+rho^2)/(1-rho^2);
-beta = 1; %Nt/Nr
 x = fsolve(@root1,init_point);
+x = real(x) + 1j*abs(imag(x));
 end
 
 function x = gamma_s_func(eval_point, rho)
 init_point = rand() + 1j*rand();
 % options = optimset('notify');
-    function F = root1(z);
-        %Problem here
-        F = z.*S_func(z, rho) - eval_point - z*eval_point; %more consistent
+    function F = root1(z)
+        %Correct negative imaginary component
+        F = z.*S_func(z, rho) - eval_point - z*eval_point; % more consistent
 %         F =  eval_point - S_func(z, rho)*z/(1+z);
     end
 x = fsolve(@root1,init_point); %TODO reject negative values
-% if imag(x) <= 0
-%     "check";
-% end
+% x = real(x) + 1j*abs(imag(x));
 end
 
 function val = S_func(z, rho)
-%     wishart = 1./power((1+z),2);
-    wishart = 1./power((1+z),1);
+    wishart = 1./power((1+z),2);
+%     wishart = 1./power((1+z),1);
     alpha = (1+rho^2)/(1-rho^2);
-%     correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
-    correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
-    val = wishart*correlation;
-%     val = 1./power((1+z),1);
-end
-
-
-function val = stieljes_corr(s, det_eigen_values)
-    val = 0;
-    N = length(det_eigen_values);
-    for i = 1 : N
-%         val = val + (1/(det_eigen_values(i)-s))/N;
-        val = val + (1/(s-det_eigen_values(i)))/N;
-    end
-end
-
-function val = stieljes_qc(s)
-    val = (1/2).*sqrt(1-4/s) - 1/2;
+    correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
+%     correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
+%     val = wishart*correlation;
+    val = wishart*correlation*correlation*correlation;
+%     val = 1./power((1+z),2);
 end
 
 
@@ -102,13 +86,15 @@ function ave = average_numeric_capacity(rows, cols, rho, average)
     for i = 1:length(vals)
         channel1 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
         channel2 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
+        projector1 = projection_matrix(rows, rows/2);
+        projector2 = projection_matrix(rows, rows/2);
         correlation = exponential_correlation(rows, rho);
-        total_cov = (channel2*(correlation*(channel1*channel1')*correlation')*channel2');
-%         total_cov = (correlation*(channel*channel')*correlation');
-%         total_cov = (channel1*channel1');
-%         total_cov = (channel2*(channel1*channel1')*channel2');
+%         total_channel = channel1;
+%         total_channel = channel2*channel1;
+        total_channel = correlation*channel2*correlation*channel1*correlation;
+%         total_channel = correlation*projector2*channel2*correlation*projector1*channel1*correlation;
+        total_cov = (total_channel*total_channel');
         vals(i) = MIMO_capacity(total_cov, 1/cols);
     end
     ave = mean(vals);
 end
-
