@@ -2,11 +2,11 @@ rows = 100;
 cols = 100;
 steps = 100;
 bottom = 1e-3;
-top = 10; 
+top = 20; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-3;
-betas = linspace(.1, 1, 5);
+betas = linspace(1e-4, 1, 5);
 numeric_capacity = zeros(size(betas));
 asymptotic_capacity = zeros(size(betas));
 for i = 1:length(betas)
@@ -16,7 +16,6 @@ for i = 1:length(betas)
     pdf = abs(pdf);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
 end
-numeric_capacity
 plot(betas, numeric_capacity, '-s');
 hold on
 plot(betas, asymptotic_capacity, '-o');

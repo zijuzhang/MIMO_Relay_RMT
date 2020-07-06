@@ -25,7 +25,7 @@ ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
 average = 100
 sizes = [5, 10, 20, 50, 100, 200]
-correlations = [.5, .8, .9, .98]
+correlations = [0, .5, .8, .9, .98]
 for cor_rho in correlations:
     capacity_variance = []
     capacity_average = []

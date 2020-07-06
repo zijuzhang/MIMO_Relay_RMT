@@ -1,13 +1,14 @@
 rows = 100;
 cols = 100;
-steps = 400;
+steps = 500;
 bottom = 1e-3;
-top = 10; 
+% top = 200; 
+top = 100; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-3;
 % s_values = x_values;
-rhos = linspace(0, 0.8, 8);
+rhos = linspace(0, 0.9, 10);
 % rhos = linspace(0,1-1e-4,10);
 numeric_capacity = zeros(size(rhos));
 asymptotic_capacity = zeros(size(rhos));
@@ -17,7 +18,7 @@ for i = 1:length(rhos)
     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
 %     stieltjes_values = (1./s_values).*(1+gamma_s(s_values, rhos(i)));
     pdf = 1/pi .* imag(stieltjes_values);
-    pdf = abs(pdf);
+%     pdf = abs(pdf);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
 %     plot(x_values,pdf);
 %     title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
@@ -86,8 +87,6 @@ function ave = average_numeric_capacity(rows, cols, rho, average)
     for i = 1:length(vals)
         channel1 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
         channel2 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
-        projector1 = projection_matrix(rows, rows/2);
-        projector2 = projection_matrix(rows, rows/2);
         correlation = exponential_correlation(rows, rho);
 %         total_channel = channel1;
 %         total_channel = channel2*channel1;

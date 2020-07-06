@@ -23,11 +23,17 @@ def c_bernoulli(rows, cols, p):
     return np.random.randint(0, 2, (rows, cols))
 
 
-def c_rand(rows, cols, var=None, mean=0):
-    if var is not None:
-        return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))*np.sqrt(var) + mean
+def c_rand(rows, cols, var=None, mean=0, normalize=True):
+    if not normalize:
+        if var is not None:
+            return (np.random.randn(rows, cols) + 1j * np.random.randn(rows, cols)) * np.sqrt(var) + mean
+        else:
+            return (np.random.randn(rows, cols) + 1j * np.random.randn(rows, cols)) + mean
     else:
-        return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows) + mean
+        if var is not None:
+            return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))*np.sqrt(var) + mean
+        else:
+            return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows) + mean
 
 
 def block_matrix(block, size, rows=True):

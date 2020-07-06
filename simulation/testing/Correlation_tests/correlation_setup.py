@@ -31,6 +31,7 @@ correlated_capacity_averages = np.zeros(len(correlation_block_sizes))
 average = 5
 for i in range(average):
     G = c_rand(rows, cols)
+    G2 = c_rand(rows, cols)
     GG = G @ np.conj(G.T)
     e_val_G = np.linalg.eigvalsh(GG)
     no_irs.append(e_val_G)
@@ -49,8 +50,9 @@ for i in range(average):
     # block = toeplitz(np.ones(int(rows / 2)))
     # correlation_matrix = block_matrix(block, rows, rows=True)
     t_correlation_matrix = exponential_correlation(size, .98)
+    s_correlation_matrix = exponential_correlation(size, .98)
     r_correlation_matrix = exponential_correlation(size, .98)
-    H_cor = r_correlation_matrix@G@t_correlation_matrix
+    H_cor = r_correlation_matrix@G2@s_correlation_matrix@G@t_correlation_matrix
     HH_cor = H_cor@hermetian(H_cor)
     e_val_cor = np.linalg.eigvalsh(HH_cor)
     irs_cor.append(np.real(e_val_cor))
@@ -60,9 +62,9 @@ for i in range(average):
     irs_trace.append(np.trace(HH))
 
 
-    # G_cap.append(capacity(GG, 1/size))
-    # irs_cap.append(capacity(HH, 1/size))
-    # cor_cap.append(capacity(HH_cor, 1/size))
+    G_cap.append(capacity(GG, 1/size))
+    irs_cap.append(capacity(HH, 1/size))
+    cor_cap.append(capacity(HH_cor, 1/size))
 
 
     # G_cap.append(capacity_water_filled(water_filling(G, 1)))

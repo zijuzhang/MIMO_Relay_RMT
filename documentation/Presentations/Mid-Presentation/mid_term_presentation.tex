@@ -77,29 +77,30 @@
 }
 
 \section{Background}
-
 \begin{frame}
-\frametitle{Relaying}
-
-	\begin{itemize}
-		\item 			
-			Base Stations Vs. Relay $\rightarrow$ reduced core network footprint/cost
-%		\item 
-%			Modes of operation provide cost/performance trade-off (decode and forward, amplify and forward ...)
-		\item 
-			Extending wireless coverage is relevant to high frequencies used in 5G +
-	\end{itemize}
-
+\frametitle{Massive MIMO}
+				\centering
+		\begin{figure}
+		\includegraphics[scale=.18]{Pictures/mimo_antenna}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{The basic MIMO channel}
-Much easier if each channel has a constant frequency response over the relevant band.
+\frametitle{Simplifying the MIMO Channel: OFDM}
+Assuming flat-fading channels between each transmit and receive antenna.
 	\begin{itemize}
 		\item 			
-			
+			Interpret each symbol to be the complex coefficient of a complex sinusoid of specific frequency. 
+		\item
+			These sinusoids pass through a channel whose frequency response is flat.
+		\item
+			By considering both channel and transmit signal in the frequency domain, we have a system given by
+			\begin{equation}
+				\my = \mH \mx.
+			\end{equation}
+		\item 
+			Justify if there are any difficulties for OFDM when moving to the high frequencies required for massive MIMO.
 	\end{itemize}
-
 \end{frame}
 
 \begin{frame}
@@ -148,25 +149,23 @@ Much easier if each channel has a constant frequency response over the relevant 
 \end{frame}
 
 
-%\begin{frame}
-%\frametitle{IRS: Modes of Operation}
-%\begin{columns}
-%\begin{column}{0.5\linewidth}
-%	Mode 1
-%	\begin{figure}
-%%			\centering
-%		\includegraphics[scale=1]{irs}
-%	\end{figure}\end{column}
-%\begin{column}{0.5\linewidth}
-%	Mode 2 (The one we will use)
-%\end{column}
-%\end{columns}
-%\end{frame}
+\begin{frame}
+\frametitle{Channel Correlation}
+	\begin{itemize}
+		\item 
+			FIR filters can represent correlation and their AED can be found. (Can just consider subset for FIR length?)
+		\item
+			The exponential correlation model is one such FIR filter with a single parameter. (Closed form expression for the S-Transform)
+		\item 
+			Measurement results for similar models show that $\rho$ can take on values up to $.6$ in $x$ GHz (a band relevant to 5G)
+	\end{itemize}
+\end{frame}
+
 \begin{frame}
 \frametitle{System Model}
 \centering
 \begin{equation*}
-	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}_1 + \mathbf{G})\mathbf{x}
+	\mathbf{y} = (\mathbf{H}_2\boldsymbol{\Phi}\mathbf{H}+ \mathbf{G})\mathbf{x}
 \end{equation*}
 with 
 $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \times S}, \mathbf{G} \in \mathbb{C}_{R \times T}$ and $\boldsymbol{\Phi}$ as $S \times S$ a diagonal matrix with $| \phi_i | =1$.
@@ -177,27 +176,36 @@ $\mathbf{H}_{1}\in \mathbb{C}_{S \times T},\mathbf{H}_{2} \in \mathbb{C}_{R \tim
 	\end{figure}
 \end{frame}
 
+\begin{frame}
+\frametitle{Channel Normalization}
+	\begin{itemize}
+		\item 
+			If transmit power is held constant as $N \rightarrow \infty$, the linear increase in capacity of the MIMO system depends on constant channel statistics.
+		\item 
+			In order to have a converging AED, we need to normalize the power of the channel.
+		\item
+			Show how can these results extend to the case without statistics changing? (is this even relevant?)
+	\end{itemize}
+\end{frame}
+
 \section{Goals}
 \begin{frame}
 \frametitle{Project Goals}
 \begin{enumerate}
 \item
-	Find capacity of asymptotic IRS systems
-	\begin{itemize}
-	\item 
-		Optimize phase matrix
-	\item
-		Generalize results
-	\end{itemize}
-
+	Generalize capacity analysis for a channel model relevant to the IRS.
 \item 
-	Confirm findings with numerical results throughout
-	
+	Optimize phase matrix at the IRS (when relevant).
+	\begin{itemize}
+	\item
+		Investigate the cases in which phase optimization is worthwhile. 
+	\end{itemize}
 \item
-	* Time permitting - Consider secrecy capacity of IRS system
+	* Time permitting - Consider secrecy capacity of IRS system (phase optimization may be relevant for some cases to increase secrecy capacity).
+\item 
+	Confirm findings with numerical results throughout.
 \end{enumerate}
 \end{frame}
-
 \section{Current Status}
 
 
