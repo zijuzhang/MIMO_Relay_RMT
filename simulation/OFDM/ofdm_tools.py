@@ -9,4 +9,4 @@ def DFT_matrix(size):
     for i in range(size):
         for j in range(size):
             mat[i,j] = i*j
-    return np.exp(1j*2*np.pi*mat/size)/100
+    return np.exp(-1j*2*np.pi*mat/size)/100

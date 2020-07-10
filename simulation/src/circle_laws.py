@@ -14,7 +14,6 @@ marcenko_st = lambda s, phi: 1/2 + (1-phi)/(2*s) + np.sqrt(np.power(1-phi, 2)/(4
 
 
 #   Deformed quarter circle
-
 def quarter_gamma4 (z, previous, alpha):
     return np.sqrt((previous-z*(alpha+(1+alpha)*previous))/z)
 
@@ -23,6 +22,10 @@ def quarter_gamma_fixed (z, alpha):
 
 def st_dquarter_gamma_based(s, alpha):
     return (-1/s)*(1+quarter_gamma_fixed(1/s, alpha))
+
+def deformed_quarter_circle(s,alpha):
+    return 1 / 2 + (1 - alpha) / (2 * np.power(s, 2)) \
+           -  np.sqrt(np.power((1 - alpha), 2) / (4 * np.power(s, 4)) - (1 + alpha) / (2 * np.power(s, 2)) + 1 / 4)
 
 #   Quarter cirlce
 def quarter_gamma_s(z, previous):

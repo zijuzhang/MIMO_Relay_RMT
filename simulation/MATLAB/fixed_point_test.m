@@ -1,9 +1,9 @@
 rows = 100;
 cols = 100;
-steps = 500;
+steps = 200;
 bottom = 1e-3;
 % top = 200; 
-top = 100; 
+top = 20; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-3;
@@ -35,7 +35,7 @@ title('Numeric Vs. Asyptotic Correlated Capacity');
 xlabel('Exponential Correlation Value (rho)');
 ylabel('Capacity (bits)');
 f = gca;
-exportgraphics(f,'results\comparison.png')
+exportgraphics(f,'results\RxCorrelation.png')
 clear all;
 
 function output = gamma_s(input, rho)
@@ -77,7 +77,8 @@ function val = S_func(z, rho)
     correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
 %     correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
 %     val = wishart*correlation;
-    val = wishart*correlation*correlation*correlation;
+    val = wishart*correlation*correlation
+%     val = wishart*correlation*correlation*correlation;
 %     val = 1./power((1+z),2);
 end
 
@@ -90,7 +91,10 @@ function ave = average_numeric_capacity(rows, cols, rho, average)
         correlation = exponential_correlation(rows, rho);
 %         total_channel = channel1;
 %         total_channel = channel2*channel1;
-        total_channel = correlation*channel2*correlation*channel1*correlation;
+%         total_channel = correlation*channel1;
+%         total_channel = correlation*channel2*channel1;
+        total_channel = correlation*channel2*correlation*channel1;
+%         total_channel = correlation*channelx2*correlation*channel1*correlation;
 %         total_channel = correlation*projector2*channel2*correlation*projector1*channel1*correlation;
         total_cov = (total_channel*total_channel');
         vals(i) = MIMO_capacity(total_cov, 1/cols);

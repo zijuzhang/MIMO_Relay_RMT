@@ -19,7 +19,6 @@ def steiltjes_from_gamma(s_vector, gamma_function, itr=200):
     return (1/s_vector)*(1+fixed_point(gamma_function, 1/s_vector, itr, 1e-2))
 
 
-
 # Move from inverse gamme to s-transform
 def s_transform_inverse_gamma(z, inverse_gamma):
     return ((1+z)/z)*inverse_gamma(z)

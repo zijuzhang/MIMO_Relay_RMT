@@ -77,12 +77,15 @@
 }
 
 \section{Background}
+\subsection{MIMO Channel}
+
 \begin{frame}
 \frametitle{Massive MIMO}
 				\centering
 		\begin{figure}
 		\includegraphics[scale=.18]{Pictures/mimo_antenna}
 	\end{figure}
+	\cite{argos2020}
 \end{frame}
 
 \begin{frame}
@@ -90,19 +93,52 @@
 Assuming flat-fading channels between each transmit and receive antenna.
 	\begin{itemize}
 		\item 			
-			Interpret each symbol to be the complex coefficient of a complex sinusoid of specific frequency. 
+			Interpret each symbol to be the complex coefficient in frequency of a specific complex sinusoid (a sub-carrier). 
 		\item
 			These sinusoids pass through a channel whose frequency response is flat.
 		\item
-			By considering both channel and transmit signal in the frequency domain, we have a system given by
+			By considering both the channel and transmit signals in the frequency domain for each "sub-carrier" in OFDM, we have a system given by
 			\begin{equation}
-				\my = \mH \mx.
+				\vy = \mH \vx.
 			\end{equation}
 		\item 
-			Justify if there are any difficulties for OFDM when moving to the high frequencies required for massive MIMO.
+			Forms of OFDM are defined for wireless protocols in 5G and 802.11
 	\end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Channel Correlation}
+	\begin{itemize}
+		\item 
+			From OFDM perspective this implies correlation between the same sub-carrier at different antennas.
+		\item 
+			FIR filters can represent some relevant types of correlation.
+			Toeplitz can be modeled asymptotically as circulant matrices. AED of circulant matrices is DFT of 1st row
+		\item
+			The exponential correlation model is one such FIR filter with elements $c_{i,j} = \rho^{i-j} $ with $ 0 \leq \rho \leq 1$.
+		\item 
+			Measurement results for similar models show that $\rho$ can take on values up to $.6$ in $x$ GHz (a band relevant to 5G)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Channel Normalization}
+\begin{itemize}
+\item
+	We want to analyze the channel behavior as $N \rightarrow \infty$ without sending capacity to infinity. 
+\begin{itemize}
+\item
+	Normalize the power of the transmitted symbols and channel gains such that $\Expect[\vy^H \vy ] = 1$.
+	Enforcing that $\Expect[\vx^H \vx ] = \frac{1}{N}\mathbf{I}$ and $\Expect[\|h_{i,j}\|^2_2 ]= \frac{1}{M}$ for $\mH \in \complex^{M \times N} $ satisfies this.
+\end{itemize}
+\item
+	The popular result that MIMO capacity grows as $\min{N_T, N_R}$ does not include such a normalization. Which type of gain is now eliminated?
+\item
+	Allows for a matrix to have a converging eigenvalue distribution despite $N, M \rightarrow \infty$.
+\end{itemize}
+\end{frame}
+
+\subsection{IRS Channel}
 \begin{frame}
 \frametitle{Relay vs. Intelligent Reflective Surface}
 \begin{columns}
@@ -149,17 +185,7 @@ Assuming flat-fading channels between each transmit and receive antenna.
 \end{frame}
 
 
-\begin{frame}
-\frametitle{Channel Correlation}
-	\begin{itemize}
-		\item 
-			FIR filters can represent correlation and their AED can be found. (Can just consider subset for FIR length?)
-		\item
-			The exponential correlation model is one such FIR filter with a single parameter. (Closed form expression for the S-Transform)
-		\item 
-			Measurement results for similar models show that $\rho$ can take on values up to $.6$ in $x$ GHz (a band relevant to 5G)
-	\end{itemize}
-\end{frame}
+
 
 \begin{frame}
 \frametitle{System Model}
@@ -410,7 +436,10 @@ Capacity max:
 
 \end{frame}
 
-
+\begin{frame}[allowframebreaks]
+        \frametitle{References}
+        \bibliography{bibliography.bib}
+\end{frame}
 
 
 

@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 from src.circle_laws import *
 from src.lin_alg import *
 rows = 100
-# alpha_list = [.1, .5, .8, 1]
-alpha_list = [.4]
-# alpha_list = [1]
+alpha_list = [.1, .5, .8, 1]
 bins = 50
 los_rank = 1
 average = 10
@@ -46,12 +44,12 @@ for alpha in alpha_list:
     parameters = [sigma, rho, phi]
     theoretic_pdf = estimated_pdf(fixed_point(final_stieltjes_deformed, s_vector, 100, 1e-3, 3,
                                               func_param=parameters, unique_half_plane=True))
-
-
+    check = estimated_pdf(deformed_quarter_circle(s_vector, alpha))
     # plt.plot(x_values, distribution, label=f"true {alpha}")
     # plt.plot(x_values, second_distribution, label=f"gamma qc {alpha}")
     # plt.plot(x_values, third_distribution, label=f"gamma dqc {alpha}")
-    plt.plot(x_values, theoretic_pdf, label=f"conc dqc {alpha}")
+    # plt.plot(x_values, check, label=f"check {alpha}")
+    # plt.plot(x_values, theoretic_pdf, label=f"conc dqc {alpha}")
 
 
 # st_distribution = estimated_pdf(st_quarter_circle_eigen(values+1j*1e-6))
