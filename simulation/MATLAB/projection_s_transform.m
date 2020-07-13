@@ -47,10 +47,17 @@ function x = gamma_s_func(eval_point, beta)
     function F = root1(z)
         F = z.*S_func(z, beta) - eval_point - z*eval_point;
     end
-init_point = rand() + 1j*rand();
+% init_point = rand() + 1j*rand();
 % x = fsolve(@root1,init_point);
-polynomial_vector = [eval_point, (2*eval_point-1), eval_point];
-check = roots(polynomial_vector);
+% sq_roots = [2, 0, 1]
+% sq_check = roots(sq_roots);
+% polynomial_vector = [eval_point, (2*eval_point-1), eval_point];
+% check1 = roots(polynomial_vector)
+syms x;
+eqn = x^2*eval_point + x*(2*eval_point-1) + eval_point == 0;
+check = solve(eqn, x);
+eval(check)
+% pos_img = imag(check(1).val)>0
 %   Need to pick out positive part of the polynomial
 x = check(1);
 end

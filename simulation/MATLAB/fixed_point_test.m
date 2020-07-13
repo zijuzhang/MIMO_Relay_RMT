@@ -8,11 +8,11 @@ x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-3;
 % s_values = x_values;
-rhos = linspace(0, 0.9, 10);
+rhos = linspace(0, 0.9, 1);
 % rhos = linspace(0,1-1e-4,10);
 numeric_capacity = zeros(size(rhos));
 asymptotic_capacity = zeros(size(rhos));
-% figure(1)
+figure(1)
 for i = 1:length(rhos)
     numeric_capacity(i) = average_numeric_capacity(rows, cols, rhos(i), 100);
     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, rhos(i)));
@@ -20,9 +20,9 @@ for i = 1:length(rhos)
     pdf = 1/pi .* imag(stieltjes_values);
 %     pdf = abs(pdf);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
-%     plot(x_values,pdf);
-%     title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
-%     hold on
+    plot(x_values,pdf);
+    title(['Capacity for this PDF is: ', num2str(asymptotic_capacity)]);
+    hold on
 end
 numeric_capacity
 asymptotic_capacity
@@ -66,8 +66,18 @@ init_point = rand() + 1j*rand();
         F = z.*S_func(z, rho) - eval_point - z*eval_point; % more consistent
 %         F =  eval_point - S_func(z, rho)*z/(1+z);
     end
-x = fsolve(@root1,init_point); %TODO reject negative values
+% check1 = fsolve(@root1,init_point) %TODO reject negative values
 % x = real(x) + 1j*abs(imag(x));
+alpha = (1+rho^2)/(1-rho^2);
+syms x;
+% eqn = x^2*eval_point + x*(2*eval_point-1) + eval_point == 0;
+eqn = x^3*eval_point + x^2*(alpha+eval_point) + x*(sqrt(x^2*(alpha^2-1)+1)- eval_point) - eval_point == 0;
+check = solve(eqn, x);
+check  = eval(check);
+% % pos_img = imag(check(1).val)>0
+x = check(1)
+% Need to pick out positive part of the polynomial
+x = real(x) + 1j*abs(imag(x));
 end
 
 function val = S_func(z, rho)
@@ -77,9 +87,9 @@ function val = S_func(z, rho)
     correlation = (alpha*z - sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
 %     correlation = (alpha*z + sqrt(alpha^2*z^2 - (z^2 - 1)))/(z-1);
 %     val = wishart*correlation;
-    val = wishart*correlation*correlation
+%     val = wishart*correlation*correlation;
 %     val = wishart*correlation*correlation*correlation;
-%     val = 1./power((1+z),2);
+    val = 1./power((1+z),1);
 end
 
 
@@ -91,9 +101,9 @@ function ave = average_numeric_capacity(rows, cols, rho, average)
         correlation = exponential_correlation(rows, rho);
 %         total_channel = channel1;
 %         total_channel = channel2*channel1;
-%         total_channel = correlation*channel1;
+        total_channel = correlation*channel1;
 %         total_channel = correlation*channel2*channel1;
-        total_channel = correlation*channel2*correlation*channel1;
+%         total_channel = correlation*channel2*correlation*channel1;
 %         total_channel = correlation*channelx2*correlation*channel1*correlation;
 %         total_channel = correlation*projector2*channel2*correlation*projector1*channel1*correlation;
         total_cov = (total_channel*total_channel');

@@ -9,7 +9,7 @@ from src.fixed_point import *
 from src.lin_alg import *
 from src.network_simulation_tools import water_filling
 import seaborn
-from scipy.linalg import toeplitz
+
 irs_cor = []
 rank = 100
 fig = plt.figure()

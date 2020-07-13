@@ -116,3 +116,7 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1, vals=False):
         return variables.value
     else:
         return channel_matrix@covariance_matrix@hermetian(channel_matrix)
+
+
+def relaxed_power_phase_optimization(channel_matrix, power_constraint, sigma_square=1, vals=False):
+    pass
