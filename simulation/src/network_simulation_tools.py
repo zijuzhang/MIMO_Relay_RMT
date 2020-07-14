@@ -113,7 +113,7 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1, vals=False):
     covariance_matrix = hermetian(V_H)@np.diag(variables.value)@V_H
     check = np.trace(covariance_matrix)
     if vals:
-        return variables.value
+        return np.diag(variables.value)
     else:
         return channel_matrix@covariance_matrix@hermetian(channel_matrix)
 

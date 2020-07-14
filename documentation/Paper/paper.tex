@@ -24,26 +24,27 @@
 \tableofcontents
 \chapter{Introduction}
 \section{Background}\label{Background}
-The spectrum of electromagnetic frequencies used by wireless communication has expanded to progressively higher frequencies with new standards. Industry research for 6G standard has already investigated 120, 200 and 340 GHz \cite{Koziol}. This expansion is motivated by large bands of currently unused frequency
-and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. A primary hurdle towards efficient communication at these frequencies is an increased attenuation of radio energy. For frequency bands relevant for upcoming wireless standards, energy attenuation due to free space path loss  molecular absorption loss
-has been shown to exceed 100 dB. Countering this loss is a key steps towards meeting the increased data rates and reliability required for future networks.
+The spectrum of electromagnetic frequencies used by wireless communication has been expanded to progressively higher frequencies with new standards. Industry research for the 6G standard has already investigated 120, 200 and 340 GHz \cite{Koziol}. This shift is motivated by large bands of currently unoccupied frequency
+and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. One primary hurdle towards efficient communication at these frequencies is an increased attenuation of radio energy. (Justify previous statement by comparing attenuation from previous to new standards). Countering this loss is a key step towards meeting the increased data rates and reliability required for future networks.
 \par
-In previous generations of wireless communications, the problem of (power) attenuation has been alleviated by reducing the effective transmission distance 
-and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying this solution on a scale to counter
-the attenuation levels relevant to new standards would pose impractical costs (why). One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients are controlled to enable active selection of the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
+In previous generations of wireless communications, attenuation due to path loss (since not at high enough frequencies for absorption) has been alleviated by reducing the effective transmission distance 
+and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying enough relays to counter
+the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many, sub-wavelength sized elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients can be controlled to select the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
 \par
 The motivating use for the RIS is to alleviate the power attenuation problem without incurring the costs of an rf-chain and transmission power 
-associated with a relay. The absence of an rf-chain in the RIS offers additional benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on a relay. 
+associated with a relay. (Compare performance to relays) (detail relay model) as show in \cite{bjornson2019demystifying}, the absence of an rf-chain in the RIS offers some benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on an active relay. 
 The thorough review in \cite{basar2019wireless} provides rigorous motivation of the use of RISs and a few notable points are included here.
-For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?).
+For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?)(Also does this normalize the path power at all?). It is important to note that scaling of received SNR proportional to $N^2$ will not hold asymptotically due to the conservation of transmitted energy \cite{bjornson2019demystifying}.
+
 For frequencies used in the current 5G standard, 30 GHz, an RIS with $100$ elements would have dimensions $1$ $\text{m}^2$.
 (Why can we just ignore the fact that we might be able to change the reflection angle? In \cite{basar2019wireless} they introduce the idea with the ability to optimize the angle by then ignore it?).
 Example of how these surfaces are implemented (Cite).
+
 Discuss how it has be looked at from MISO and MIMO perspective.
 \par
 Need to show how many surfaces are needed in order to be on the same power gain order that is lost by the frequency increase (100dB).
 \par
-The previous section has shown that countering the increased attenuation of high frequencies using RIS and MIMO gains will requires systems 
+The previous section has shown that countering the increased attenuation of high frequencies using RIS and MIMO gains will require systems 
 sizes on the order of x. Now motivate using asymptotic analysis.
 \par
 \input{correlation_review}
@@ -67,6 +68,15 @@ For square $\mX$ with dimension $N\times N$ the normalized trace is denoted by $
 The following sections are now previewed. In section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
 
 \chapter{System Model}\label{system_model}
+\section{Power Normalization}
+Consider the SISO channel with an RIS given by $y = \vh_{rs}^H \phase \vh_{st}$. In this case, $ \phase$ should be chosen optimally such that 
+the phases all add constructively at the receiver (\ie $h_{rs,i} \phi_k h_{st,j}$ add constructively at the receiver). 
+In the case of an i.i.d Rayleigh channel with elements $\CNO$ and $\sigma^2_{\text{noise}} =1$, the SNR at the receiver is given by $\gamma = N$.
+Intuitively if the channel gains are normalized such that the received power is normalized for any system size $N$ the IRS offers no gain. 
+In this case we can achieve this normalization by enforcing that elements of the a channel matrix $\mH \in \CN^{N \times K}$ have variance $\frac{1}{N}$.
+This observation highlights an point that must be considered when performing asymptotic analysis; the received power must be normalized.
+
+
 \section{The Correlated IRS Channel}
 In the most general case we consider the channel given by 
 
