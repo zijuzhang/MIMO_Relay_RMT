@@ -24,25 +24,21 @@
 \tableofcontents
 \chapter{Introduction}
 \section{Background}\label{Background}
-The spectrum of electromagnetic frequencies used by wireless communication has been expanded to progressively higher frequencies with new standards. Industry research for the 6G standard has already investigated 120, 200 and 340 GHz \cite{Koziol}. This shift is motivated by large bands of currently unoccupied frequency
-and the possibility of decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. One primary hurdle towards efficient communication at these frequencies is an increased attenuation of radio energy. (Justify previous statement by comparing attenuation from previous to new standards). Countering this loss is a key step towards meeting the increased data rates and reliability required for future networks.
+The spectrum of electromagnetic frequencies used by wireless communication has been expanded to progressively higher frequencies with new standards. Industry research for the 6G standard has already investigated systems using frequency bands in the 120, 200 and 340 GHz range \cite{Koziol}. This shift is motivated by large bands of currently unoccupied frequency and the possibility for decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. One primary hurdle towards efficient communication at these frequencies is the higher net attenuation of radio energy due both to scattering effects and molecular absorption. \cite{TODO} show through extensive data collection that relevant attenuation will be (x). 
+As a relevant example, radar systems have long used this band of frequencies due to the resulting high resolution. For example, one such system operating in the 2 - 4 GHz band requires 25 kW of power for a detection range of 400 km \cite{TODO}. 
+Countering this type of loss is a key step towards meeting the increased data rates and reliability required for future networks. 
 \par
-In previous generations of wireless communications, attenuation due to path loss (since not at high enough frequencies for absorption) has been alleviated by reducing the effective transmission distance 
-and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. (Would be nice to cite some actual costs here). Deploying enough relays to counter
-the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest (check if deployed yet) are surfaces made of many, sub-wavelength sized elements with favorable reflective properties for high frequency electromagnetic waves (detail) and whose reflective coefficients can be controlled to select the phase of reflected waves. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
+In previous generations of wireless communications, attenuation due to path loss has been alleviated by reducing the effective transmission distance 
+and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. Deploying enough relays to counter
+the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest is the use of surfaces made of many, sub-wavelength sized elements with favorable electromagnetic reflection and whose reflective coefficient can be controlled to select the phase of the reflected wave. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
+While this work focuses on the theory surrounding such surfaces, it is worth noting that these surfaces have been successfully implemented in works such as \cite{tan2018enabling} in which an RIS with 224 elements was built and tested. 
 \par
 The motivating use for the RIS is to alleviate the power attenuation problem without incurring the costs of an rf-chain and transmission power 
-associated with a relay. (Compare performance to relays) (detail relay model) as show in \cite{bjornson2019demystifying}, the absence of an rf-chain in the RIS offers some benefits over relays. First, reflection does not introduce the noise associated with the rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on an active relay. 
+associated with a relay. The absence of an rf-chain on the RIS offers some benefits over relays. First, reflection does not introduce the noise associated with an rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on an active relay. 
 The thorough review in \cite{basar2019wireless} provides rigorous motivation of the use of RISs and a few notable points are included here.
-For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?)(Also does this normalize the path power at all?). It is important to note that scaling of received SNR proportional to $N^2$ will not hold asymptotically due to the conservation of transmitted energy \cite{bjornson2019demystifying}.
-
-For frequencies used in the current 5G standard, 30 GHz, an RIS with $100$ elements would have dimensions $1$ $\text{m}^2$.
-(Why can we just ignore the fact that we might be able to change the reflection angle? In \cite{basar2019wireless} they introduce the idea with the ability to optimize the angle by then ignore it?).
-Example of how these surfaces are implemented (Cite).
-
-Discuss how it has be looked at from MISO and MIMO perspective.
+For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?)(Also does this normalize the path power at all?). While such results are indeed motivating, it is important to note that scaling of received SNR proportional to $N^2$ will not hold asymptotically due to the conservation of transmitted energy \cite{bjornson2019demystifying}.
 \par
-Need to show how many surfaces are needed in order to be on the same power gain order that is lost by the frequency increase (100dB).
+Need to show how many surfaces (are the corresponding size) are needed in order to be on the same power gain order that is lost by the frequency increase (100dB).
 \par
 The previous section has shown that countering the increased attenuation of high frequencies using RIS and MIMO gains will require systems 
 sizes on the order of x. Now motivate using asymptotic analysis.
@@ -65,7 +61,7 @@ For square $\mX$ with dimension $N\times N$ the normalized trace is denoted by $
 \Expect[\frac{1}{N}\sum_{i=1}^N x_{i,i}]$
 
 \section{Outline}
-The following sections are now previewed. In section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
+The following sections are now previewed. Section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
 
 \chapter{System Model}\label{system_model}
 \section{Power Normalization}
@@ -89,48 +85,55 @@ A key metric of interest for the channel described in the previous section is th
 \begin{equation}\label{mut_ent}
 I(\vy;\vx) = h(\vy) - h(\vy|\vx).
 \end{equation}
-If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} 
+If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is also circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} 
 \begin{equation}\label{entropy}
 h(\vy) = \Expect[\Log(|\pi e \mathbf{Q}_{y}|)]
 \end{equation}
  for $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
 
-For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect[\vn\vn^H] = \mI$, substituting equation \eqref{entropy} into equation
-\eqref{mut_ent} gives
+For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect\left[\vn\vn^H \right] = \mI$, substituting equation \eqref{entropy} into equation
+\eqref{mut_ent} and simplifying gives
 \begin{equation}\label{mut_inf}
-\Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
+\Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right].
 \end{equation}
-Using the model for $\mHt$ from the previous section, and maximizing with respect to the
-transmit covariance matrix and the phases at the IRS gives and expression for the capacity of the system
+Using the model for $\mHt$ from the previous section, and maximizing with respect to both the
+transmit covariance matrix and phases at the IRS gives and expression for the system capacity
 
 \begin{equation}\label{capacity}
-\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect [\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)].
+\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right]
 \end{equation}
-Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of $h(\vx) $ and $h(\vn)$.
-
-If $\mHt$ is not known at the transmitter, the transmit power can be allocated
-equally such that $\mQ_x = \mathbf{I}$. This allows for simplifying equation \eqref{capacity} to 
-\begin{equation}\label{no_csi_capacity}
-\mathbb{C} = \underset{\phase}{\mathop{max}} = N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)]
+or equivalently,
+\begin{equation}
+\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\sum_{i=1}^{N}\Log(\mathbf{I} + \lambda_i)\right].
 \end{equation}
 where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
-Notice that in this form, the linear scaling of capacity with N is clear.
-Expanding the expectation gives the expression
-\begin{equation}\label{no_csi_capacity_aed}
-\mathbb{C} = \underset{\phase}{\mathop{max}} = N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda_i)p_{\lambda\lambda^H}(x) dx
+
+Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of the distribution of $\vx $ with Gaussian noise $\vn$. (Perhaps mention that normally we cannot generate continuous Gaussian x so we use channel coding).
+If $\mHt$ is not known at the transmitter, the transmit power can be allocated
+equally such that $\mQ_x = \mathbf{I}$ (Need to provided some evidence for this choice and extend to the case that we choose it in some other way using a distribution). This allows for simplifying equation \eqref{capacity} to 
+\begin{equation}\label{no_csi_capacity}
+\mathbb{C} = \underset{\phase}{\mathop{max}} N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)].
 \end{equation}
-in which the bounds of the integral represent the range for the eigenvalues of a positive semidefinite matrix. 
+
+In this form, the linear scaling of capacity with N is clear.
+Expanding the expectation gives 
+\begin{equation}\label{no_csi_capacity_aed}
+\mathbb{C} = \underset{\phase}{\mathop{max}} N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda)p_{\lambda\lambda^H}(x) dx
+\end{equation}
+in which the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix. 
 
 Note that because $\Log$ is a concave function, we can upper bound the mutual information with
 \begin{equation}\label{mut_inf}
-\Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda_i])
+\Expect[\Log(1 + \frac{1}{\sigma_n}\lambda)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda])
 \end{equation}
-Now discuss capacity and consider equal power but optimize over phase
-We now want to consider the case in 
+
+\section{Explanation of Asymptotic Analysis}
+Equation \eqref{no_csi_capacity_aed} highlights the important point that knowledge of the eigenvalue distribution of the received signal co-variance matrix is sufficient information to find the capacity of a MIMO channel. As we are generally interested in random channels, finding this eigenvalue distribution is not a straightforward task.
+
 
 \section{Motivation for AED as a projection of Matrices}
 Equation \ref{no_csi_capacity_aed} shows that the capacity of a communication channel can be found using the AED of the channel covariance matrix.
-For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = Expect[\Tr{(mHt \mHt^H})] = $.
+For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = \Expect[\Tr{(mHt \mHt^H})] = $.
 One property that will be useful in the following is the relationship between the eigenvalues of a channel covariance matrix and the singular values of
 the channel.
 For a general matrix $\mH \in \complex^{n \times m}$ the singular values are given by 

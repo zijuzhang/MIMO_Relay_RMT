@@ -1,11 +1,16 @@
 \par
-Investigation leading to the current interest in MIMO systems showed the key property that (with constant transmit power), capacity (and mutual information) in an $N \times N$ MIMO system with independent channels scales linearly in $N$ \cite{foschini1998limits}. However the assumption of independent channels between each pair of transmit and receive antennas is not generally reasonable. This prompted much investigation into the impact of correlation to this scaling. In the following, a number of these studies are reviewed. These chosen works use channel correlation models similar to the one we will develop for our system model. In particular, this models the correlation between antennas as decreasing  exponentially with the distance between antennas. Definitely need to show this is a valid model (Cite).
+Investigation leading to the current interest in MIMO systems showed the key property that (with constant transmit power), capacity (and mutual information) in an $N \times N$ MIMO system with independent, i.i.d gaussian channels scales linearly in $N$ \cite{foschini1998limits}. While the assumption of \emph{identically distributed} channels is intuitively reasonable when adding more antennas, the assumption of \emph{independent} channels between each pair of transmit and receive antennas is not generally reasonable. As this point could determine the ability to leverage capacity scaling of massive MIMO, it prompted much investigation. In the following, a number of these studies are reviewed. These chosen works use channel correlation models similar to the one we will develop for our system model. In particular, this models the correlation between antennas as decreasing  exponentially with the distance between antennas. Definitely need to show this is a valid model (Cite).
 \par
 1. Looking at correlation for finite size systems.
-In test data collected for (parameters) relevant to 3G and 4G wireless correlation between channels was shown to be as high as $0.5$ for a point-to-point, $4 \times 4$ system \cite{martin2000multiple} (corresponding capacity drop?). (Is this a bigger problem for higher frequencies?).
-Explain why calculating capacity (even without correlation) for finite case is difficult/cumbersome. Describe early results for MIMO.
+In test data collected with channel parameters (carrier frequency, bandwidth, power...) relevant to 3G and 4G, wireless correlation between channels was shown to be as high as $0.5$ for a point-to-point, $4 \times 4$ system \cite{martin2000multiple} (corresponding capacity drop?). Need to describe the propagation environment a bit more. 
+As increased antenna density is one of the primary motivations for moving to higher frequencies, future antenna spacing with respect to wavelength is likely to remain consistent and therefore similar antenna correlation can be expected (proof of this?).
+Explain why calculating capacity (even without correlation) for finite case is difficult/cumbersome for large numbers of antennas. Describe early results for MIMO.
+\par
+Explain reason for using power scaling here.
+
 \par
 One method that has been shown to reduce the complexity of this calculation is the assumption that $N \rightarrow \infty$. 
+(TODO need to explain the power normalization needed for this to work)
 This is motivated by the observation that the eigenvalues of a channel covariance matrix converge to a deterministic distribution for many random 
 matrices as  $N \rightarrow \infty$. In the remainder, this will be referred to as the Asymptotic Eigenvalue Distribution (AED). 
 By making this assumption the impact of $N$ is only a scaling for some deterministic value. 
