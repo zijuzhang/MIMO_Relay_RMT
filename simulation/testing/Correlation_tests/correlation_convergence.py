@@ -32,11 +32,12 @@ for cor_rho in correlations:
             # H_cor = r_correlation_matrix@G@t_correlation_matrix
             H_cor = r_correlation_matrix@G2@s_correlation_matrix@random_phase(size)@G@t_correlation_matrix
             HH_cor = H_cor@hermetian(H_cor)
-            # e_val_cor = np.linalg.eigvalsh(HH_cor)
-            # irs_cor.append(np.real(e_val_cor))
-            # cor_trace.append(np.trace(HH_cor))
-            # cor_cap.append(capacity(HH_cor, 1/size))
-            cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
+            cor_cap.append(capacity(HH_cor, 1/size))
+            #   Check alternative transmit correlation matrix (normalize such that the covariance trace is 1
+            # transmit_covariance = t_correlation_matrix/np.sum(np.diag(t_correlation_matrix))
+            # HH_cor = H_cor@transmit_covariance@hermetian(H_cor)
+            # cor_cap.append(capacity(HH_cor, 1))
+            # cor_cap.append(capacity_water_filled(water_filling(H_cor, 1)))
         capacity_average.append(np.average(cor_cap))
         capacity_variance.append(np.var(cor_cap))
 

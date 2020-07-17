@@ -46,7 +46,6 @@ sizes on the order of x. Now motivate using asymptotic analysis.
 \input{correlation_review}
 \par
 Motivated by the potential benefit of the RIS, we now investigate for the RIS system with correlation
-
 \par
 Now discuss all of the previous work looking at the optimization of the phases. 
 General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
@@ -97,35 +96,47 @@ For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect\left[\vn\vn^
 \Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right].
 \end{equation}
 Using the model for $\mHt$ from the previous section, and maximizing with respect to both the
-transmit covariance matrix and phases at the IRS gives and expression for the system capacity
+transmit covariance matrix and phases at the IRS gives an expression for the system capacity
 
 \begin{equation}\label{capacity}
 \mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right]
 \end{equation}
 or equivalently,
-\begin{equation}
+\begin{equation}\label{capacity_tricky}
 \mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\sum_{i=1}^{N}\Log(\mathbf{I} + \lambda_i)\right].
 \end{equation}
+where $\lambda_i$ are the eigenvalues of $\mHt \mQ_x \mHt^H$.
+
+Recalling that in general we are interested in evaluating the capacity in order to determine a feasible transmission rate for a given communication channel, equation \eqref{capacity_tricky} poses a couple of hurdles to evaluation. First, we need to be able to evaluate an expectation over the joint pdf $p(\lambda_1 \cdots	 \lambda_N)$. Second, there is an optimization problem whose solution will generally depend on the distribution of the channel which would require a closed-form of the optimization problem solution. 
+Two simplifications will be used in order to move forward. 
+First, we will enforce that the transmitter chooses a deterministic $\mQ_x$. 
+By enforcing a deterministic choice of $\mQ_x$, we no longer have to consider this component of the optimization.
+Second we will normalize the channel, and therefore the received power, to allow the received signal covariance matrix eigenvalue distribution to converge. 
+
+
+
+If $\mHt$ is not known at the transmitter, a common choice for the transmitter signal covariance matrix is  $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$, giving the simplified form of equation \eqref{capacity}
+\begin{equation}\label{no_csi_capacity}
+\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R \Expect[\Log(1 + \frac{P_{\text{total}}}{\sigma_nN_t}\lambda_i)].
+\end{equation}
 where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
+In this form, the linear scaling of capacity with N is clear.
+If we assume that $\Expect\left[ \vy \vy^H \right]$ has a converging eigenvalue distribution as the system dimensions increase to infinity, we can expand the expectation to get the expression
+\begin{equation}\label{no_csi_capacity_aed}
+\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda)p_{\lambda\lambda^H}(x) dx
+\end{equation}
+in which the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix. In the following we will refer to this distribution as the Asymptotic Eigenvalue Distribution (AED).
+
+From this, we see that if the normalized channel has a converging eigenvalue distribution we can simply scale the capacity for a single channel by the system size $N_R$. 
 
 Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of the distribution of $\vx $ with Gaussian noise $\vn$. (Perhaps mention that normally we cannot generate continuous Gaussian x so we use channel coding).
-If $\mHt$ is not known at the transmitter, the transmit power can be allocated
-equally such that $\mQ_x = \mathbf{I}$ (Need to provided some evidence for this choice and extend to the case that we choose it in some other way using a distribution). This allows for simplifying equation \eqref{capacity} to 
-\begin{equation}\label{no_csi_capacity}
-\mathbb{C} = \underset{\phase}{\mathop{max}} N_R \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda_i)].
-\end{equation}
 
-In this form, the linear scaling of capacity with N is clear.
-Expanding the expectation gives 
-\begin{equation}\label{no_csi_capacity_aed}
-\mathbb{C} = \underset{\phase}{\mathop{max}} N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda)p_{\lambda\lambda^H}(x) dx
-\end{equation}
-in which the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix. 
 
 Note that because $\Log$ is a concave function, we can upper bound the mutual information with
 \begin{equation}\label{mut_inf}
 \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda])
 \end{equation}
+
 
 \section{Explanation of Asymptotic Analysis}
 Equation \eqref{no_csi_capacity_aed} highlights the important point that knowledge of the eigenvalue distribution of the received signal co-variance matrix is sufficient information to find the capacity of a MIMO channel. As we are generally interested in random channels, finding this eigenvalue distribution is not a straightforward task.
@@ -141,7 +152,7 @@ For a general matrix $\mH \in \complex^{n \times m}$ the singular values are giv
 \sigma(\mH)_i = \sqrt{\lambda({\mH\mH^H}_i)}.
 \end{equation}
 This also gives the relationship between the pdf for the singular and and eigenvalues $p_{\sigma}(x^2) = p_{\lambda}(x)$
-\section{Proof of Freeness}
+\section{Free Probability}\label{Free_Prob_Intro}
 \begin{itemize}
 
 \item 
@@ -234,9 +245,33 @@ This also gives the relationship between the pdf for the singular and and eigenv
 	
 \end{itemize}
 
+\section{The IRS Channel}
+Using the approach for finding asyptotic eigenvalue distributions detailed in \ref{Free_Prob_Intro} we will then use the capacity analysis detailed in \ref{sectiond:mut_info}. We will now develop a channel model on which to perform this analysis. Specifically we develop a channel model that is representative of a MIMO communication system with an RIS. 
+\par
+In Section \cite{Background} previous studies were reviewed which showed the impact and relevance of correlation to massive MIMO systems, therefore we begin with an RIS channel given by 
+	\begin{equation}
+	\mH_{Total} = \mR_{R}^{\frac{1}{2}}(\underbrace{\mH_{2}\boldsymbol{\Phi}\mR_{S}^{\frac{1}{2}}\mH_{1}}_{\text{IRS}}.
+	\end{equation}
+
+The random matrices $\mH_{2}$ and $ \mH_{1}$ represent the channels from the transmitter to the IRS and from the IRS to the receiver respectively. Both are assumed to have i.i.d. elements with variance $\frac{1}{N}$.  The matrices $\mR_{R}, \mR_{S}$ and $\mR_{T}$ represent a deterministic model for the correlation at the receiver, IRS and transmitter respectively.
+The resulting covariance matrix looks quite similar to the one used for the example in Section \ref{Free_Prob_Intro} but first we want to verify that 
+the resulting components will be free. 
+
+
+(TODO provide references to prove that the components are free)
+
+
+
+(Will need to detail any constraints embedded in this system model)
+
 \chapter{Results}\label{Results}
 \section{Asymptotic Results}
-We first consider the case in which all components of the channel given by (ref) are free. As shown in (Appendix), in this case the 
+Begin this section using the model from the last
+The final part of this section should show that phases will always cancel out for free probability analysis. 
+
+\subsection{Asymptotic Results Discussion}
+
+We first consider the case in which all matrices of the channel given by (ref) are free. As shown in (Appendix), in this case the 
 phase shifts at the RIS, $\phase$, cancels out of the AED expression. 
 By considering the case in which a single transmitter and receiver communicate over the channel $\mathbf{h}_r^T \phase \mathbf{h}_t$ it is clear that
 the impact of the phase matrix must diminish under the assumptions of free probability, \ie  as the number of antennas at transmitter and receiver increase asymptotically and that the component matrices of the channel are free. 
