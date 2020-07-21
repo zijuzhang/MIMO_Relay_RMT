@@ -1,0 +1,6 @@
+Consider the SISO channel with an RIS given by $y = \vh_{rs}^H \phase \vh_{st}$. In this case, $ \phase$ should be chosen optimally such that 
+the phases all add constructively at the receiver (\ie $h_{rs,i} \phi_k h_{st,j}$ add constructively at the receiver). 
+In the case of an i.i.d Rayleigh channel with elements $\CNO$ and $\sigma^2_{\text{noise}} =1$, the SNR at the receiver is given by $\gamma = N$.
+Intuitively if the channel gains are normalized such that the received power is normalized for any system size $N$ the IRS offers no gain. 
+In this case we can achieve this normalization by enforcing that elements of the a channel matrix $\mH \in \CN^{N \times K}$ have variance $\frac{1}{N}$.
+This observation highlights an point that must be considered when performing asymptotic analysis; the received power must be normalized.

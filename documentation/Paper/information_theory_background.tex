@@ -1,0 +1,56 @@
+A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel $\mHt$ is known at the receiver, the mutual information is given by 
+\begin{equation}\label{mut_ent}
+I(\vy;\vx) = h(\vy) - h(\vy|\vx).
+\end{equation}
+If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is also circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} 
+\begin{equation}\label{entropy}
+h(\vy) = \Expect[\Log(|\pi e \mathbf{Q}_{y}|)]
+\end{equation}
+ for $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
+
+For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect\left[\vn\vn^H \right] = \mI$, substituting equation \eqref{entropy} into equation
+\eqref{mut_ent} and simplifying gives
+\begin{equation}\label{mut_inf}
+\Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right].
+\end{equation}
+Using the model for $\mHt$ from the previous section, and maximizing with respect to both the
+transmit covariance matrix and phases at the IRS gives an expression for the system capacity
+
+\begin{equation}\label{capacity}
+\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right]
+\end{equation}
+or equivalently,
+\begin{equation}\label{capacity_tricky}
+\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\sum_{i=1}^{N}\Log(\mathbf{I} + \lambda_i)\right].
+\end{equation}
+where $\lambda_i$ are the eigenvalues of $\mHt \mQ_x \mHt^H$.
+
+Recalling that in general we are interested in evaluating the capacity in order to determine a feasible transmission rate for a given communication channel, equation \eqref{capacity_tricky} poses a couple of hurdles to evaluation. First, we need to be able to evaluate an expectation over the joint pdf $p(\lambda_1 \cdots	 \lambda_N)$. Second, there is an optimization problem whose solution will generally depend on the distribution of the channel which would require a closed-form of the optimization problem solution. 
+Two simplifications will be used in order to move forward. 
+First, we will enforce that the transmitter chooses a deterministic $\mQ_x$. 
+By enforcing a deterministic choice of $\mQ_x$, we no longer have to consider this component of the optimization.
+Second we will normalize the channel, and therefore the received power, to allow the received signal covariance matrix eigenvalue distribution to converge. 
+
+
+
+If $\mHt$ is not known at the transmitter, a common choice for the transmitter signal covariance matrix is  $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$, giving the simplified form of equation \eqref{capacity}
+\begin{equation}\label{no_csi_capacity}
+\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R \Expect[\Log(1 + \frac{P_{\text{total}}}{\sigma_nN_t}\lambda_i)].
+\end{equation}
+where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
+In this form, the linear scaling of capacity with N is clear.
+If we assume that $\Expect\left[ \vy \vy^H \right]$ has a converging eigenvalue distribution as the system dimensions increase to infinity, we can expand the expectation to get the expression
+\begin{equation}\label{no_csi_capacity_aed}
+\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda)p_{\lambda\lambda^H}(x) dx
+\end{equation}
+in which the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix. In the following we will refer to this distribution as the Asymptotic Eigenvalue Distribution (AED).
+
+From this, we see that if the normalized channel has a converging eigenvalue distribution we can simply scale the capacity for a single channel by the system size $N_R$. 
+
+Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of the distribution of $\vx $ with Gaussian noise $\vn$. (Perhaps mention that normally we cannot generate continuous Gaussian x so we use channel coding).
+
+
+Note that because $\Log$ is a concave function, we can upper bound the mutual information with
+\begin{equation}\label{mut_inf}
+\Expect[\Log(1 + \frac{1}{\sigma_n}\lambda)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda])
+\end{equation}

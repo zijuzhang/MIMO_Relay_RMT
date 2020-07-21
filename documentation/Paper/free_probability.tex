@@ -1,0 +1,91 @@
+\begin{itemize}
+
+\item 
+	A brief introduction to free probability.
+	\par 
+	Free probability is the counterpart to classical probability for the case in which random variables (in this case random matrices) do 
+	not commute. In the same way that classical free probability provides methods to find the pdf for the products and sums of commuting random
+	 variables, free probability provides tools to find the pdfs for products and sums of non-commuting random variables. It is important to note
+	 that non-commutativity of matrices affects not only the pdf of matrix multiplications but also matrix sums. 
+	In the following work, a number of tools from free probability will be used. These tools are now introduced with appropriate context and intuition 
+	for this investigation but for a thorough coverage of these topics, see \cite{tulino2004random} and \cite{mingo2017free}.
+	 \begin{itemize}
+	 \item 
+	 	The cornerstone of free probability is the concept freeness of two random variables in the context of a projection. In our case, freeness between two 
+	 	matrices is given by 
+	 	We now introduce useful tools from free probability  that can be applied to free random variables.
+
+	 	\item 
+	 	Stieltjes Transform: 
+	 	Generally, the projection of matrix is not given in closed form. The projection can be uniquely represented using
+		\begin{equation}\label{stieltjes}
+		G(s) = \int_{-\infty}^{\infty} \frac{dp(x)}{(x - s)} \; \text{for} \; \img(s) > 0
+		\end{equation}	
+		This representation will allow us to find the projection of the sum and project of matrices using addition and multiplication.
+		\item 
+		R-Transform:
+		Mention self-adjoint
+		Given the Stieltjes transform of a RV, the corresponding R-Transform given by 
+		X. 
+		The R-Transform of the sum of two, free RVs can be found using
+		Y
+		This process use known as free additive convolution.
+		\item
+		S-Transform:
+		Mention self-adjoint
+		Similarly, given the Stieltjes transform of a RV, the S-Transform given by 
+		X, X;
+		The S-Transform of the product of two, free RVs can be found using
+		Y
+		This process is known as free multiplicative convolution.
+	 	\item 
+	 	If there is a case in which finding the singular value distribution is easier than the eigenvalue distribution we can use equation  
+	 	 \eqref{sigular_eigen} to move between the two. Considering a symmetric function of the singular value distribution
+	 	 \begin{equation}\label{symmetric}
+	 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2}
+	 	 \end{equation}
+	 	 the definition of the Steiltjes transform gives the following steps, leading to a relationship between the Stieltjes transforms. 
+	 	 \begin{align*}
+	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}
+	 	 \\&  =  
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
+	 	 \\&  =  
+	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
+	  	 \\&  =  
+	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
+ 	 	  	 \\&  =  
+ 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
+ 	 	 \\&  =  
+			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
+	 	 \\&  = 
+	 	 	-s G_{\lambda}(s^2)
+	 	 \end{align*}
+	 	\item 
+	 		Another useful property that will be used is the relationship between the eigenvalues of a matrix and its rotation.
+	 		Specifically, consider the covariance matrix given by $\mH_2\mH_1 \mH1^H \mH2^H$.
+	 		By the rotational property of the trace, 
+	 		\begin{align*}
+	 		trace({\mH_2\mH_1 \mH1^H \mH2^H }) = \trace({\mH_1^H \mH_2^H \mH_2 \mH_1 }).
+	 		\end{align*}
+	 		... Not sure if I need to prove this here.  
+	 	\item 
+	  	build up to show that phases cancel via s-transform
+	 	Stieltjes of AED (IE for hermetian matrices)
+	 	Stieltjes of SVD (when they are components covariance matrix)
+	 	Getting Steiltes of SVD using R-Transform
+	 	Finding R-Transform of Individual components
+	 	Using Stieltjes of individuals to get R-transforms
+	 	Using aed stieltjes to get svd individual
+	 	Using S-transform to get stieltjes of individual aed.
+	\end{itemize}	 	
+	
+	Now describe with S-Transform and show that it can have a singular distribution in the limit at we go to rank 1. 
+		
+\item 
+	Show that at least for uncorrelated case, the matrices in the sum are free. 
+
+\item 
+	Give proofs in an appendix?
+	
+\end{itemize}

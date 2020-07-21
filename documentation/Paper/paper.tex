@@ -24,124 +24,37 @@
 \tableofcontents
 \chapter{Introduction}
 \section{Background}\label{Background}
-The spectrum of electromagnetic frequencies used by wireless communication has been expanded to progressively higher frequencies with new standards. Industry research for the 6G standard has already investigated systems using frequency bands in the 120, 200 and 340 GHz range \cite{Koziol}. This shift is motivated by large bands of currently unoccupied frequency and the possibility for decreased antenna size (allowing for increased antenna density) \cite{akyildiz2018combating}. One primary hurdle towards efficient communication at these frequencies is the higher net attenuation of radio energy due both to scattering effects and molecular absorption. \cite{TODO} show through extensive data collection that relevant attenuation will be (x). 
-As a relevant example, radar systems have long used this band of frequencies due to the resulting high resolution. For example, one such system operating in the 2 - 4 GHz band requires 25 kW of power for a detection range of 400 km \cite{TODO}. 
-Countering this type of loss is a key step towards meeting the increased data rates and reliability required for future networks. 
-\par
-In previous generations of wireless communications, attenuation due to path loss has been alleviated by reducing the effective transmission distance 
-and supplementing the transmission power using relays \cite{dahlman20134g}. Two key costs to deploying relays are the radio frequency chains used for receiving and transmitting, and the power used for transmission. Deploying enough relays to counter
-the attenuation levels relevant to new standards would pose impractical costs. One new solution that has attracted significant interest is the use of surfaces made of many, sub-wavelength sized elements with favorable electromagnetic reflection and whose reflective coefficient can be controlled to select the phase of the reflected wave. In this work, such a surface will generally be referred to as a reconfigurable intelligent surface (RIS).
-While this work focuses on the theory surrounding such surfaces, it is worth noting that these surfaces have been successfully implemented in works such as \cite{tan2018enabling} in which an RIS with 224 elements was built and tested. 
-\par
-The motivating use for the RIS is to alleviate the power attenuation problem without incurring the costs of an rf-chain and transmission power 
-associated with a relay. The absence of an rf-chain on the RIS offers some benefits over relays. First, reflection does not introduce the noise associated with an rf-chain. Second, without the band-pass filters of an rf-chain, they have a frequency response over the entire spectrum (explain). Third, they are inherently full-duplex, a feature that is difficult to implement for co-located rf-chains on an active relay. 
-The thorough review in \cite{basar2019wireless} provides rigorous motivation of the use of RISs and a few notable points are included here.
-For a single antenna, single receiver channel using an RIS with $N$ reflective elements, the power at the receiver is can be proportional to $N^2$ (? Does this hold if we remove the ability to choose the angle?)(Also does this normalize the path power at all?). While such results are indeed motivating, it is important to note that scaling of received SNR proportional to $N^2$ will not hold asymptotically due to the conservation of transmitted energy \cite{bjornson2019demystifying}.
-\par
-Need to show how many surfaces (are the corresponding size) are needed in order to be on the same power gain order that is lost by the frequency increase (100dB).
-\par
-The previous section has shown that countering the increased attenuation of high frequencies using RIS and MIMO gains will require systems 
-sizes on the order of x. Now motivate using asymptotic analysis.
+\input{background_opening}
 \par
 \input{correlation_review}
 \par
-Motivated by the potential benefit of the RIS, we now investigate for the RIS system with correlation
+\input{irs_optimization}
 \par
-Now discuss all of the previous work looking at the optimization of the phases. 
-General difficultly of the problem due to the non-convexity of the problem. Look at some different ways it's been applied.
+In summary, this section has highlight two primary points. First, that channel correlation can degrade the capacity scaling of massive MIMO systems. Second, that an RIS may provide additional degrees of freedom with which to increase capacity. We now investigate these questions be formulating and analyzing and RIS-aided, MIMO system with channel correlation. 
 
 \section{Notation}
-The following notation is used throughout the remainder. 
-$\Expect[x]$ is the expected value of a random variable $x$.
-Bold font, lower-case letters ($\vx$) and upper-case letters ($\mX$) denote vector and matrices respectively and all vectors are assumed to be column vectors unless noted otherwise. 
-The transpose and hermetian of $\mX$ are denoted by $\mX^T$ and $\mX^H$ respectively.
-$\mI_N$ denotes the identity matrix of dimension $N$.
-For square $\mX$ with dimension $N\times N$ the normalized trace is denoted by $\Tr(\mX)  = \underset{N \rightarrow \infty}{\text{lim}}
-\Expect[\frac{1}{N}\sum_{i=1}^N x_{i,i}]$
-
+\input{notation}
 \section{Outline}
-The following sections are now previewed. Section \ref{system_model} covers the system model used throughout as well as a review of the necessary theory to characterize the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results where appropriate are discussed. 
+The following sections are now previewed. Section \ref{system_model} covers the system model used in the remainder as well as a review of the necessary theory to analyze the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results are discussed. 
 
 \chapter{System Model}\label{system_model}
 \section{Power Normalization}
-Consider the SISO channel with an RIS given by $y = \vh_{rs}^H \phase \vh_{st}$. In this case, $ \phase$ should be chosen optimally such that 
-the phases all add constructively at the receiver (\ie $h_{rs,i} \phi_k h_{st,j}$ add constructively at the receiver). 
-In the case of an i.i.d Rayleigh channel with elements $\CNO$ and $\sigma^2_{\text{noise}} =1$, the SNR at the receiver is given by $\gamma = N$.
-Intuitively if the channel gains are normalized such that the received power is normalized for any system size $N$ the IRS offers no gain. 
-In this case we can achieve this normalization by enforcing that elements of the a channel matrix $\mH \in \CN^{N \times K}$ have variance $\frac{1}{N}$.
-This observation highlights an point that must be considered when performing asymptotic analysis; the received power must be normalized.
-
-
+\input{power_normalization}
 \section{The Correlated IRS Channel}
-In the most general case we consider the channel given by 
+In general, the received signal from a line of sight path between the transmitter and receiver would contain much more power than any reflected signal. We consider only the reflected portion of this path in the system model given by
 
+%	\begin{equation}
+%	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+%	\end{equation}
 	\begin{equation}
-	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}}\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
-
+The random channels $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ represent the paths from transmitter to RI and from RIS to receiver, respectively. Similarly, $ \mathbf{R}_{R},  \mathbf{R}_{S} $ and  $\mathbf{R}_{S}$ represent the correlation introduced at the transmitter, RIS and receiver, respectively. 
+This correlation will always be modeled by the so-called exponential correlation model. As seen in the sequence this model for correlation will enable a very clean analysis.
 \section{Mutual Information}\label{sectiond:mut_info}
-A key metric of interest for the channel described in the previous section is the mutual information between the transmitted and received signal. If the channel $\mHt$ is known at the receiver, the mutual information is given by 
-\begin{equation}\label{mut_ent}
-I(\vy;\vx) = h(\vy) - h(\vy|\vx).
-\end{equation}
-If both $\vx$ and $\vn$ are circularly symmetric Gaussian random vectors, $\vy$ is also circularly symmetric Gaussian with entropy given by \cite{telatar1999capacity} 
-\begin{equation}\label{entropy}
-h(\vy) = \Expect[\Log(|\pi e \mathbf{Q}_{y}|)]
-\end{equation}
- for $\mathbf{Q}_{y} = \Expect{[\vy \vy^H]}$. Note also that for a given $\mathbf{Q}_{y}$ the entropy is maximized if and only if $\vy$ is circularly symmetric Gaussian.
-
-For a given transmit covariance matrix, $\mathbf{Q_x}$ and $\Expect\left[\vn\vn^H \right] = \mI$, substituting equation \eqref{entropy} into equation
-\eqref{mut_ent} and simplifying gives
-\begin{equation}\label{mut_inf}
-\Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right].
-\end{equation}
-Using the model for $\mHt$ from the previous section, and maximizing with respect to both the
-transmit covariance matrix and phases at the IRS gives an expression for the system capacity
-
-\begin{equation}\label{capacity}
-\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\Log(|\mathbf{I} + \mHt \mQ_x \mHt^H|)\right]
-\end{equation}
-or equivalently,
-\begin{equation}\label{capacity_tricky}
-\mathbb{C} = \underset{\boldsymbol{\Phi},\mathbf{Q_x}}{\mathop{max}} \Expect \left[\sum_{i=1}^{N}\Log(\mathbf{I} + \lambda_i)\right].
-\end{equation}
-where $\lambda_i$ are the eigenvalues of $\mHt \mQ_x \mHt^H$.
-
-Recalling that in general we are interested in evaluating the capacity in order to determine a feasible transmission rate for a given communication channel, equation \eqref{capacity_tricky} poses a couple of hurdles to evaluation. First, we need to be able to evaluate an expectation over the joint pdf $p(\lambda_1 \cdots	 \lambda_N)$. Second, there is an optimization problem whose solution will generally depend on the distribution of the channel which would require a closed-form of the optimization problem solution. 
-Two simplifications will be used in order to move forward. 
-First, we will enforce that the transmitter chooses a deterministic $\mQ_x$. 
-By enforcing a deterministic choice of $\mQ_x$, we no longer have to consider this component of the optimization.
-Second we will normalize the channel, and therefore the received power, to allow the received signal covariance matrix eigenvalue distribution to converge. 
-
-
-
-If $\mHt$ is not known at the transmitter, a common choice for the transmitter signal covariance matrix is  $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$, giving the simplified form of equation \eqref{capacity}
-\begin{equation}\label{no_csi_capacity}
-\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R \Expect[\Log(1 + \frac{P_{\text{total}}}{\sigma_nN_t}\lambda_i)].
-\end{equation}
-where $\lambda_i$ are the eigenvalues of $\mHt \mHt^H$.
-In this form, the linear scaling of capacity with N is clear.
-If we assume that $\Expect\left[ \vy \vy^H \right]$ has a converging eigenvalue distribution as the system dimensions increase to infinity, we can expand the expectation to get the expression
-\begin{equation}\label{no_csi_capacity_aed}
-\mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R  \int_{x=0}^{\infty}\Log(1 + \frac{1}{\sigma_n}\lambda)p_{\lambda\lambda^H}(x) dx
-\end{equation}
-in which the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix. In the following we will refer to this distribution as the Asymptotic Eigenvalue Distribution (AED).
-
-From this, we see that if the normalized channel has a converging eigenvalue distribution we can simply scale the capacity for a single channel by the system size $N_R$. 
-
-Note that because the choice of $h(\vx) $ and $h(\vn)$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of the distribution of $\vx $ with Gaussian noise $\vn$. (Perhaps mention that normally we cannot generate continuous Gaussian x so we use channel coding).
-
-
-Note that because $\Log$ is a concave function, we can upper bound the mutual information with
-\begin{equation}\label{mut_inf}
-\Expect[\Log(1 + \frac{1}{\sigma_n}\lambda)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda])
-\end{equation}
-
-
+\input{information_theory_background}
 \section{Explanation of Asymptotic Analysis}
-Equation \eqref{no_csi_capacity_aed} highlights the important point that knowledge of the eigenvalue distribution of the received signal co-variance matrix is sufficient information to find the capacity of a MIMO channel. As we are generally interested in random channels, finding this eigenvalue distribution is not a straightforward task.
-
-
+Equation \eqref{no_csi_capacity_aed} highlights the important point that knowledge of the eigenvalue distribution of the received signal covariance matrix is sufficient information to find the capacity of a MIMO channel. For general, random channels, finding this eigenvalue distribution is not a straightforward task.
 \section{Motivation for AED as a projection of Matrices}
 Equation \ref{no_csi_capacity_aed} shows that the capacity of a communication channel can be found using the AED of the channel covariance matrix.
 For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = \Expect[\Tr{(mHt \mHt^H})] = $.
@@ -152,99 +65,9 @@ For a general matrix $\mH \in \complex^{n \times m}$ the singular values are giv
 \sigma(\mH)_i = \sqrt{\lambda({\mH\mH^H}_i)}.
 \end{equation}
 This also gives the relationship between the pdf for the singular and and eigenvalues $p_{\sigma}(x^2) = p_{\lambda}(x)$
+
 \section{Free Probability}\label{Free_Prob_Intro}
-\begin{itemize}
-
-\item 
-	A brief introduction to free probability.
-	\par 
-	Free probability is the counterpart to classical probability for the case in which random variables (in this case random matrices) do 
-	not commute. In the same way that classical free probability provides methods to find the pdf for the products and sums of commuting random
-	 variables, free probability provides tools to find the pdfs for products and sums of non-commuting random variables. It is important to note
-	 that non-commutativity of matrices affects not only the pdf of matrix multiplications but also matrix sums. 
-	In the following work, a number of tools from free probability will be used. These tools are now introduced with appropriate context and intuition 
-	for this investigation but for a thorough coverage of these topics, see \cite{tulino2004random} and \cite{mingo2017free}.
-	 \begin{itemize}
-	 \item 
-	 	The cornerstone of free probability is the concept freeness of two random variables in the context of a projection. In our case, freeness between two 
-	 	matrices is given by 
-	 	We now introduce useful tools from free probability  that can be applied to free random variables.
-
-	 	\item 
-	 	Stieltjes Transform: 
-	 	Generally, the projection of matrix is not given in closed form. The projection can be uniquely represented using
-		\begin{equation}\label{stieltjes}
-		G(s) = \int_{-\infty}^{\infty} \frac{dp(x)}{(x - s)} \; \text{for} \; \img(s) > 0
-		\end{equation}	
-		This representation will allow us to find the projection of the sum and project of matrices using addition and multiplication.
-		\item 
-		R-Transform:
-		Mention self-adjoint
-		Given the Stieltjes transform of a RV, the corresponding R-Transform given by 
-		X. 
-		The R-Transform of the sum of two, free RVs can be found using
-		Y
-		This process use known as free additive convolution.
-		\item
-		S-Transform:
-		Mention self-adjoint
-		Similarly, given the Stieltjes transform of a RV, the S-Transform given by 
-		X, X;
-		The S-Transform of the product of two, free RVs can be found using
-		Y
-		This process is known as free multiplicative convolution.
-	 	\item 
-	 	If there is a case in which finding the singular value distribution is easier than the eigenvalue distribution we can use equation  
-	 	 \eqref{sigular_eigen} to move between the two. Considering a symmetric function of the singular value distribution
-	 	 \begin{equation}\label{symmetric}
-	 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2}
-	 	 \end{equation}
-	 	 the definition of the Steiltjes transform gives the following steps, leading to a relationship between the Stieltjes transforms. 
-	 	 \begin{align*}
-	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}
-	 	 \\&  =  
-	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
-	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
-	 	 \\&  =  
-	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
-	  	 \\&  =  
-	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
- 	 	  	 \\&  =  
- 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
- 	 	 \\&  =  
-			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
-	 	 \\&  = 
-	 	 	-s G_{\lambda}(s^2)
-	 	 \end{align*}
-	 	\item 
-	 		Another useful property that will be used is the relationship between the eigenvalues of a matrix and its rotation.
-	 		Specifically, consider the covariance matrix given by $\mH_2\mH_1 \mH1^H \mH2^H$.
-	 		By the rotational property of the trace, 
-	 		\begin{align*}
-	 		trace({\mH_2\mH_1 \mH1^H \mH2^H }) = \trace({\mH_1^H \mH_2^H \mH_2 \mH_1 }).
-	 		\end{align*}
-	 		... Not sure if I need to prove this here.  
-	 	\item 
-	  	build up to show that phases cancel via s-transform
-	 	Stieltjes of AED (IE for hermetian matrices)
-	 	Stieltjes of SVD (when they are components covariance matrix)
-	 	Getting Steiltes of SVD using R-Transform
-	 	Finding R-Transform of Individual components
-	 	Using Stieltjes of individuals to get R-transforms
-	 	Using aed stieltjes to get svd individual
-	 	Using S-transform to get stieltjes of individual aed.
-	\end{itemize}	 	
-	
-	Now describe with S-Transform and show that it can have a singular distribution in the limit at we go to rank 1. 
-		
-\item 
-	Show that at least for uncorrelated case, the matrices in the sum are free. 
-
-\item 
-	Give proofs in an appendix?
-	
-\end{itemize}
-
+\input{free_probability}
 \section{The IRS Channel}
 Using the approach for finding asyptotic eigenvalue distributions detailed in \ref{Free_Prob_Intro} we will then use the capacity analysis detailed in \ref{sectiond:mut_info}. We will now develop a channel model on which to perform this analysis. Specifically we develop a channel model that is representative of a MIMO communication system with an RIS. 
 \par
