@@ -40,21 +40,13 @@ The following sections are now previewed. Section \ref{system_model} covers the 
 \chapter{System Model}\label{system_model}
 \section{Power Normalization}
 \input{power_normalization}
-\section{The Correlated IRS Channel}
-In general, the received signal from a line of sight path between the transmitter and receiver would contain much more power than any reflected signal. We consider only the reflected portion of this path in the system model given by
-
-%	\begin{equation}
-%	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
-%	\end{equation}
-	\begin{equation}
-	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}}\mathbf{R}_{T}^{\frac{1}{2}}.
-	\end{equation}
-The random channels $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ represent the paths from transmitter to RI and from RIS to receiver, respectively. Similarly, $ \mathbf{R}_{R},  \mathbf{R}_{S} $ and  $\mathbf{R}_{S}$ represent the correlation introduced at the transmitter, RIS and receiver, respectively. 
-This correlation will always be modeled by the so-called exponential correlation model. As seen in the sequence this model for correlation will enable a very clean analysis.
 \section{Mutual Information}\label{sectiond:mut_info}
 \input{information_theory_background}
 \section{Explanation of Asymptotic Analysis}
-Equation \eqref{no_csi_capacity_aed} highlights the important point that knowledge of the eigenvalue distribution of the received signal covariance matrix is sufficient information to find the capacity of a MIMO channel. For general, random channels, finding this eigenvalue distribution is not a straightforward task.
+Equation \eqref{no_csi_capacity_aed} highlights the important point that the eigenvalue distribution of the received signal covariance matrix is sufficient information to find the capacity of a MIMO channel. For general, random channels, finding this eigenvalue distribution is not a straightforward task.
+We now introduce some of the key tools that will be used in order to perform this analysis.
+\section{Free Probability}\label{Free_Prob_Intro}
+`\input{free_probability}
 \section{Motivation for AED as a projection of Matrices}
 Equation \ref{no_csi_capacity_aed} shows that the capacity of a communication channel can be found using the AED of the channel covariance matrix.
 For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = \Expect[\Tr{(mHt \mHt^H})] = $.
@@ -65,32 +57,11 @@ For a general matrix $\mH \in \complex^{n \times m}$ the singular values are giv
 \sigma(\mH)_i = \sqrt{\lambda({\mH\mH^H}_i)}.
 \end{equation}
 This also gives the relationship between the pdf for the singular and and eigenvalues $p_{\sigma}(x^2) = p_{\lambda}(x)$
-
-\section{Free Probability}\label{Free_Prob_Intro}
-\input{free_probability}
 \section{The IRS Channel}
-Using the approach for finding asyptotic eigenvalue distributions detailed in \ref{Free_Prob_Intro} we will then use the capacity analysis detailed in \ref{sectiond:mut_info}. We will now develop a channel model on which to perform this analysis. Specifically we develop a channel model that is representative of a MIMO communication system with an RIS. 
-\par
-In Section \cite{Background} previous studies were reviewed which showed the impact and relevance of correlation to massive MIMO systems, therefore we begin with an RIS channel given by 
-	\begin{equation}
-	\mH_{Total} = \mR_{R}^{\frac{1}{2}}(\underbrace{\mH_{2}\boldsymbol{\Phi}\mR_{S}^{\frac{1}{2}}\mH_{1}}_{\text{IRS}}.
-	\end{equation}
-
-The random matrices $\mH_{2}$ and $ \mH_{1}$ represent the channels from the transmitter to the IRS and from the IRS to the receiver respectively. Both are assumed to have i.i.d. elements with variance $\frac{1}{N}$.  The matrices $\mR_{R}, \mR_{S}$ and $\mR_{T}$ represent a deterministic model for the correlation at the receiver, IRS and transmitter respectively.
-The resulting covariance matrix looks quite similar to the one used for the example in Section \ref{Free_Prob_Intro} but first we want to verify that 
-the resulting components will be free. 
-
-
-(TODO provide references to prove that the components are free)
-
-
-
-(Will need to detail any constraints embedded in this system model)
+\input{irs_channel}
 
 \chapter{Results}\label{Results}
 \section{Asymptotic Results}
-Begin this section using the model from the last
-The final part of this section should show that phases will always cancel out for free probability analysis. 
 
 \subsection{Asymptotic Results Discussion}
 
@@ -121,9 +92,10 @@ First mention that for iid random matrices, convergence is very fast (numerical)
 
 \section{Non-Asymptotic Results}
 In the previous section, two notable observations were made. First, that under the assumptions of Free Probability (Ref), the choice of $\phase$ at the 
-RIS has no impact on the capacity of the system. Second, that for matrices of random elements, the  convergence of matrix behavior towards that predicted by Free Probability is slowed by adding correlations between elements. As seen in \ref{Background} current large systems have been shown for 
-sizes (X). We now consider whether this size is reasonable under correlations realized in systems (NEED TO FIND and justify). 
-
+RIS has no impact on the capacity of the system. Second, that for matrices of random elements, the  convergence of the matrix behavior towards that predicted by Free Probability is slowed by adding correlations between elements. Aligning these results with previous results showing the benefits of exploiting RIS phases in Section \ref{Background} requires further defining the parameters of systems which can be considered asymptotic. 
+In order to at least numerically investigate this question we now compare the performance of RIS MIMO systems with parameters reflecting the state of the art. 
+ As seen in \ref{Background} current large systems have been shown for 
+sizes S= 224. We now consider whether this size is reasonable under correlations realized in systems (NEED TO FIND and justify). 
 \chapter{Conclusion}
 \chapter{Appendix}
 Proofs

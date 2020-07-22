@@ -1,0 +1,52 @@
+Using the approach for finding asymptotic eigenvalue distributions detailed in \ref{Free_Prob_Intro} we now analyze a channel model that is representative of a MIMO communication system with an RIS. 
+\par
+In general, the received signal from a line of sight path between a transmitter and receiver would contain  sufficient energy to disregard the contribution of any reflected signal.  Therefore, we focus on a channel model in which all signal power to the receiver is through the path of the RIS  given by
+
+%	\begin{equation}
+%	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+%	\end{equation}
+	\begin{equation}\label{correlated_channel}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}\mathbf{H}_{2}\underbrace{\phase}_{\text{IRS}}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}\mathbf{R}_{T}^{\frac{1}{2}}.
+	\end{equation}
+The random channels $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ represent the random channel gains from transmitter to RIS and from RIS to receiver, respectively. Similarly, $ \mathbf{R}_{T},  \mathbf{R}_{S} $ and  $\mathbf{R}_{S}$ represent the correlation introduced at the transmitter, RIS and receiver, respectively. 
+This correlation will always be modeled by the so-called exponential correlation model. As seen in the later, this model for correlation will enable a very clean analysis.
+\par
+
+To begin using the tools of free probability, we first ensure that the components of the covariance matrix given by 
+	\begin{equation}
+	\mC = \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}
+	\left(\mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}\right)^H.
+	\end{equation}
+are free. 
+Noting from Equation \eqref{no_csi_capacity_aed} that the capacity is only affected by the non-zero eigenvalues of the covariance matrix allows us to equivalently 
+consider the AED of the covariance matrix given by 
+	\begin{align}
+	\mC &  =  \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}^{\frac{H}{2}}
+	 \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}\mR_{T}^{\frac{H}{2}}
+	 \\
+	 &  =  
+	 \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}^{\frac{H}{2}}
+	 \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}.
+	\end{align}
+This structure appears to admit analysis through the use of the S-Transform and multiplicative free convolution. In order to continue decomposing this covariance matrix into subcomponents  with known S-Transforms, we exploit a property of the S-Transform given by (proven in Appendix \ref{rotation_property})
+\begin{equation}
+S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
+\end{equation}
+If all system dimensions are $N$, these S-Trasforms (and AEDs) identical so for this section we will assume that all system dimensions are $N$.
+Iterating the rotational property gives the equivalent matrix
+	\begin{equation}
+	\mC =
+\underbrace{\phase^H \phase}_{\mI}
+	\mR_{S}
+	 \mH_{2}^H \mH_{2}
+	 \mH_{1}\mH_{1}^H 
+	  \mR_{R}
+	 \mR_{T}.
+	\end{equation}
+Without any further analysis this expression shows the interesting result that in the asymptotic domain, the phases at the RIS (or indeed any unitary matrix in the channel) cancels out. For the remaining terms, we simply need an expression for the S-Transform in order to evaluate the asymptotic system capacity.
+\par 
+While we do not consider a line of sight component to this channel, it is worth noting that using the tools from a similar analysis in \cite{}, it can be shown that 
+a similar cancellation of phases will occur. 
+(also mention the non-zero mean aspect here?)
+
+
