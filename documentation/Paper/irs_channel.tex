@@ -48,15 +48,14 @@ Iterating the rotational property gives the equivalent matrix
 Now give the S-Transforms explicitly (given the above definitions of the matrices) and show that freeness applies. 
 \begin{enumerate}
 \item 
-	For both $\mH_{2}^H \mH_{2}$ and $\mH_{1}\mH_{1}^H$ with all system dimensions equal, the S-Transform is derived in \cite{} and given by 
+	For both $\mH_{2}^H \mH_{2}$ and $\mH_{1}\mH_{1}^H$ with all system dimensions equal, the S-Transform as shown in \cite{muller2002random} is given by 
 	\begin{equation}
 	S(z) = \frac{1}{1+z}
 	\end{equation}
 \item 
-	As shown in \cite{}, as $N \rightarrow \infty$ the  Toeplitz matrix has a spectrum (and thus AED) of a circulant matrix. Circulant matrices have an AED 
-	given by the (discrete fourier transform ?) of the first row. Using the definition of the Stieltjes transform and the definition of the S-Transform in terms of the Stieljes transform the S-Transform of the exponential correlation model is shown to be
+	As shown in \cite{gray2006toeplitz}, with $N \rightarrow \infty$ Toeplitz matrices have the spectrum (and thus AED) of an equivalent circulant matrix (whose spectrum and thus AED is given by the discrete Fourier transform of the first row). Using the definition of the Stieltjes transform and the definition of the S-Transform in terms of the Stieljes transform, the S-Transform of the exponential correlation model is shown to be \cite{skupch2005free}
 	\begin{equation}
-	x
+	S(z) = \frac{\alpha z^2 + z \sqrt{alpha^2 z^2 -(z^2-1)}}{z-1}
 	\end{equation}
 \item
 	The final step to evaluating this expression is ensuring that the individual components whose S-Transforms we have found are free and thus able to be use with multiplicative free convolution. 	
