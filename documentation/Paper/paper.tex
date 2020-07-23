@@ -26,8 +26,10 @@
 \section{Background}\label{Background}
 \input{background_opening}
 \par
+\subsection{MIMO with correlation}\label{mimo_corr}
 \input{correlation_review}
 \par
+\subsection{RIS Optimization}\label{irs_opt}
 \input{irs_optimization}
 \par
 In summary, this section has highlight two primary points. First, that channel correlation can degrade the capacity scaling of massive MIMO systems. Second, that an RIS may provide additional degrees of freedom with which to increase capacity. We now investigate these questions be formulating and analyzing and RIS-aided, MIMO system with channel correlation. 
@@ -37,29 +39,19 @@ In summary, this section has highlight two primary points. First, that channel c
 \section{Outline}
 The following sections are now previewed. Section \ref{system_model} covers the system model used in the remainder as well as a review of the necessary theory to analyze the resulting channel. In section \ref{Results}, the theoretical results and corresponding numerical results are discussed. 
 
-\chapter{System Model}\label{system_model}
-\section{Power Normalization}
+\chapter{Analyzing the RIS System}\label{system_model}
+\section{Analysis Preliminaries}
+\subsection{Power Normalization}
 \input{power_normalization}
-\section{Mutual Information}\label{sectiond:mut_info}
+\subsection{Mutual Information}\label{sectiond:mut_info}
 \input{information_theory_background}
-\section{Explanation of Asymptotic Analysis}
-Equation \eqref{no_csi_capacity_aed} highlights the important point that the eigenvalue distribution of the received signal covariance matrix is sufficient information to find the capacity of a MIMO channel. For general, random channels, finding this eigenvalue distribution is not a straightforward task.
-We now introduce some of the key tools that will be used in order to perform this analysis.
-\section{Free Probability}\label{Free_Prob_Intro}
-`\input{free_probability}
-\section{Motivation for AED as a projection of Matrices}
-Equation \ref{no_csi_capacity_aed} shows that the capacity of a communication channel can be found using the AED of the channel covariance matrix.
-For matrices with converging eigenvalue distributions we can use $p_{\lambda\lambda^H} = \Expect[\Tr{(mHt \mHt^H})] = $.
-One property that will be useful in the following is the relationship between the eigenvalues of a channel covariance matrix and the singular values of
-the channel.
-For a general matrix $\mH \in \complex^{n \times m}$ the singular values are given by 
-\begin{equation}\label{sigular_eigen}
-\sigma(\mH)_i = \sqrt{\lambda({\mH\mH^H}_i)}.
-\end{equation}
-This also gives the relationship between the pdf for the singular and and eigenvalues $p_{\sigma}(x^2) = p_{\lambda}(x)$
-\section{The IRS Channel}
+\subsection{Free Probability}\label{Free_Prob_Intro}
+\input{free_probability}
+\section{RIS Analysis}
+\subsection{The Asyptotic IRS Channel}
 \input{irs_channel}
-
+\subsection{Non-Asymptotic Results}
+\input{non_asymptotic}
 \chapter{Results}\label{Results}
 \section{Asymptotic Results}
 
@@ -75,117 +67,12 @@ decreases as the correlation in the channel increase. Under these circumstances,
 \begin{itemize}
 \item 
 	
-	Show that in the asymptotic case where free probability holds, the phase matrix no longer matters
-	We first show that under assumptions of the channel which allow for use of free probability, $\phase$
-	cancels out of \eqref{capacity}.
-	
-\item
-	Show that numerical agrees with theoretical for uncorrelated 
-\item
-	Now consider the case where the assumptions of free probability no longer apply 
-	Show how numerical has larger deviation from theoretic for the case of the correlated channel and perhaps 
-	look at methods of phase optimization that can help counter this loss. Also need to show proof that for the
-	correlated case, free probability assumptions no longer hold. 
 \end{itemize}
 \subsection{Asymptotic Assumptions Under Correlation}
 First mention that for iid random matrices, convergence is very fast (numerical). Then mention show for correlation within matrix. 
 
-\section{Non-Asymptotic Results}
-In the previous section, two notable observations were made. First, that under the assumptions of Free Probability (Ref), the choice of $\phase$ at the 
-RIS has no impact on the capacity of the system. Second, that for matrices of random elements, the  convergence of the matrix behavior towards that predicted by Free Probability is slowed by adding correlations between elements. Aligning these results with previous results showing the benefits of exploiting RIS phases in Section \ref{Background} requires further defining the parameters of systems which can be considered asymptotic. 
-In order to at least numerically investigate this question we now compare the performance of RIS MIMO systems with parameters reflecting the state of the art. 
- As seen in \ref{Background} current large systems have been shown for 
-sizes S= 224. We now consider whether this size is reasonable under correlations realized in systems (NEED TO FIND and justify). 
 \chapter{Conclusion}
 \chapter{Appendix}
-Proofs
-\begin{enumerate}
-\item
-	Prove freeness of the relevant points. 
-\item 
-	rotations have same non-zero eigenvalues
-\item 
-Proof of split using singular values.\\
-Consider the channel given by 
-\begin{equation}
-\mH_{Total} = \mH_{2} + \mH_{1}.
-\end{equation}
-with covariance matrix 
-\begin{equation}
-\mC =
-\mH_{2}\mathbf{H}_{2}^H + 
-\mH_{1}\mathbf{H}_{1}^H + 
-\mH_{2}\mathbf{H}_{1}^H +
-\mH_{1}\mathbf{H}_{2}^H .
-\end{equation}
-Because the components of this sum are not free (CITE) (and some are non-hermetian), additive free convolution cannot be used.
-We note that using the singular value decomposition $\mH_{Total} = \mU \boldsymbol{\Sigma} \mV^H$ we can
-see that the covariance matrix can be written 
-\begin{equation}
-\mC = \mU \boldsymbol{\Sigma}\boldsymbol{\Sigma}^H \mU^H
-= \mU \boldsymbol{\Lambda} \mU^H.
-\end{equation}
-With $\mC \succeq 0 \implies \lambda(\mC\mC)_i \geq 0$ we see that the definition of the singular values 
-$\sigma(\mC)_i = \sqrt{\lambda(\mC\mC)_i}$ leads to an expression relating the density function of the singular values of a channel matrix
-, $p_{\sigma}(x)$, and the eigenvalues of the channel covariance matrix, $ p_{\lambda}(x)$,  given by $p_{\sigma}(x^2) = p_{\lambda}(x)$.
-Defining a new, symmetric density function of the singular value distribution
- 	 \begin{equation}\label{symmetric}
- 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2},
- 	 \end{equation}
- 	 we now substitute $\tilde{p}_{\sigma}(x)$ into the definition of the Stieljes transform \eqref{stieltjes}
- 	 to give the relationship
- 	 	 	 \begin{align*}
-	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}dx
-	 	 \\&  =  
-	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
-	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
-	 	 \\&  =  
-	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
-	  	 \\&  =  
-	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
- 	 	  	 \\&  =  
- 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
- 	 	 \\&  =  
-			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
-	 	 \\&  = 
-	 	 	-s G_{\lambda}(s^2)
-	 	 \end{align*}
-With the R-transform definition unchanged for the symmetric distribution, and the additional useful property (CITE)
-\begin{equation}
-\tilde{R}_{\mH_{Total}}(w) = \tilde{R}_{\mH_{2}}(w) + \tilde{R}_{\mH_{1}}
-\end{equation}
-We find that we only need the Stieltjes transform for the covariance matrix of each component of the sum which can in general be found using the tools
-of multiplicative free convolution.
-
-\item 
-Proof of canceling phases.\\
-Consider the channel given by 
-\begin{equation}
-\mathbf{H}_{Total} = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}.
-\end{equation}
-This product of matrices suggests the use of multiplicative free convolution to solve for the AED using the S-Transform. 
-Following the same procedure show in \cite{muller2002asymptotic}, we begin with the covariance matrix
-\begin{equation}
-\mC_2 = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H\boldsymbol{\Phi}^H\mathbf{H}_{2}^H
-\end{equation}
-and note that this has the same non-zero eigenvalues as the matrix (Proof)
-\begin{equation}
-\tilde{\mC}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H.
-\end{equation}
-The relationship between the S-Transform of $\mC_2$ and $\tilde{\mC}_2$ is given by 
-\begin{equation}\label{rotation_property}
-S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
-\end{equation}
-With \begin{equation}
-\mC_1 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
-\end{equation}
-we see that $S_{\tilde{\mC}_2}(z) = S_{\mC_1}(z) S_{\mathbf{H}_{1}\mathbf{H}_{1}^H}(z)$.  Repeating the above procedure on $\mC_1$ we find
-\begin{equation}
-\tilde{\mC}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
-\end{equation}
-with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$ we are left with 
-$S_{\mC_1}(z) =  S_{\mathbf{H}_{2}^H\mathbf{H}_{2}}(z)$. As a result we see that 
-the phase matrix cancels. The same canceling applies to any unitary matrix $\mathbf{A}$ such that   $\mathbf{A}\mathbf{A}^\dagger =\mathbf{A}^\dagger \mathbf{A} = \mI$.
-\end{enumerate}
+\input{appendix}
 \bibliography{bibliography}
 \end{document}

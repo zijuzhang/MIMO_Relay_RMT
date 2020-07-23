@@ -9,7 +9,9 @@ In general, the received signal from a line of sight path between a transmitter 
 	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}\mathbf{H}_{2}\underbrace{\phase}_{\text{IRS}}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
 The random channels $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ represent the random channel gains from transmitter to RIS and from RIS to receiver, respectively. Similarly, $ \mathbf{R}_{T},  \mathbf{R}_{S} $ and  $\mathbf{R}_{S}$ represent the correlation introduced at the transmitter, RIS and receiver, respectively. 
-This correlation will always be modeled by the so-called exponential correlation model. As seen in the later, this model for correlation will enable a very clean analysis.
+The structure of $\mathbf{H}_{Total}$ suggests that we will want to use multiplicative free convolution in order to evalute the AED and therefore we would like to choose a   valid correlation model with a known S-Transform expression. 
+The exponential correlation model is defined by a single parameter $\rho$ with elements given by $\rho^{i-j}$.
+As seen in the later, this model for correlation will enable a very clean analysis.
 \par
 
 To begin using the tools of free probability, we first ensure that the components of the covariance matrix given by 
@@ -43,10 +45,29 @@ Iterating the rotational property gives the equivalent matrix
 	  \mR_{R}
 	 \mR_{T}.
 	\end{equation}
-Without any further analysis this expression shows the interesting result that in the asymptotic domain, the phases at the RIS (or indeed any unitary matrix in the channel) cancels out. For the remaining terms, we simply need an expression for the S-Transform in order to evaluate the asymptotic system capacity.
+Now give the S-Transforms explicitly (given the above definitions of the matrices) and show that freeness applies. 
+\begin{enumerate}
+\item 
+	For both $\mH_{2}^H \mH_{2}$ and $\mH_{1}\mH_{1}^H$ with all system dimensions equal, the S-Transform is derived in \cite{} and given by 
+	\begin{equation}
+	S(z) = \frac{1}{1+z}
+	\end{equation}
+\item 
+	As shown in \cite{}, as $N \rightarrow \infty$ the  Toeplitz matrix has a spectrum (and thus AED) of a circulant matrix. Circulant matrices have an AED 
+	given by the (discrete fourier transform ?) of the first row. Using the definition of the Stieltjes transform and the definition of the S-Transform in terms of the Stieljes transform the S-Transform of the exponential correlation model is shown to be
+	\begin{equation}
+	x
+	\end{equation}
+\item
+	The final step to evaluating this expression is ensuring that the individual components whose S-Transforms we have found are free and thus able to be use with multiplicative free convolution. 	
+\end{enumerate}
+\par
+Without any further analysis this expression shows the interesting result that under the assumptions of Free Probability and equal power transmission, the phases at the RIS (or indeed any unitary matrix in the channel) cancel out. For the remaining terms, we simply need an expression for the S-Transform in order to evaluate the asymptotic system capacity.
 \par 
-While we do not consider a line of sight component to this channel, it is worth noting that using the tools from a similar analysis in \cite{}, it can be shown that 
-a similar cancellation of phases will occur. 
-(also mention the non-zero mean aspect here?)
+Using the previous analysis we can observe an extension of this result that may be relevant to variations of this system model. 
+While we do not consider a line of sight component to this channel, using the tools from a similar analysis in \cite{}, it can be shown that 
+a similar cancellation of phases will occur for the RIS channel with an LOS (or non-zero mean) component of the signal.
+Note that if we are simply adding a non-zero mean component. We can find the corresponding AED by looking considering the channel without the non-zero mean and then adding the single eigenvalue from the non-zero mean component; in which case the phases will again cancel out. 
+
 
 

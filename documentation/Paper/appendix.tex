@@ -1,0 +1,91 @@
+Proofs
+\begin{enumerate}
+\item 
+	Eigen/Singular Relationship
+\item
+	Prove freeness of the relevant points. 
+\item 
+	rotations have same non-zero eigenvalues
+\item 
+Proof of split using singular values.\\
+Consider the channel given by 
+\begin{equation}
+\mH_{Total} = \mH_{2} + \mH_{1}.
+\end{equation}
+with covariance matrix 
+\begin{equation}
+\mC =
+\mH_{2}\mathbf{H}_{2}^H + 
+\mH_{1}\mathbf{H}_{1}^H + 
+\mH_{2}\mathbf{H}_{1}^H +
+\mH_{1}\mathbf{H}_{2}^H .
+\end{equation}
+Because the components of this sum are not free (CITE) (and some are non-hermetian), additive free convolution cannot be used.
+We note that using the singular value decomposition $\mH_{Total} = \mU \boldsymbol{\Sigma} \mV^H$ we can
+see that the covariance matrix can be written 
+\begin{equation}
+\mC = \mU \boldsymbol{\Sigma}\boldsymbol{\Sigma}^H \mU^H
+= \mU \boldsymbol{\Lambda} \mU^H.
+\end{equation}
+With $\mC \succeq 0 \implies \lambda(\mC\mC)_i \geq 0$ we see that the definition of the singular values 
+$\sigma(\mC)_i = \sqrt{\lambda(\mC\mC)_i}$ leads to an expression relating the density function of the singular values of a channel matrix
+, $p_{\sigma}(x)$, and the eigenvalues of the channel covariance matrix, $ p_{\lambda}(x)$,  given by $p_{\sigma}(x^2) = p_{\lambda}(x)$.
+Defining a new, symmetric density function of the singular value distribution
+ 	 \begin{equation}\label{symmetric}
+ 	 \tilde{p}_{\sigma}(x) = \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{2},
+ 	 \end{equation}
+ 	 we now substitute $\tilde{p}_{\sigma}(x)$ into the definition of the Stieljes transform \eqref{stieltjes}
+ 	 to give the relationship
+ 	 	 	 \begin{align*}
+	 	 \tilde{G}_\sigma (s) & =  \frac{1}{2} \int_{-\infty}^{\infty} \frac{p_{\sigma}(x) + p_{\sigma}(-x)}{x-s}dx
+	 	 \\&  =  
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{x - s} + 
+	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{dp_{\sigma}(x)}{-x - s}
+	 	 \\&  =  
+	 	 	 	 \frac{1}{2} \int_{-\infty}^{\infty} \frac{-2s dp_{\sigma}(x)}{(-x - s)(x - s)}
+	  	 \\&  =  
+	 	 	 	\int_{-\infty}^{\infty} \frac{-s dp_{\sigma}(x)}{-x^2 + s^2} 	
+ 	 	  	 \\&  =  
+ 	 	 	-s  \int_{-\infty}^{\infty}  \frac{dp_{\sigma}(x)}{ x^2 - s^2} 	 
+ 	 	 \\&  =  
+			-s  \int_{-\infty}^{\infty}  \frac{dp_{\lambda}(x)}{ x - s^2} 
+	 	 \\&  = 
+	 	 	-s G_{\lambda}(s^2)
+	 	 \end{align*}
+With the R-transform definition unchanged for the symmetric distribution, and the additional useful property (CITE)
+\begin{equation}
+\tilde{R}_{\mH_{Total}}(w) = \tilde{R}_{\mH_{2}}(w) + \tilde{R}_{\mH_{1}}
+\end{equation}
+We find that we only need the Stieltjes transform for the covariance matrix of each component of the sum which can in general be found using the tools
+of multiplicative free convolution.
+
+\item 
+Proof of canceling phases.\\
+Consider the channel given by 
+\begin{equation}
+\mathbf{H}_{Total} = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}.
+\end{equation}
+This product of matrices suggests the use of multiplicative free convolution to solve for the AED using the S-Transform. 
+Following the same procedure show in \cite{muller2002asymptotic}, we begin with the covariance matrix
+\begin{equation}
+\mC_2 = \mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H\boldsymbol{\Phi}^H\mathbf{H}_{2}^H
+\end{equation}
+and note that this has the same non-zero eigenvalues as the matrix (Proof)
+\begin{equation}
+\tilde{\mC}_2 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}\mathbf{H}_{1}^H.
+\end{equation}
+The relationship between the S-Transform of $\mC_2$ and $\tilde{\mC}_2$ is given by 
+\begin{equation}\label{rotation_property}
+S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
+\end{equation}
+With \begin{equation}
+\mC_1 = \boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}\boldsymbol{\Phi}
+\end{equation}
+we see that $S_{\tilde{\mC}_2}(z) = S_{\mC_1}(z) S_{\mathbf{H}_{1}\mathbf{H}_{1}^H}(z)$.  Repeating the above procedure on $\mC_1$ we find
+\begin{equation}
+\tilde{\mC}_{1} = \boldsymbol{\Phi}\boldsymbol{\Phi}^H\mathbf{H}_{2}^H\mathbf{H}_{2}
+\end{equation}
+with $\boldsymbol{\Phi}\boldsymbol{\Phi}^H = \mathbf{I}$ we are left with 
+$S_{\mC_1}(z) =  S_{\mathbf{H}_{2}^H\mathbf{H}_{2}}(z)$. As a result we see that 
+the phase matrix cancels. The same canceling applies to any unitary matrix $\mathbf{A}$ such that   $\mathbf{A}\mathbf{A}^\dagger =\mathbf{A}^\dagger \mathbf{A} = \mI$.
+\end{enumerate}

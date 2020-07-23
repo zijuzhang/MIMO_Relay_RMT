@@ -31,11 +31,10 @@ where $\lambda_i$ are the eigenvalues of $\mHt \mQ_x \mHt^H$.
 
 Recalling that in general we are interested in evaluating the capacity in order to determine a feasible transmission rate for a given communication channel, equation \eqref{capacity_tricky} poses a couple of hurdles to evaluation. First, we need to be able to evaluate an expectation over the joint pdf $p(\lambda_1 \cdots	 \lambda_N)$. Second, there is an optimization problem whose solution may in general depend on the distribution of the channel. Including this solution in the capacity expression without a closed form may be difficult.
 To resolve these hurdles, two simplifications will be used.
-First, we will enforce that the transmitter chooses a deterministic $\mQ_x$. 
+First, we will enforce that the transmitter chooses $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$. 
 By enforcing a deterministic choice of $\mQ_x$, we no longer have to consider this component of the expectation.
 Second we will normalize the channel, and therefore the received power, to allow the received signal covariance matrix eigenvalue distribution to converge. 
-
-If $\mHt$ is not known at the transmitter, an intuitive choice for the transmitter signal covariance matrix is  $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$ which leads to the form of equation \eqref{capacity}
+These assumptions lead to the form of equation \eqref{capacity}
 \begin{equation}\label{no_csi_capacity}
 \mathbb{C} = \underset{\phase}{\mathop{max}} \; N_R \Expect \left[\Log(1 + \frac{P_{\text{total}}}{\sigma_nN_t}\lambda_i)\right].
 \end{equation}
@@ -47,8 +46,9 @@ If we assume that $\Expect\left[ \vy \vy^H \right]$ has a converging eigenvalue 
 \end{equation}
 in which $p_{\lambda\lambda^H}(x)$ is the channel AED and the bounds of the integral reflect the range for the eigenvalues of a positive semidefinite matrix.
 Note that because the choice for the distributions of $\vx$ and $\vn$ maximize $h(\vy)$, equation \eqref{capacity} provides an upper bound on the capacity of the channel for any choices of the distribution of $\vx $ with Gaussian noise $\vn$. (Perhaps mention that normally we cannot generate continuous Gaussian x so we use channel coding).
-
-
+\par
+Discuss if $\mQ_x = \frac{P_{\text{total}}}{N_t}\mathbf{I}$ is optimal at high SNR (are we in the low SNR regeime?)
+\par
 Note that because $\Log$ is a concave function, we can upper bound the mutual information with
 \begin{equation}\label{mut_inf}
 \Expect[\Log(1 + \frac{1}{\sigma_n}\lambda)] \leq \Log(1 + \frac{1}{\sigma_n}\Expect[\lambda])
