@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Numerical Results}
+I use the system model given by 
+\begin{equation}
+\vy = \mH_{Total} \mW \vs  + \vn
+\end{equation}
+with 
+
+	\begin{equation}
+	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+	\end{equation}
+
+Using a matched filter  and precoder which satisfies the transmission power constraint gives (normalize each column)
+\begin{equation}
+\mW = \mathbf{H}_{Total}^H
+\end{equation} 
+
+Numerical results for $s_k \in \mathcal{NC}(0,1)$, $n_k \in \mathcal{NC}(0,1)$
+\begin{itemize}
+\item
+zf mu: 202.0989509146119
+zf std: 57.23864582855936
+\item
+matched mu: 476.69650954785794
+matched std: 239.3529067968275
+\end{itemize}
+
+
+\bibliography{bibliography}
+
+\end{document}

@@ -70,6 +70,15 @@ def normalize_matrix(matrix, rows=False):
             ret_mat[row, :] /= np.linalg.norm(matrix[row, :], 2)
         return ret_mat
 
+def precode_mf(channel, normalize=True):
+    ret = hermetian(channel)
+    for col in range(ret.shape[1]):
+        ret[:, col] = ret[:, col]/np.power(np.linalg.norm(ret[:, col]), 2)
+    return ret
+
+def precode_zf(channel):
+    return hermetian(channel) @ np.linalg.pinv(channel @ hermetian(channel))
+
 
 def normalize(x):
     normalized = x/np.linalg.norm(x)

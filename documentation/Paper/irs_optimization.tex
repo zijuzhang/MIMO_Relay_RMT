@@ -1,9 +1,22 @@
-The previous section looked at a select few entries from the substantial literature investigating the capacity of MIMO systems.
-This analysis can often be difficult because the definition of capacity implies an optimization over any controlled variables. 
-While in select cases this optimization may yield a closed form solution that may be used in the analysis, this is not generally the case. 
-In fact, the current literature on RIS system has skipped this analysis entirely because the RIS optimization is a non-convex problem. Rather 
+During the review of select entries from the literature investigating the capacity of MIMO systems in the previous section, it was noted that this analysis can be difficult because the definition of capacity implies an optimization over any controlled variables. 
+While in select cases this optimization may yield a closed form solution that may be used in the analysis, this is generally not the case. As a result, bounds on the capacity are often analyzed instead. 
+Modeling the RIS as a diagonal matrix whose diagonal elements are given by 
+	\begin{equation}
+	\phi_i = \exp{j\theta_i}
+	\end{equation}
+	it is clear that any optimization over the possible values of $phi_i$ includes this non-convex constraint to say nothing of the objective function.
+
+In fact, the current literature on RIS systems has skipped this analysis entirely because the RIS optimization is a non-convex problem. Rather, 
 numerous algorithms have been proposed and analyzed numerically. We now briefly review a few selected results from the current RIS literature. 
 \par
-Go through and review
+\begin{itemize}
+\item
+	
+	As is often the case with non-convex optimization, different reformulations of the problem have been used in order to find local optima of the problem.
+	
+
+First show that in general the non-convex constraint of the phases requires relaxation or the problem
+\item
+\end{itemize}
 \par
 One key point to note is that in none of the above works and indeed so far as the author's knowledge have these works considered relevant case of a MIMO channel with channel correlation. 

@@ -15,11 +15,10 @@ rank = 100
 fig = plt.figure()
 ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
-average = 1000
-sizes = [10, 20, 50, 100, 200]
+average = 10
+sizes = [20, 50, 100, 200]
 # average = 10
-# sizes = [10, 20, 50, 100]
-correlations = [0, .5, .8, .9, .98]
+correlations = [0, .5, .9, .98]
 for cor_rho in correlations:
     capacity_variance = []
     capacity_average = []
@@ -28,19 +27,19 @@ for cor_rho in correlations:
         s_correlation_matrix = exponential_correlation(size, cor_rho)
         r_correlation_matrix = exponential_correlation(size, cor_rho)
         sec_cap = []
-        G = c_rand(size, size)
-        G2 = c_rand(size, size)
-        G3 = c_rand(size, size)
         for i in range(average):
+            G = c_rand(size, size)
+            G2 = c_rand(size, size)
+            G3 = c_rand(size, size)
             # H_cor = r_correlation_matrix@G@t_correlation_matrix
             H_cor = r_correlation_matrix@G2@s_correlation_matrix@random_phase(size)@G@t_correlation_matrix
             H_cor_eve = r_correlation_matrix@G3@s_correlation_matrix@random_phase(size)@G@t_correlation_matrix
             HH_cor = H_cor@hermetian(H_cor)
             HH_cor_eve = H_cor_eve@hermetian(H_cor_eve)
             #   Optimize for the intended received
-            # powers = water_filling(H_cor, 1, vals=True)
-            # sec_cap.append(capacity_water_filled(H_cor@powers@hermetian(H_cor)) - capacity_water_filled(H_cor_eve@powers@hermetian(H_cor_eve)))
-            sec_cap.append(capacity(HH_cor, 1/size) - capacity(HH_cor_eve, 1/size))
+            powers = water_filling(H_cor, 1, vals=True)
+            sec_cap.append(capacity_water_filled(H_cor@powers@hermetian(H_cor)) - capacity_water_filled(H_cor_eve@powers@hermetian(H_cor_eve)))
+            # sec_cap.append(capacity(HH_cor, 1/size) - capacity(HH_cor_eve, 1/size))
         capacity_average.append(np.average(sec_cap))
         capacity_variance.append(np.var(sec_cap))
 
