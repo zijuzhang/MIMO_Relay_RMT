@@ -46,9 +46,9 @@ Since the IRS introduces the potential for additional correlation it seems reaso
 	Method from \cite{huang2018achievable}.
 \begin{itemize}
 \item
-	No LOS of correlation
+	No LOS or correlation considered in system model.
 \item
-	Requires full CSIT at IRS
+	Algorithm requires full CSIT at IRS
 \item 
 	Assumes a ZF precoder in order to simplify sum-capacity objective function.
 \item
@@ -62,7 +62,22 @@ Since the IRS introduces the potential for additional correlation it seems reaso
 \end{itemize}
 
 \item 
-	Method from \cite{huang2018achievable}.
+	Method from \cite{kammoun2020asymptotic}.
+	\begin{itemize}
+		\item 
+			Algorithm only requires channel statistics for the RIS update
+		\item
+			System model includes correlation.
+		\item
+			Does transmitter need perfect CSI or can they make do with just knowing the composite channel.
+		\item
+			Uses max-min SINR as objective
+		\item
+			Optimizes the beamformer, the powers and RIS (continuous phases allowed)
+		\item
+			Question: \cite[Section III ]{kammoun2020asymptotic} makes a claim that for a single rank channel the RIS only offers a "substantial" benefit if there
+			is a single user.  This makes sense for a Decision-Feedback equalization sense but it is still not clear to me why the benefit
+	\end{itemize}
 
 \end{enumerate}
 \bibliography{bibliography}
