@@ -29,22 +29,41 @@ with
 	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
 
-Using a matched filter  and precoder which satisfies the transmission power constraint gives (normalize each column)
-\begin{equation}
-\mW = \mathbf{H}_{Total}^H
-\end{equation} 
+The following numerical results evaluate the MSE the channel above with $s_k \in \mathcal{NC}(0,\frac{1}{N_R})$, $n_k \in \mathcal{NC}(0,\frac{1}{N_R})$.
+For each channel realization, I evaluate the MSE for the matched filter and zero-forcing filter using $\phase = e^{j\theta}\mI$ for 10 uniform spaced values of $\theta \in [0, 2\pi]$. Then I collect the mean and variance of the 10 MSEs for the channel realization. I repeat and average across 1000 channel realizations. I perform this same analysis across different values of $\rho$ in the exponential correlation model (i.e.  $r_{i,j}=\rho^(i-j)$. The results in Figure \ref{MSE_correlation} indicate that the variance of the MSE over different values of the phase matrix parameter, $\theta$,  can be quite large. In particular when the correlation parameter, $\rho$ is close to 1.
+		\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/over_10_thetas}
+	  \caption{Comparison MSE over different amounts of correlation.}
+	  	  \label{MSE_correlation}
+	\end{figure}
 
-Numerical results for $s_k \in \mathcal{NC}(0,1)$, $n_k \in \mathcal{NC}(0,1)$
+Based on the measurement data collected in \cite{martin2000multiple}, the correlation between antennas can reach $.5$ even in a, $4 \times 4 $ MIMO systems. 
+Since the IRS introduces the potential for additional correlation it seems reasonable to allow for $\rho = .5$.
+
+\section{Next Steps: Methods for Phase Optimization}
+\begin{enumerate}
+\item
+	Method from \cite{huang2018achievable}.
 \begin{itemize}
 \item
-zf mu: 202.0989509146119
-zf std: 57.23864582855936
+	No LOS of correlation
 \item
-matched mu: 476.69650954785794
-matched std: 239.3529067968275
+	Requires full CSIT at IRS
+\item 
+	Assumes a ZF precoder in order to simplify sum-capacity objective function.
+\item
+	Alternating algorithm approach with two main steps
+	\begin{enumerate}
+	\item 
+		Minimize transmission power w.r.t phases
+	\item
+		Maximize rate wrt power
+	\end{enumerate}
 \end{itemize}
 
+\item 
+	Method from \cite{huang2018achievable}.
 
+\end{enumerate}
 \bibliography{bibliography}
-
 \end{document}
