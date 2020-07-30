@@ -24,40 +24,42 @@ I use the system model given by
 \vy = \mH_{Total} \mW \vs  + \vn
 \end{equation}
 with 
-
 	\begin{equation}
-	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
+	\mH_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
-
-The following numerical results evaluate the MSE the channel above with $s_k \in \mathcal{NC}(0,\frac{1}{N_R})$, $n_k \in \mathcal{NC}(0,\frac{1}{N_R})$.
-For each channel realization, I evaluate the MSE for the matched filter and zero-forcing filter using $\phase = e^{j\theta}\mI$ for 10 uniform spaced values of $\theta \in [0, 2\pi]$. Then I collect the mean and variance of the 10 MSEs for the channel realization. I repeat and average across 1000 channel realizations. I perform this same analysis across different values of $\rho$ in the exponential correlation model (i.e.  $r_{i,j}=\rho^(i-j)$. The results in Figure \ref{MSE_correlation} indicate that the variance of the MSE over different values of the phase matrix parameter, $\theta$,  can be quite large. In particular when the correlation parameter, $\rho$ is close to 1.
+Elements of $\mH_{2},\mH_{1}$ and $\mG$ are normalized so as to have a normalized trace of 1 and $\mathbf{R}_{k}$ represents the exponential correlation model with elements $r_{i,j}=\rho^{i-j}$.
+\par
+The following numerical results evaluate the MSE for the channel above with $s_k \in \mathcal{NC}(0,\frac{1}{N_T})$, $n_k \in \mathcal{NC}(0,\frac{1}{N_R})$
+$N_T = 10$ (transmitters), $N_R = 10$ (receivers) and $N_S = 50$ (IRS surfaces).
+For each channel realization, I evaluate the MSE for the matched filter and zero-forcing filter using $\phase = e^{j\theta}\mI$ for 10 uniform spaced values of $\theta \in [0, 2\pi]$. I then find the mean and variance of the MSE over the 10 values of $\theta$. I repeat and average this across 1000 channel realizations. This numerical test is performed for different values of $\rho$ in the exponential correlation model. The results in Figure \ref{MSE_correlation} indicate that the variance of the MSE over different values of the phase matrix parameter, $\theta$,  is significant and increases as the correlation parameter, $\rho$ approaches 1.
 		\begin{figure}[H]
-	\includegraphics[width= 15cm,height = 10cm]{figures/over_10_thetas}
+	\includegraphics[width= 16cm,height = 13cm]{figures/over_10_thetas}
 	  \caption{Comparison MSE over different amounts of correlation.}
 	  	  \label{MSE_correlation}
 	\end{figure}
 
-Based on the measurement data collected in \cite{martin2000multiple}, the correlation between antennas can reach $.5$ even in a, $4 \times 4 $ MIMO systems. 
-Since the IRS introduces the potential for additional correlation it seems reasonable to allow for $\rho = .5$.
+Based on the measurement data collected in \cite{martin2000multiple}, the correlation between antennas can reach $.5$ even in a $4 \times 4 $ MIMO system without an IRS. 
+The IRS should introduce the potential for additional correlation in the system so seems reasonable to allow for $\rho = .5$ (or maybe even higher). I have not been able to find any correlation measurement data from larger systems or with an IRS.
 
 \section{Next Steps: Methods for Phase Optimization}
+The above results motivate the investigation of phase optimization to reduce the MSE. A couple of previous works looking at such optimization are now reviewed. 
 \begin{enumerate}
 \item
 	Method from \cite{huang2018achievable}.
 \begin{itemize}
 \item
-	No LOS or correlation considered in system model.
+	No LOS or correlation component in the channel model.
 \item
-	Algorithm requires full CSIT at IRS
+	Algorithm requires full CSIT at IRS.
 \item 
-	Assumes a ZF precoder in order to simplify sum-capacity objective function.
+	Assumes a ZF precoder in order to simplify the sum-capacity objective function.
 \item
-	Alternating algorithm approach with two main steps
+	Uses an alternating algorithm approach with two main steps
 	\begin{enumerate}
 	\item 
-		Minimize transmission power w.r.t phases
+		Minimize transmission power w.r.t $\theta$.
 	\item
-		Maximize rate wrt power
+		Maximize rate with respect transmission power of each transmit antenna.
 	\end{enumerate}
 \end{itemize}
 
@@ -65,20 +67,32 @@ Since the IRS introduces the potential for additional correlation it seems reaso
 	Method from \cite{kammoun2020asymptotic}.
 	\begin{itemize}
 		\item 
-			Algorithm only requires channel statistics for the RIS update
+			Algorithm only requires channel statistics for the IRS update.
 		\item
-			System model includes correlation.
+			Unlike \cite{huang2018achievable}, optimization occurs over a beamforming matrix and then optimizes powers and phases. 
 		\item
-			Does transmitter need perfect CSI or can they make do with just knowing the composite channel.
+			Channel uses a correlation model sort of like the exponential model except for that I don't think the matrix is normalized for power.
 		\item
-			Uses max-min SINR as objective
+			Uses max-min $\text{SINR}_K$ as objective.
 		\item
-			Optimizes the beamformer, the powers and RIS (continuous phases allowed)
-		\item
-			Question: \cite[Section III ]{kammoun2020asymptotic} makes a claim that for a single rank channel the RIS only offers a "substantial" benefit if there
-			is a single user.  This makes sense for a Decision-Feedback equalization sense but it is still not clear to me why the benefit
+			For case with single rank channel (fully correlated channel) they use constant phase at all elements. Different phases are used for full-rank case.
+		\item 
+			Figure 9. of this work is particular interesting as it provides evidence that their algorithm can significantly increase the minimum user rate when compared
+			to another method of selecting the phases at the IRS. Note that here they allow the number of reflecting surfaces to be quite high but keep $N_R = N_T = 8$.
 	\end{itemize}
-
 \end{enumerate}
+Assuming a matched filter at the transmitter the MSE problem for the choice of the IRS phases becomes
+		\begin{subequations}
+	\label{optim}
+	\begin{align}
+	    \underset{\phase}{\text{minimize }}
+	    & \; \| \mH_{Total}(\mH_{Total}^H\vs + \vn) - \vs \| \label{potential_game} \\
+	    \text{subject to  } \; &
+	    | \theta_i | = 1 & \forall i \in {1 \cdots	 N_S}
+		\label{pos_power_const}
+	\end{align}
+	\end{subequations}
+	Is the utility function at least convex?
+	Do I need to include the power constraint here? Probably
 \bibliography{bibliography}
 \end{document}
