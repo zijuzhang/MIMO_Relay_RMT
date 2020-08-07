@@ -1,0 +1,29 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Numerical Results}
+Below are the simulation results using the simulation system parameters as shown in the previous results but now plotted over $\theta \in [0, 2\pi]$ for $\phase = e^{j\theta}\mI$. This result suggests that the optimal $\phase$ with respect to the MSE depends  primarily on the fast-fading characteristics of the channel.
+		\begin{figure}[H]
+	\includegraphics[width= 16cm,height = 13cm]{figures/plotted_over_theta}
+	  \caption{Comparison MSE over different amounts of correlation.}
+	  	  \label{MSE_correlation}
+	\end{figure} 
+
+\end{document}
