@@ -1,6 +1,6 @@
-Using the approach for finding asymptotic eigenvalue distributions detailed in \ref{Free_Prob_Intro} we now analyze a channel model that is representative of a MIMO communication system with an RIS. 
+Using the approach from Section \ref{Free_Prob_Intro} to find the asymptotic eigenvalue distribution, we now analyze a channel model that is representative of a MIMO communication system with an RIS. 
 \par
-In general, the received signal from a line of sight path between a transmitter and receiver would contain  sufficient energy to disregard the contribution of any reflected signal.  Therefore, we focus on a channel model in which all signal power to the receiver is through the path of the RIS  given by
+In general, the received signal from any line of sight path between a transmitter and receiver would contain  sufficient energy to disregard the contribution of any reflected signal (although this component may be very low rank).  Therefore, we focus on a channel model in which all signal power to the receiver is through the path of the RIS  given by
 
 %	\begin{equation}
 %	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
@@ -9,33 +9,30 @@ In general, the received signal from a line of sight path between a transmitter 
 	\mathbf{H}_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}\mathbf{H}_{2}\underbrace{\phase}_{\text{IRS}}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
 The random channels $\mathbf{H}_{1}$ and $\mathbf{H}_{2}$ represent the random channel gains from transmitter to RIS and from RIS to receiver, respectively. Similarly, $ \mathbf{R}_{T},  \mathbf{R}_{S} $ and  $\mathbf{R}_{S}$ represent the correlation introduced at the transmitter, RIS and receiver, respectively. 
-The structure of $\mathbf{H}_{Total}$ suggests that we will want to use multiplicative free convolution in order to evalute the AED and therefore we would like to choose a   valid correlation model with a known S-Transform expression. 
-The exponential correlation model is defined by a single parameter $\rho$ with elements given by $\rho^{i-j}$.
-As seen in the later, this model for correlation will enable a very clean analysis.
+When compared with the example seen in Section \ref{Free_Prob_Intro}, the structure of $\mathbf{H}_{Total}$ suggests that we can to use multiplicative free convolution in order to evalute the AED. With this in mind, we would like to choose a correlation model  that not only represents the system but one with a known S-Transform expression. 
+One such model is exponential correlation. Defined by a single parameter $\rho$, the elements of the corresponding correlation matrix are given by $\rho^{i-j}$.
 \par
-
-To begin using the tools of free probability, we first ensure that the components of the covariance matrix given by 
+To begin using the tools of free probability, we must first separate out the free sub-components of the covariance matrix given by 
 	\begin{equation}
 	\mC = \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}
 	\left(\mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}\right)^H.
 	\end{equation}
-are free. 
-Noting from Equation \eqref{no_csi_capacity_aed} that the capacity is only affected by the non-zero eigenvalues of the covariance matrix allows us to equivalently 
+Given the S-transform of these sub-components, the total S-transform is simply the resulting product.
+Noting from Equation \eqref{no_csi_capacity_aed} that the capacity is only affected by the non-zero eigenvalues of the covariance matrix, we equivalently
 consider the AED of the covariance matrix given by 
 	\begin{align}
 	\mC &  =  \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}^{\frac{H}{2}}
 	 \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}^{\frac{1}{2}}\mR_{T}^{\frac{H}{2}}
 	 \\
 	 &  =  
-	 \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}^{\frac{H}{2}}
-	 \mR_{R}^{\frac{1}{2}}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}.
+	 \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}.
 	\end{align}
-This structure appears to admit analysis through the use of the S-Transform and multiplicative free convolution. In order to continue decomposing this covariance matrix into subcomponents  with known S-Transforms, we exploit a property of the S-Transform given by (proven in Appendix \ref{rotation_property})
+In order to continue decomposing this covariance matrix into sub-components, we exploit a property of the S-Transform given by (proven in Appendix \ref{rotation_property})
 \begin{equation}
 S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
 \end{equation}
 If all system dimensions are $N$, these S-Trasforms (and AEDs) identical so for this section we will assume that all system dimensions are $N$.
-Iterating the rotational property gives the equivalent matrix
+Repeated iteration of the rotational property above gives the equivalent matrix
 	\begin{equation}
 	\mC =
 \underbrace{\phase^H \phase}_{\mI}
@@ -45,7 +42,10 @@ Iterating the rotational property gives the equivalent matrix
 	  \mR_{R}
 	 \mR_{T}.
 	\end{equation}
-Now give the S-Transforms explicitly (given the above definitions of the matrices) and show that freeness applies. 
+Note that using the Eigen Value Decomposition of $\mR_{R}$ and $\mR_{T}$, we find the product $\mR_{R} \mR_{T}$ is also a Toeplitz matix (which can be represented by a circulant matrix in the asymptotic system size).
+In \cite[Section 4.3.2]{muller2013applications} it is shown that the hermetian matrix $\mH\mH_^H$ with $h_{i,j} \in \NC\{0, \frac{1}{N}\}$
+is free 
+Having shown the relative freeness of the matrix sub-components, we must now find the S-transform for each in order to find the product.
 \begin{enumerate}
 \item 
 	For both $\mH_{2}^H \mH_{2}$ and $\mH_{1}\mH_{1}^H$ with all system dimensions equal, the S-Transform as shown in \cite{muller2002random} is given by 
@@ -57,14 +57,12 @@ Now give the S-Transforms explicitly (given the above definitions of the matrice
 	\begin{equation}
 	S(z) = \frac{\alpha z^2 + z \sqrt{alpha^2 z^2 -(z^2-1)}}{z-1}
 	\end{equation}
-\item
-	The final step to evaluating this expression is ensuring that the individual components whose S-Transforms we have found are free and thus able to be use with multiplicative free convolution. 	
 \end{enumerate}
 \par
-Without any further analysis this expression shows the interesting result that under the assumptions of Free Probability and equal power transmission, the phases at the RIS (or indeed any unitary matrix in the channel) cancel out. For the remaining terms, we simply need an expression for the S-Transform in order to evaluate the asymptotic system capacity.
+Without further analysis, this expression shows the interesting result that under the assumptions of Free Probability and equal power transmission, the phases at the RIS (or indeed any unitary matrix in the channel) cancel out of the expression for the AED. For the remaining terms, we simply need an expression for the S-Transform in order to evaluate the asymptotic system capacity.s
 \par 
 Using the previous analysis we can observe an extension of this result that may be relevant to variations of this system model. 
-While we do not consider a line of sight component to this channel, using the tools from a similar analysis in \cite{}, it can be shown that 
+While we do not consider a line of sight component to this channel, using the tools from a similar analysis in \cite{muller2012channel}, it can be shown that 
 a similar cancellation of phases will occur for the RIS channel with an LOS (or non-zero mean) component of the signal.
 Note that if we are simply adding a non-zero mean component. We can find the corresponding AED by looking considering the channel without the non-zero mean and then adding the single eigenvalue from the non-zero mean component; in which case the phases will again cancel out. 
 

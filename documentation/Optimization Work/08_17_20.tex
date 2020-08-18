@@ -27,7 +27,8 @@ with
 	\begin{equation}
 	\mH_{Total} = \mathbf{R}_{R}^{\frac{1}{2}}(\underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{R}_{S}^{\frac{1}{2}}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}})\mathbf{R}_{T}^{\frac{1}{2}}.
 	\end{equation}
-Below are the simulation results using the simulation system parameters as shown in the previous results but now plotted over $\theta \in [0, 2\pi]$ for $\phase = e^{j\theta}\mI$. This result suggests that the optimal $\phase$ with respect to the MSE depends  primarily on the fast-fading characteristics of the channel.
+Below are the simulation results using the simulation system parameters as shown in the previous results but now plotted over $\theta \in [0, 2\pi]$ for $\phase = e^{j\theta}\mI$. At the transmitter, I am precoding with a matched filter that does \emph{not} include the phases of the IRS. 
+This result suggests that the optimal $\phase$ with respect to the achievable rate and SINR depends  primarily on the fast-fading characteristics of the channel but that there is an optimal choice when using MSE as the utility.
 		\begin{figure}[H]
 	\includegraphics[width= 16cm,height = 13cm]{figures/MSE}
 	  \caption{Comparison MSE over different choice of IRS phase.}

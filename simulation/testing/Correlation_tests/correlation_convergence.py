@@ -44,7 +44,6 @@ for cor_rho in correlations:
     var_plt.plot(sizes, capacity_variance, '-o', label=f'Correlation (rho): {cor_rho}')
     ave_plt.plot(sizes, capacity_average, '-o', label=f'Correlation (rho): {cor_rho}')
 
-
 # ave_plt.title("Capacity Average")
 # plt.title("Capacity Variance")
 var_plt.set_ylabel("Capacity Variance")
