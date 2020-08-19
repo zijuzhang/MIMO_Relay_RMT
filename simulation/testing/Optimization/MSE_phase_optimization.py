@@ -1,9 +1,9 @@
 from src.lin_alg import *
 import matplotlib.pyplot as plt
 
-num_tx = 10
+num_tx = 16
 num_rx = 10
-num_reflectors = 50
+num_reflectors = 128
 average = 1000
 cor_mf_mu = []
 cor_mf_var = []

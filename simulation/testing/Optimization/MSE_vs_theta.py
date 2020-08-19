@@ -41,13 +41,13 @@ for theta in phases:
     SINR_matched = []
     AR_Matched = []
     for j in range(average):
-        # transmit_symbols = np.random.randn(num_rx)
-        transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
+        # transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
+        transmit_symbols = BPSK(num_rx)
         noise = c_rand(num_rx, 1, var=1).flatten()
         # noise = c_rand(num_rx, 1).flatten()
         G = c_rand(num_reflectors, num_tx, var=1)
         G2 = c_rand(num_rx, num_reflectors, var=1)
-        los_path = c_rand(num_rx, num_tx, var=1)*0
+        los_path = c_rand(num_rx, num_tx, var=1)
         irs_path = G2 @ s_correlation_matrix @ phase @ G
         irs_path_rand = G2 @ s_correlation_matrix @ phase_rand @ G
         channel = r_correlation_matrix @(irs_path + los_path)@ t_correlation_matrix
