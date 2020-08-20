@@ -5,5 +5,4 @@ import numpy as np
 
 def optimize_phases(num_elements, info):
     opt_phases = np.ones(num_elements)
-
     return opt_phases

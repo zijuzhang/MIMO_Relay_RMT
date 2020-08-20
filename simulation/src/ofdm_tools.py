@@ -8,5 +8,5 @@ def DFT_matrix(size):
     mat = np.zeros((size,size))
     for i in range(size):
         for j in range(size):
-            mat[i,j] = i*j
+            mat[i, j] = i*j
     return np.exp(-1j*2*np.pi*mat/size)/100

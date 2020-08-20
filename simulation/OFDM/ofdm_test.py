@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-from OFDM.ofdm_tools import *
+from src.ofdm_tools import *
 from src.lin_alg import *
 #   Begin with frequencies
 num_subcarriers = 1000
