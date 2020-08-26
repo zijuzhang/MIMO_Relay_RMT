@@ -19,19 +19,19 @@ opt_phase = np.diag(optimize_phases(num_reflectors, None))
 H1 = c_rand(num_reflectors, num_tx, var=1)
 H2 = c_rand(num_rx, num_reflectors, var=1)
 G = c_rand(num_rx, num_tx, var=1)
-# H_total = (G + H2@opt_phase@H1)
-H_total = (G)
+H_total = (G + H2@opt_phase@H1)
 # One transmission
 transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
 noise = c_rand(num_rx, 1, var=1).flatten()
 #   For now use perfect CSI
 pilots = DFT_matrix(num_tx)
 received_pilots = H_total@pilots
-#   First check without noise at received. Check with
 csi_estimate = ML_MIMO(received_pilots, pilots)
-MSE = np.power(np.linalg.norm(csi_estimate@transmit_symbols - H_total@transmit_symbols), 2)
-matched_filter = hermetian(csi_estimate)
-transmit_symbols = matched_filter@transmit_symbols
-received = H_total @ transmit_symbols + noise
+#   Normalize transmit power from matched filter
+matched_filter = precode_mf(csi_estimate)
+transmit_signal = matched_filter@transmit_symbols
+# transmit_signal = transmit_symbols
+received = H_total @ transmit_signal + noise
+MSE = 10*np.log(np.power(np.linalg.norm(received - transmit_symbols), 2)/num_rx)
 #   Normalized MSE
-MSE = 10*np.log(np.power(np.linalg.norm(received - transmit_symbols), 2))
+print(f"MSE: {MSE}")
