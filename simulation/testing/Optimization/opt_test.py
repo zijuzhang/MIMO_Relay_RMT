@@ -3,6 +3,8 @@ from src.sum_optimization import *
 from src.lin_alg import *
 num_elements = 10
 num_distrete_vals = 4
+num_repetitions = 2
+rep_val = []
 complex_coefficient = np.random.uniform(-10, 10, 100) + 1j * np.random.uniform(-10, 10, 100)
 phase_adjacency = np.random.randint(0, 100, (num_elements, 4))
 coded = np.zeros((num_elements, complex_coefficient.size))
@@ -12,20 +14,22 @@ for i in range(phase_adjacency.shape[0]):
 cur_sum = 0
 min_power = np.inf
 o_complex_coefficient = complex_coefficient
-for elem_ind in range(num_elements):
-    #   For each phase option choose the one resulting in the largest current sum
-    best_phase_ind = 0
-    min_power = np.inf
-    poly_code = coded[elem_ind, :]
-    off_elements = complex_coefficient*np.logical_not(poly_code)
-    for phase_ind in range(num_distrete_vals):
-        phase_code = np.exp(1j*phase_ind*(np.pi/2))*poly_code
-        cur = np.abs(phase_code@complex_coefficient + np.sum(off_elements))
-        if cur < min_power:
-            min_power = cur
-            best_phase_ind = phase_ind
-    adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
-    complex_coefficient = off_elements + adjustment
+for rep_ind in range(num_repetitions):
+    for elem_ind in range(num_elements):
+        #   For each phase option choose the one resulting in the largest current sum
+        best_phase_ind = 0
+        min_power = np.inf
+        poly_code = coded[elem_ind, :]
+        off_elements = complex_coefficient*np.logical_not(poly_code)
+        for phase_ind in range(num_distrete_vals):
+            phase_code = np.exp(1j*phase_ind*(np.pi/2))*poly_code
+            cur = np.abs(phase_code@complex_coefficient + np.sum(off_elements))
+            if cur < min_power:
+                min_power = cur
+                best_phase_ind = phase_ind
+        adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
+        complex_coefficient = off_elements + adjustment
+    rep_val.append(min_power)
 check = np.abs(np.sum(o_complex_coefficient))
 gain = np.abs(np.sum(o_complex_coefficient)) - min_power
 print(gain)
