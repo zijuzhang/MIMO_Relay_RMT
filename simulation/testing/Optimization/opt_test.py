@@ -17,18 +17,22 @@ o_complex_coefficient = complex_coefficient
 for rep_ind in range(num_repetitions):
     for elem_ind in range(num_elements):
         #   For each phase option choose the one resulting in the largest current sum
-        best_phase_ind = 0
-        min_power = np.inf
+        # best_phase_ind = 0
+        # min_power = np.inf
         poly_code = coded[elem_ind, :]
         off_elements = complex_coefficient*np.logical_not(poly_code)
-        for phase_ind in range(num_distrete_vals):
-            phase_code = np.exp(1j*phase_ind*(np.pi/2))*poly_code
-            cur = np.abs(phase_code@complex_coefficient + np.sum(off_elements))
-            if cur < min_power:
-                min_power = cur
-                best_phase_ind = phase_ind
-        adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
+        # for phase_ind in range(num_distrete_vals):
+        #     phase_code = np.exp(1j*phase_ind*(np.pi/2))*poly_code
+        #     cur = np.abs(phase_code@complex_coefficient + np.sum(off_elements))
+        #     if cur < min_power:
+        #         min_power = cur
+        #         best_phase_ind = phase_ind
+        # adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
+        total_off = np.sum(off_elements)
+        best_phase = np.angle(total_off) + np.pi - np.angle(poly_code*complex_coefficient)
+        adjustment = np.exp(1j*best_phase)*poly_code*complex_coefficient
         complex_coefficient = off_elements + adjustment
+        min_power = np.abs(np.sum(complex_coefficient))
     rep_val.append(min_power)
 check = np.abs(np.sum(o_complex_coefficient))
 gain = np.abs(np.sum(o_complex_coefficient)) - min_power
