@@ -40,7 +40,15 @@ with
 		\begin{equation}
 			\hat{\mG} = [(\mathbf{P} \mathbf{P}^H)^{-1} \mathbf{P} \mathbf{Y}^H]^H
 		\end{equation}
-			
+		With the received signal
+		\begin{equation}
+		 \mathbf{Y} = \mH_{Total} \mathbf{P} + \mathbf{N}
+		\end{equation}
+			the resulting CSI estimate is 
+					\begin{equation}
+		 \hat{\mH}_{Total} = \mH_{Total} + \mathbf{P}\mathbf{N}
+		\end{equation}
+		in which the elements of $\mathbf{P}\mathbf{N}$ have the same power and orthogonality as $\mathbf{N}$.
 	\item 	
 		In the next time interval, we turn on a single IRS element and transmit the pilot sequence again such that the received signal is 
 			\begin{equation*}
