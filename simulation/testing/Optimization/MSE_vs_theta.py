@@ -1,10 +1,10 @@
 from src.lin_alg import *
 import matplotlib.pyplot as plt
 
-num_tx = 50
-num_rx = 50
+num_tx = 16
+num_rx = 10
 num_reflectors = 50
-average = 1000
+average = 100
 # average = 10
 cor_mf_mu = []
 cor_mf_var = []
@@ -16,9 +16,9 @@ phases = np.linspace(0, 2 * np.pi, 10)
 fig = plt.figure()
 ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
-transmit_cor = .5
-irs_cor = .5
-receiver_cor = .5
+transmit_cor = 0
+irs_cor = 0
+receiver_cor = 0
 MSE_zf_mu = []
 MSE_matched_mu = []
 MSE_matched_mu_rand = []
@@ -41,8 +41,8 @@ for theta in phases:
     SINR_matched = []
     AR_Matched = []
     for j in range(average):
-        # transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
-        transmit_symbols = BPSK(num_rx)
+        transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
+        # transmit_symbols = BPSK(num_rx)
         noise = c_rand(num_rx, 1, var=1).flatten()
         # noise = c_rand(num_rx, 1).flatten()
         G = c_rand(num_reflectors, num_tx, var=1)
@@ -53,7 +53,8 @@ for theta in phases:
         channel = r_correlation_matrix @(irs_path + los_path)@ t_correlation_matrix
         channel_rand = r_correlation_matrix @(irs_path_rand + los_path)@ t_correlation_matrix
         channel_no_phase = r_correlation_matrix @(G2 @ s_correlation_matrix @ G + los_path)@ t_correlation_matrix
-        transmit_signal_matched = precode_mf(channel_no_phase) @ transmit_symbols
+        # Using perfect
+        transmit_signal_matched = precode_mf(channel) @ transmit_symbols
         received_matched = channel @ transmit_signal_matched + noise
         received_matched_rand = channel_rand @ transmit_signal_matched + noise
         MSE_matched.append(10*np.log(np.power(np.linalg.norm(received_matched - transmit_symbols), 2)))

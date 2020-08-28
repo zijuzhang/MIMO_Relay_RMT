@@ -38,10 +38,10 @@ for cor_rho in rhos:
             irs_path = G2 @ s_correlation_matrix @ phase @ G
             channel = r_correlation_matrix @(irs_path + los_path)@ t_correlation_matrix
             transmit_signal_matched = precode_mf(channel) @ transmit_symbols
-            received_matched = channel @ (transmit_signal_matched + noise)
+            received_matched = channel @ transmit_signal_matched + noise
             MSE_matched.append(10*np.log(np.power(np.linalg.norm(received_matched - transmit_symbols), 2)))
             zf_precoding = precode_zf(channel) @ transmit_symbols
-            received_zf = channel @(zf_precoding + noise)
+            received_zf = channel @zf_precoding + noise
             MSE_zf.append(10*np.log(np.power(np.linalg.norm(received_zf - transmit_symbols), 2)))
         MSE_zf_mu.append(np.average(MSE_zf))
         MSE_zf_var.append(np.var(MSE_zf))

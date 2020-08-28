@@ -26,24 +26,30 @@ with
 	\begin{equation*}
 	\mH_{Total} = \underbrace{\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}}_{\text{IRS}} + \underbrace{\mathbf{G}}_{\text{LOS}}.
 	\end{equation*}
-In the following, we will assume that a matched filter is used at transmitter. Further we will evaluate the performance of the system using the Expected Mean Square Error given by 
+	The IRS component of the channel can be decomposed in the paths through the individual elements as
+	\begin{equation}
+	\mathbf{H}_{2}\boldsymbol{\Phi}\mathbf{H}_{1}= 
+	\Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}
+	\end{equation}
+	for an IRS with $N_S$ reflective elements. 
+In the following, we will assume that a matched filter is used at the transmitter. Further we will evaluate the performance of the system using the Mean Square Error given by 
 \begin{equation}
 E\left[\|  \vs - (\mG + \Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\mG + \Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H\vs) \|^2 \right]
 \end{equation}
 in which we do not consider the noise at the receiver. 
-Note that we are using the full information of the current channel in order to estimate the optimal phases at the IRS. 
-In order to minimize the overhead of pilot acquisition, we estimate the CSE in the following manner. In the following we assume that the elements of the IRS can not only adjust the phases of the impinging waves but may also be "turned off" such that they are not included in the channel.
+In the following we assume that the elements of the IRS can not only adjust the phases of the impinging waves but may also be "turned off" such that they are not included in the channel.
+In order to minimize the overhead of pilot acquisition, we estimate the CSE in the following manner. 
 \begin{enumerate}
 \item
-	In order to first transmit matched filter we leave all IRS elements \emph{on}. Assuming that we perfectly estimate the entire channel $\mH_{Total}$, we will not have sufficient information to estimate the individual components of the channel $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and thus we cannot optimize with respect to $\phi_i $.
+We leave all IRS elements \emph{on} to first find the full matched filter at the Tx. Assuming that we estimate the entire channel $\mH_{Total}$, we will not have sufficient information to estimate the individual components of the IRS component of the channel $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and thus we cannot optimize with respect to $\phi_i $.
 \item
 	In the next iteration of pilots, we turn off all elements in order to estimate the LOS matrix $\mG $.
 \item
-	By turning on a specific IRS element (can we use patterns using the correlation?) and sending additional pilots, we can estimate 
+	Next, by turning on a specific IRS element (can we use patterns using the correlation?) and sending additional pilots, we can estimate 
 	the path through a specific IRS element given by $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$.
 	Using this information, we can now use the expression 
 	\begin{equation}
-E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}) \|^2 \right]
+E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})\vs  \|^2 \right]
 \end{equation}
 	\item
 		Repeating the procedure above, we estimate additional elements $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and perform the optimization over increasing number of phases.
@@ -52,6 +58,14 @@ E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf
 		Note that once correlation is considered, we may want to decide the phase of elements in close proximity whose channels we have not yet estimated.
 \end{enumerate}
 \section{Optimization Problem}
+First, we rewrite the above utility function as
+	\begin{equation}
+E\left[ trace\left((\vs - \mathbf{H}\mathbf{F}\vs)(\vs - \mathbf{H}\mathbf{F}\vs)^H \right)\right]
+\end{equation}
+Assuming $\mathbf{H}$ and $\mathbf{F}$ to be constant over a coherence period, the expectation applies only to $\vs \vs^H$ to give
+	\begin{equation}
+trace\left((\vs - \mathbf{H}\mathbf{F}\vs)(\vs - \mathbf{H}\mathbf{F}\vs)^H \right).
+\end{equation}
 First we consider equal power allocation at the transmitter such that after finding the first $K < N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem
 is given by
 	\begin{align}
@@ -64,7 +78,10 @@ is given by
 	\end{align}
 	with $\mathbf{A} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
 	We classify the terms of the resulting polynomial into two types:
-	cross types (e.g $(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$) and non-cross types (e.g $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$). For non-cross types, the phase terms will always cancel out ($\phi_i \phi_i^H = 1$). For the cross-terms, note that
-	for each term in the polynomial, the hermetian of the term is also in the polynomial sum (e.g both $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$ and $ (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}\mG^H$). Because $= trace(\mH^H) = trace(\mH)^*$, the complex component of these terms will always cancel. The result is that the phases, $\phi_i \forall i \in {1 \cdots	 K}$ will cancel out of the MSE expression. This result would hold for any linear-beamformer is used at the transmitter.
+	cross types (e.g $(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$) and non-cross terms (e.g $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$). For non-cross terms, the phases will always cancel out ($\phi_i \phi_i^H = 1$). For the cross-terms, note that
+	for each term in the polynomial, the hermetian of the term is also in the polynomial sum (e.g both $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$ and $ (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}\mG^H$). Because $= trace(\mH^H) = trace(\mH)^*$, the complex component of these terms will always cancel. The result is that the phases, $\phi_i  \;\forall i \in {1 \cdots	 K}$ will cancel out of the MSE expression. This result would hold for any linear-beamformer is used at the transmitter.
+\section{Numerical Inconsistency}
+Why is it that in the numerical results, the phase does have an impact on the MSE.
+
 \bibliography{bibliography}
 \end{document}
