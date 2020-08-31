@@ -15,7 +15,7 @@ rank = 100
 fig = plt.figure()
 ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
-average = 10
+average = 100
 sizes = [10, 20, 50, 100]
 correlations = [0, .5, .8, .9, .98]
 for cor_rho in correlations:

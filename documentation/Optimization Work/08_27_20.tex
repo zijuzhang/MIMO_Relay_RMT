@@ -75,13 +75,21 @@ is given by
 	     \\
 	    \text{subject to  } \; &
 	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
-	\end{align}
+	\end{align}\label{mse_problem}
 	with $\mathbf{A} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
 	We classify the terms of the resulting polynomial into two types:
 	cross types (e.g $(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$) and non-cross terms (e.g $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$). For non-cross terms, the phases will always cancel out ($\phi_i \phi_i^H = 1$). For the cross-terms, note that
-	for each term in the polynomial, the hermetian of the term is also in the polynomial sum (e.g both $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$ and $ (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}\mG^H$). Because $= trace(\mH^H) = trace(\mH)^*$, the complex component of these terms will always cancel. The result is that the phases, $\phi_i  \;\forall i \in {1 \cdots	 K}$ will cancel out of the MSE expression. This result would hold for any linear-beamformer is used at the transmitter.
-\section{Numerical Inconsistency}
-Why is it that in the numerical results, the phase does have an impact on the MSE.
-
+	for each term in the polynomial, the hermetian of the term is also in the polynomial sum (e.g both $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$ and $ (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}\mG^H$). Because $trace(\mH^H) = trace(\mH)^*$, the complex component of these terms will always cancel. In the case of minimizing the MSE, this means that we want to minimize the resulting real component for all of these cross terms. In order to investigate further, we decompose the problem further. Neglecting the non-cross terms and using the linearity $trace$ with respect to scaling, we can equivalently consider the problem 
+	\begin{align}
+	    \underset{\phase}{\text{maximize }}
+	    & \; Img \left( \Sigma_{i=1}^{K} \Sigma_{j=i}^{K} c_{i,j} \phi_{i} \phi_{j}  \right)
+	     \\
+	    \text{subject to  } \; &
+	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}.
+	\end{align}\label{mse_problem_clear}
+	Note that because the polynomial in Problem \eqref{mse_problem} is the trace of a Hermetian product, only the imaginary component along the diagonal of each cross term is canceled by its corresponding Hermetian component in the sum. Replacing $ Img$ with a trigonometric function it is clear that this utility function is non-convex over the domain.
+\section{Phase Optimization}
+One potential method of performing this optimization is based on the ideas of coordinate descent in which a single variable is updated while all others are held constant.
+From problem \eqref{mse_problem_clear} it is clear that if all $\phi_{j} \; j \neq i $ are held constant, $\phi_{i}$ can be chosen as a phase which fulfills the objective function. The numerical results below indicate the impact of this optimization technique on the MSE of the IRS system described above. 
 \bibliography{bibliography}
 \end{document}

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 num_tx = 16
 num_rx = 10
 num_reflectors = 50
-average = 100
+average = 1000
 # average = 10
 cor_mf_mu = []
 cor_mf_var = []
@@ -16,9 +16,9 @@ phases = np.linspace(0, 2 * np.pi, 10)
 fig = plt.figure()
 ave_plt = fig.add_subplot(2, 1, 1)
 var_plt = fig.add_subplot(2, 1, 2)
-transmit_cor = 0
-irs_cor = 0
-receiver_cor = 0
+transmit_cor = .5
+irs_cor = .5
+receiver_cor = .5
 MSE_zf_mu = []
 MSE_matched_mu = []
 MSE_matched_mu_rand = []
@@ -56,7 +56,8 @@ for theta in phases:
         # Using perfect
         transmit_signal_matched = precode_mf(channel) @ transmit_symbols
         received_matched = channel @ transmit_signal_matched + noise
-        received_matched_rand = channel_rand @ transmit_signal_matched + noise
+        transmit_signal_matched_rand = precode_mf(channel_rand) @ transmit_symbols
+        received_matched_rand = channel_rand @ transmit_signal_matched_rand + noise
         MSE_matched.append(10*np.log(np.power(np.linalg.norm(received_matched - transmit_symbols), 2)))
         MSE_matched_rand.append(10*np.log(np.power(np.linalg.norm(received_matched_rand - transmit_symbols), 2)))
         # zf_precoding = precode_zf(channel) @ transmit_symbols
