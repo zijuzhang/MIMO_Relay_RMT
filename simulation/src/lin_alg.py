@@ -35,6 +35,7 @@ def c_rand(rows, cols, var=None, mean=0, normalize=True):
         else:
             return (np.random.randn(rows, cols) + 1j*np.random.randn(rows, cols))/np.sqrt(2*rows) + mean
 
+
 def BPSK(num):
     ret = np.random.randint(0, 2, num)
     ret += -1*(ret == 0)
