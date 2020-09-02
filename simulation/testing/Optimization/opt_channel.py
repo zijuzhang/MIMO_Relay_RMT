@@ -4,9 +4,9 @@ from src.optimization import *
 
 
 average = 100
-num_tx = 16
-num_rx = 10
-num_reflectors = 50
+num_tx = 4
+num_rx = 4
+num_reflectors = 4
 
 for j in range(average):
     #   Each IRS path is a column of F2 @ a row of F1
@@ -16,8 +16,8 @@ for j in range(average):
     coefficients = []
     for elem_ind in range(num_reflectors):
         ind = elem_ind * num_reflectors
-        for elem2_ind in range(num_reflectors - elem_ind):
-            elem2_ind += elem_ind
+        for elem2_ind in range(num_reflectors - elem_ind - 1):
+            elem2_ind += elem_ind + 1
             f2i = F2[:, elem_ind]
             f1i = F1[elem_ind, :]
             f2j = F2[:, elem2_ind]
@@ -27,11 +27,13 @@ for j in range(average):
 
     phase_adjacency = np.zeros((num_reflectors, len(coefficients)))
     ind = 0
-    for elem_ind in range(num_reflectors):
-        for elem2_ind in range(num_reflectors - elem_ind):
+    for elem_ind in range(num_reflectors-1):
+        for elem2_ind in range(num_reflectors - elem_ind - 1):
             phase_adjacency[elem_ind, ind + elem2_ind] = 1
-            phase_adjacency[elem2_ind, ind + elem2_ind] = 1
-        ind += num_reflectors - elem_ind
+            elem3_ind = elem2_ind + elem_ind + 1
+            phase_adjacency[elem3_ind, ind + elem2_ind] = 1
+            pass
+        ind += num_reflectors - elem_ind - 1
     optimal_phases = optimize_phases(np.asarray(coefficients), phase_adjacency)
     pass
 
