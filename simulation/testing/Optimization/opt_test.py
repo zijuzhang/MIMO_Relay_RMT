@@ -18,7 +18,7 @@ for rep_ind in range(num_repetitions):
     for elem_ind in range(num_elements):
         #   For each phase option choose the one resulting in the largest current sum
         best_phase_ind = 0
-        min_power = np.inf
+        # min_power = np.inf
         poly_code = coded[elem_ind, :]
         off_elements = complex_coefficient*np.logical_not(poly_code)
         total_off = np.sum(off_elements)
@@ -33,8 +33,8 @@ for rep_ind in range(num_repetitions):
         best_phase = np.angle(total_off) + np.pi - np.angle(poly_code@complex_coefficient)
         adjustment = np.exp(1j*best_phase)*poly_code*complex_coefficient
         complex_coefficient = off_elements + adjustment
-        min_power = np.abs(np.sum(complex_coefficient))
-    rep_val.append(min_power)
+        # min_power = np.abs(np.sum(complex_coefficient))
+    rep_val.append(np.abs(np.sum(complex_coefficient)))
 gain = original - rep_val
 print(gain)
 #   Adjust the complex coefficients using the winning phase
