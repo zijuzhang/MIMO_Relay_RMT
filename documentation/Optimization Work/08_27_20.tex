@@ -60,23 +60,31 @@ E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf
 \section{Optimization Problem}
 First, we rewrite the above utility function as
 	\begin{equation}
-E\left[ trace\left((\vs - \mathbf{H}\mathbf{F}\vs)(\vs - \mathbf{H}\mathbf{F}\vs)^H \right)\right]
+E\left[ \trace\left((\vs - \mathbf{H}\mathbf{W}\vs)(\vs - \mathbf{H}\mathbf{W}\vs)^H \right)\right]
 \end{equation}
-Assuming $\mathbf{H}$ and $\mathbf{F}$ to be constant over a coherence period, the expectation applies only to $\vs \vs^H$ to give
+Assuming $\mathbf{H}$ and $\mathbf{W}$ (The Tx linear precoder) to be constant over a coherence period, the expectation applies only to $\vs \vs^H$ 
+and we consider equal power allocation at the transmitter such that the utility function becomes
 	\begin{equation}
-trace\left((\vs - \mathbf{H}\mathbf{F}\vs)(\vs - \mathbf{H}\mathbf{F}\vs)^H \right).
+\trace\left((\mI - \mathbf{H}\mathbf{W})(\mI - \mathbf{H}\mathbf{W})^H \right).
 \end{equation}
-First we consider equal power allocation at the transmitter such that after finding the first $K \leq N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem
-is given by
+After finding the first $K \leq N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem with respect to the IRS phases for the case of a Matched Filter at the Tx is given by
 	\begin{align}
 	    \underset{\phase}{\text{minimize }}
-	    & \; trace\left((\mI - \mathbf{A}\mathbf{A}^H)
-	   (\mI - \mathbf{A}\mathbf{A}^H)^H \right)
+	    & \; \trace\left((\mI - \mathbf{H}\mathbf{H}^H)
+	   (\mI - \mathbf{H}\mathbf{H}^H)^H \right)
 	     \\
 	    \text{subject to  } \; &
 	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
 	\end{align}\label{mse_problem}
-	with $\mathbf{A} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
+	or further simplified into
+		\begin{align}
+	    \underset{\phase}{\text{minimize }}
+	    & \; - 2 \trace \left( \mathbf{H}\mathbf{H}^H\right) + \trace\left(\mathbf{H}\mathbf{H}^H \mathbf{H}\mathbf{H}^H\right)
+	     \\
+	    \text{subject to  } \; &
+	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
+	\end{align}\label{mse_problem_s}
+	with $\mathbf{H} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
 	We classify the terms of the resulting polynomial into two types:
 	cross types (e.g $(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$) and non-cross terms (e.g $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$). For non-cross terms, the phases will always cancel out ($\phi_i \phi_i^H = 1$). For the cross-terms, note that
 	for each term in the polynomial, the hermetian of the term is also in the polynomial sum (e.g both $\mG (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H$ and $ (\phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}\mG^H$). Because $trace(\mH^H) = trace(\mH)^*$, the complex component of these terms will always cancel. In the case of minimizing the MSE, this means that we want to minimize the resulting real component for all of these cross terms. In order to investigate further, we decompose the problem further. Neglecting the non-cross terms and using the linearity of the $trace$ operator with respect to scaling, we can equivalently consider the problem 
@@ -94,5 +102,10 @@ From problem \eqref{mse_problem_clear} it is clear that if all $\phi_{j} \; j \n
 For a given step of this algorithm in which $\phi_{i}$ the update is determined by a sum $\phi_{i}a + b$ and $\phi_{i}$ is chosen so at to maximize the 
 complex component of the sum (which we will be canceled out by its complex conjugate.
 The numerical results below indicate the impact of this optimization technique on the MSE of the IRS system described above. 
+
+\begin{enumerate}
+\item
+	Always compare to the matched filter with random phases
+\end{enumerate}
 \bibliography{bibliography}
 \end{document}

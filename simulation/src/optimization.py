@@ -34,7 +34,11 @@ def optimize_phases(coefficients, adjacency, num_repetitions=1):
             #         min_power = cur
             #         best_phase_ind = phase_ind
             # adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
-            best_phase = np.angle(total_off) + np.pi - np.angle(poly_code @ coefficients)
+            #   Adjust phase to minimize the real component of the resulting sum
+            # best_phase = np.angle(total_off) + np.pi - np.angle(poly_code @ coefficients)
+            best_phase = np.conjugate(np.angle(total_off)) - np.angle(poly_code @ coefficients)
+            # best_phase = np.angle(total_off) - np.angle(poly_code @ coefficients)
+            # best_phase = - np.angle(poly_code @ coefficients)
             final_phases[elem_ind] *= np.exp(1j * best_phase)
             adjustment = np.exp(1j * best_phase) * poly_code * coefficients
             coefficients = off_elements + adjustment

@@ -6,16 +6,20 @@ num_distrete_vals = 4
 num_repetitions = 2
 rep_val = []
 complex_coefficient = np.random.uniform(-10, 10, 100) + 1j * np.random.uniform(-10, 10, 100)
-phase_adjacency = np.random.randint(0, 100, (num_elements, 50))
+phase_adjacency = np.random.randint(0, 100, (num_elements, 10))
 coded = np.zeros((num_elements, complex_coefficient.size))
 for i in range(phase_adjacency.shape[0]):
     for j in range(phase_adjacency.shape[1]):
         coded[i, phase_adjacency[i, j]] = 1
+coded = np.concatenate((coded, coded), axis=1)
+complex_coefficient = np.concatenate((complex_coefficient, np.conjugate(complex_coefficient)))
 cur_sum = 0
 min_power = np.inf
 original = np.abs(np.sum(complex_coefficient))
+check = []
 for rep_ind in range(num_repetitions):
     for elem_ind in range(num_elements):
+        check.append(np.abs(np.sum(complex_coefficient)))
         #   For each phase option choose the one resulting in the largest current sum
         best_phase_ind = 0
         # min_power = np.inf
@@ -29,11 +33,12 @@ for rep_ind in range(num_repetitions):
         #         min_power = cur
         #         best_phase_ind = phase_ind
         # adjustment = np.exp(1j*best_phase_ind*(np.pi/2))*poly_code*complex_coefficient
-        check = np.angle(poly_code@complex_coefficient)
+        # check = np.angle(poly_code@complex_coefficient)
         best_phase = np.angle(total_off) + np.pi - np.angle(poly_code@complex_coefficient)
         adjustment = np.exp(1j*best_phase)*poly_code*complex_coefficient
         complex_coefficient = off_elements + adjustment
         # min_power = np.abs(np.sum(complex_coefficient))
+    # rep_val.append(np.abs(np.sum(complex_coefficient)))
     rep_val.append(np.abs(np.sum(complex_coefficient)))
 gain = original - rep_val
 print(gain)
