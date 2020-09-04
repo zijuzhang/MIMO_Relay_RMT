@@ -18,7 +18,7 @@ for size in IRS_sizes:
         F1 = c_rand(num_reflectors, num_tx, var=1)
         F2 = c_rand(num_rx, num_reflectors, var=1)
         rand = random_phase(num_reflectors)
-        transmit_matched_rand = precode_mf(F2@rand@F1)
+        transmit_matched_rand = precode_mf(F2@F1)
         coefficients = []
         #   Choose the optimal IRS phases using the known channels with 0 phase at the IRS elements.
         for elem_ind in range(num_reflectors):
@@ -29,8 +29,8 @@ for size in IRS_sizes:
                 f1i = F1[elem_ind, :]
                 f2j = F2[:, elem2_ind]
                 f1j = F1[elem2_ind, :]
-                # coefficient = f1i.T@transmit_matched_rand@hermetian(transmit_matched_rand)@np.conjugate(f1j)*hermetian(f2j)@f2i
-                coefficient = f1i.T@np.conjugate(f1j)*hermetian(f2j)@f2i
+                coefficient = f1i.T@transmit_matched_rand@hermetian(transmit_matched_rand)@np.conjugate(f1j)*hermetian(f2j)@f2i
+                # coefficient = f1i.T@np.conjugate(f1j)*hermetian(f2j)@f2i
                 coefficients.append(coefficient)
         phase_adjacency = np.zeros((num_reflectors, len(coefficients)))
         ind = 0
@@ -41,10 +41,8 @@ for size in IRS_sizes:
                 phase_adjacency[elem3_ind, ind + elem2_ind] = 1
                 pass
             ind += num_reflectors - elem_ind - 1
-        # optimal_phases = optimize_phases(np.asarray(coefficients), phase_adjacency, 1)
-        #TODO toggle negative
         optimal_phases = optimize_phases(np.asarray(coefficients), phase_adjacency, 2)
-        check1 = np.trace(F2@rand@F1@hermetian(F2@rand@F1))
+        check1 = np.trace(F2@F1@hermetian(F2@F1))
         check2 = np.trace(F2 @ np.diag(optimal_phases) @ F1 @ hermetian(F2 @ np.diag(optimal_phases) @ F1))
         #   Now perform comparison of optimized phases with random/uniform phases
         # transmit_symbols = BPSK(num_rx)
