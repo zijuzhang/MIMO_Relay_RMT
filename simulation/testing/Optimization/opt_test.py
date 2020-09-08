@@ -5,7 +5,8 @@ num_elements = 20
 num_distrete_vals = 4
 num_repetitions = 2
 rep_val = []
-complex_coefficient = np.random.uniform(-10, 10, 100) + 1j * np.random.uniform(-10, 10, 100)
+# complex_coefficient = np.random.uniform(-10, 10, 100) + 1j * np.random.uniform(-10, 10, 100)
+complex_coefficient = c_rand(100, 1).flatten()
 phase_adjacency = np.random.randint(0, 100, (num_elements, 10))
 coded = np.zeros((num_elements, complex_coefficient.size))
 for i in range(phase_adjacency.shape[0]):
@@ -18,6 +19,7 @@ min_power = np.inf
 original = np.abs(np.sum(complex_coefficient))
 check = []
 iterations_skipped = 0
+itr = 0
 for rep_ind in range(num_repetitions):
     for elem_ind in range(num_elements):
         check.append(np.sum(complex_coefficient)+np.sum(np.conjugate(complex_coefficient)))
@@ -34,10 +36,12 @@ for rep_ind in range(num_repetitions):
         if (new <= check[-1]):
             complex_coefficient = off_elements + adjustment
         else:
-            iterations_skipped +=1
+            iterations_skipped += 1
+        itr += 1
         # complex_coefficient = off_elements + adjustment
     rep_val.append(np.sum(complex_coefficient)+np.sum(np.conjugate(complex_coefficient)))
 check1 = np.linalg.norm(rep_val[-1] - original)/np.linalg.norm(original)
-improvement = 20*np.log(np.linalg.norm(rep_val[-1] - original)/np.linalg.norm(original))
+# improvement = 20*np.log(np.linalg.norm(rep_val[-1] - original)/np.linalg.norm(original))
+improvement = np.linalg.norm(rep_val[-1] - original)/np.linalg.norm(original)
 print(f"improvement: {improvement}")
-print(f"skipped iterations: {iterations_skipped}")
+print(f"fraction skipped iterations: {iterations_skipped/itr}")

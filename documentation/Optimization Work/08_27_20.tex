@@ -32,16 +32,16 @@ with
 	\Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}
 	\end{equation}
 	for an IRS with $N_S$ reflective elements. 
-In the following, we will assume that a matched filter is used at the transmitter. Further we will evaluate the performance of the system using the Mean Square Error given by 
+In the following, we will assume that a matched filter is used at the transmitter and we will evaluate the performance of the system using the Mean Square Error given by 
 \begin{equation}
-E\left[\|  \vs - (\mG + \Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\mG + \Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})^H\vs) \|^2 \right]
+E\left[\|  \vs - (\mG + \Sigma_{i=1}^{N_S} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})\mathbf{W}\vs) \|^2 \right]
 \end{equation}
-in which we do not consider the noise at the receiver. 
-In the following we assume that the elements of the IRS can not only adjust the phases of the impinging waves but may also be "turned off" such that they are not included in the channel.
+in which $\mathbf{W}$ is the linear precoder at the transmitter. We do not consider the noise at the receiver in this utility function. 
+In the following we assume that the elements of the IRS can adjust the phases of the impinging waves and may also be "turned off" such that they are not included in the channel.
 In order to minimize the overhead of pilot acquisition, we estimate the CSE in the following manner. 
 \begin{enumerate}
 \item
-We leave all IRS elements \emph{on} to first find the full matched filter at the Tx. Assuming that we estimate the entire channel $\mH_{Total}$, we will not have sufficient information to estimate the individual components of the IRS component of the channel $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and thus we cannot optimize with respect to $\phi_i $.
+We leave all IRS elements \emph{on} to first find the full channel   $\mH_{Total}$(and then transmit this to the Tx). At this point, we will not have sufficient information to estimate the individual components of the IRS component of the channel $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and thus we cannot optimize with respect to $\phi_i $.
 \item
 	In the next iteration of pilots, we turn off all elements in order to estimate the LOS matrix $\mG $.
 \item
@@ -49,29 +49,29 @@ We leave all IRS elements \emph{on} to first find the full matched filter at the
 	the path through a specific IRS element given by $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$.
 	Using this information, we can now use the expression 
 	\begin{equation}
-E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})(\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})\vs  \|^2 \right]
+E\left[\|  \vs - (\mG +  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})\mathbf{W}\vs  \|^2 \right]
 \end{equation}
+in which $\mH_{Total} =  \mH_1 + \Sigma_{i=1}^{1} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$
 	\item
 		Repeating the procedure above, we estimate additional elements $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ and perform the optimization over increasing number of phases.
 	\item 
 		We are investigating how this optimization enhances performance w.r.t the MSE as well a how the correlation in the channel may change this. 
-		Note that once correlation is considered, we may want to decide the phase of elements in close proximity whose channels we have not yet estimated.
+		Note that once correlation is considered, the order in which the channels through each element $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$ may impact the optimization performance .
 \end{enumerate}
 \section{Optimization Problem}
 First, we rewrite the above utility function as
 	\begin{equation}
 E\left[ \trace\left((\vs - \mathbf{H}\mathbf{W}\vs)(\vs - \mathbf{H}\mathbf{W}\vs)^H \right)\right]
 \end{equation}
-Assuming $\mathbf{H}$ and $\mathbf{W}$ (The Tx linear precoder) to be constant over a coherence period, the expectation applies only to $\vs \vs^H$ 
-and we consider equal power allocation at the transmitter such that the utility function becomes
+Assuming $\mathbf{H}$ and $\mathbf{W}$ to be constant over a coherence period, the expectation applies only to $\vs \vs^H$. If we consider equal power allocation at the transmitter, the utility function becomes
 	\begin{equation}
 \trace\left((\mI - \mathbf{H}\mathbf{W})(\mI - \mathbf{H}\mathbf{W})^H \right).
 \end{equation}
-After finding the first $K \leq N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem with respect to the IRS phases for the case of a Matched Filter at the Tx is given by
+After finding $K \leq N_S$ IRS element channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem with respect to the IRS phases for the case of a Matched Filter at the Tx is given by
 	\begin{align}
 	    \underset{\phase}{\text{minimize }}
-	    & \; \trace\left((\mI - \mathbf{H}\mathbf{H}^H)
-	   (\mI - \mathbf{H}\mathbf{H}^H)^H \right)
+	    & \; \trace\left((\mI - \mathbf{H}\mathbf{W})
+	   (\mI - \mathbf{H}\mathbf{W})^H \right)
 	     \\
 	    \text{subject to  } \; &
 	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
@@ -79,19 +79,20 @@ After finding the first $K \leq N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_
 	or further simplified into
 		\begin{align}
 	    \underset{\phase}{\text{minimize }}
-	    & \; - 2 \trace \left( \mathbf{H}\mathbf{H}^H\right) + \trace\left(\mathbf{H}\mathbf{H}^H \mathbf{H}\mathbf{H}^H\right)
+	    & \; - \trace \left( \mathbf{H}\mathbf{W}\right) - \trace \left( \mathbf{H}\mathbf{W}\right)^* +
+	    \trace\left(\mathbf{H}\mathbf{W} \mathbf{W}^H \mathbf{H}^H\right)
 	     \\
 	    \text{subject to  } \; &
 	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
-	\end{align}\label{mse_problem_s}
+	\end{align}\label{mse_problem_full}
 	with $\mathbf{H} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
-	Expanding the above utility function and neglecting the terms without any phase coefficients, the above utility function becomes
+	Expanding the above utility function and neglecting the terms without any phase coefficients, the cost function becomes
 	\begin{equation}
 	\Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right ) +  \Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right)^H.
 	\end{equation}
 	From this expression it can be seen that the complex component of each term will be canceled by its complex conjugate.
 	One method to potentially perform this optimization is to iterate over each element of the IRS and choose $\phi_{i}$ such that 
-	the resulting components of the sum have entirely negative and real. In this case, each step of the algorithm solves the problem
+	the corresponding component of the sum is real and negative. In this case, each step of the algorithm solves the problem
 			\begin{align}
 	    \underset{\phi_k}{\text{minimize }}
 	    & \; \phi_k c + \phi_k^* c^* + a 
@@ -99,14 +100,20 @@ After finding the first $K \leq N_S$ IRS channels $\mathbf{h}_{2,i}\mathbf{h}^T_
 	    \text{subject to  } \; &
 	    | \phi_i | = 1   \; \forall i \in {1 \cdots	 K}
 	\end{align}\label{mse_problem_s}
-	in which $a \in \reals$ and $c \in \complex$ so the result is simply to choose $\phi_k$ to make $\phi_k c$ negative and real.
-	The primary difficulty to performing such and optimization is finding the all values of $ c_i $ for each $\phi_{k}$ as each phase will be associated with 
-	more than one $ c_i $ (particularly in the case of the matched filter precoder).
+	in which $a \in \reals$ and $c \in \complex$ so the result is simply to choose $\phi_k$ such that $\phi_k c$ is negative and real.
+
 \section{Optimization Implementation}
-To begin solving this problem I considered randomly selecting many complex numbers and corresponding phases in order to model the utility function 
+To begin solving this problem I considered randomly selecting many complex numbers and corresponding phases in order to model the cost function 
 	\begin{equation}
 	\Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right ) +  \Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right)^H.
 	\end{equation}
-	The algorithm then iterates through each $\phi_{k}$ shifts the phase such that the result is a negative real (only if this update improves the utility function).
+	The algorithm then iterates through each $\phi_{k}$ and shifts the phase such $\phi_{k} c_i$ a real and negative.
+	Below is an example in which 100 numbers and their complex conjugates from $\mathcal{NC}(0,1)$ are assigned phase coefficients which are then used in the above optimization 
+	problem. I have the algorithm for this test working but it is more difficult to apply this to the IRS case (numerical results) as I need to find the coefficient $c_i$ for each phase term.
+	\par
+	Next I considered the case in which an arbitrary linear precoding filter is used at the transmitter and the MSE is minimized.
+	In this case, each step of the algorithm is the same as Problem \eqref{mse_problem_s}.
+	
+	 with the matched filter is finding the all values of $ c_i $ for each $\phi_{k}$ as each phase will be associated with more than one $ c_i $.
 \bibliography{bibliography}
 \end{document}
