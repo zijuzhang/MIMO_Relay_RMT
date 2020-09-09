@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 average = 50
 num_tx = 16
 num_rx = 10
-IRS_sizes = [16, 164, 128]
+IRS_sizes = [16, 64]
 MSE_opt_size = []
 MSE_rand_size = []
 for size in IRS_sizes:
@@ -40,10 +40,12 @@ for size in IRS_sizes:
         # Check that the sum is equal to the original channel
         phase_adjacency = np.concatenate((np.zeros((num_reflectors, len(coefficients))), np.eye(num_reflectors)), axis=1)
         # correct = np.allclose(Fc, F2@F1)
+        extra = 1j*-1j
         for elem_ind in range(num_reflectors):
             f2i = F2[:, elem_ind]
             f1i = F1[elem_ind, :]
             coefficients.append(-np.trace(np.outer(f2i, f1i)@beamformer))
+            extra += np.trace(np.outer(f2i, f1i)@beamformer@hermetian(np.outer(f2i, f1i)@beamformer))
         ind = 0
         for elem_ind in range(num_reflectors-1):
             for elem2_ind in range(num_reflectors - elem_ind - 1):
@@ -51,14 +53,11 @@ for size in IRS_sizes:
                 elem3_ind = elem2_ind + elem_ind + 1
                 phase_adjacency[elem3_ind, ind + elem2_ind] = 1
             ind += num_reflectors - elem_ind - 1
-        optimal_phases, improvements = optimize_phases(np.asarray(coefficients), phase_adjacency, improvements=True)
+        optimal_phases, improvements = optimize_phases(np.asarray(coefficients), phase_adjacency, F2, F1, num_repetitions=2, improvements=True)
         H_opt = F2@optimal_phases@F1
-        beamformer_opt = precode_mf(H_opt)
-        #TODO WORK ON THIS POINT check_2 should be equal to check_3
-        check_1 = np.trace((np.eye(num_rx) - H_t@beamformer)@hermetian((np.eye(num_rx) - H_t@beamformer))) - num_rx
-        check_2 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
-        # check_3 = non_cross + improvements[-1]
-        check_3 = non_cross + np.sum(coefficients) + np.sum(np.conjugate(coefficients))
+        check_1 = np.trace(-H_t@beamformer) + np.conjugate(np.trace(-H_t@beamformer)) + np.trace(H_t@beamformer@hermetian(H_t@beamformer))
+        check_2 = improvements[-1]
+        check_3 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
         #   Now perform comparison of optimized phases with random/uniform phases
         # transmit_symbols = BPSK(num_rx)
         noise = c_rand(num_rx, 1, var=1).flatten()
