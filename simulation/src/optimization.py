@@ -3,7 +3,7 @@ Optimization tools for selecting the phases as IRS elements
 """
 import numpy as np
 
-def optimize_phases(coefficients, adjacency, num_repetitions=1):
+def optimize_phases(coefficients, adjacency, num_repetitions=1, improvements=False):
     """
     Given a sum of complex numbers rotated by a number of phases with overlap, this is a sub-optimal algorithm for
     finding a set of phases to minimize this sum. Note that the complex numbers are implied to be included in a
@@ -36,4 +36,7 @@ def optimize_phases(coefficients, adjacency, num_repetitions=1):
         min_power = np.sum(coefficients) + np.sum(np.conjugate(coefficients))
         rep_val.append(min_power)
     #   Return the final phase offset of each IRS element (i.e. the total phase offset applied during optimization).
-    return final_phases
+    if improvements:
+        return np.diag(final_phases), progress
+    else:
+        return np.diag(final_phases)

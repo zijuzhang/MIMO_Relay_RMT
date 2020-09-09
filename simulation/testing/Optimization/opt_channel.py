@@ -20,12 +20,13 @@ for size in IRS_sizes:
         rand = random_phase(num_reflectors)
         beamformer = precode_mf(F2@F1)
         coefficients = []
-        # Fc = -1j*1j*np.zeros((num_rx, num_tx))
+        non_cross = -1j*1j*0
         for elem_ind in range(num_reflectors):
             ind = elem_ind * num_reflectors
             f2i = F2[:, elem_ind]
             f1i = F1[elem_ind, :]
             i_mat = np.outer(f2i, f1i)
+            non_cross += np.trace(i_mat@beamformer@hermetian(i_mat@beamformer))
             # Fc += i_mat
             for elem2_ind in range(num_reflectors - elem_ind - 1):
                 elem2_ind += elem_ind + 1
@@ -50,12 +51,14 @@ for size in IRS_sizes:
                 elem3_ind = elem2_ind + elem_ind + 1
                 phase_adjacency[elem3_ind, ind + elem2_ind] = 1
             ind += num_reflectors - elem_ind - 1
-        optimal_phases = np.diag(optimize_phases(np.asarray(coefficients), phase_adjacency))
+        optimal_phases, improvements = optimize_phases(np.asarray(coefficients), phase_adjacency, improvements=True)
         H_opt = F2@optimal_phases@F1
         beamformer_opt = precode_mf(H_opt)
-        check_1 = np.trace((np.eye(num_rx) - H_t@beamformer)@hermetian((np.eye(num_rx) - H_t@beamformer)))
-        check_2 = np.trace((np.eye(num_rx) - H_opt@beamformer)@hermetian((np.eye(num_rx) - H_opt@beamformer)))
-
+        #TODO WORK ON THIS POINT check_2 should be equal to check_3
+        check_1 = np.trace((np.eye(num_rx) - H_t@beamformer)@hermetian((np.eye(num_rx) - H_t@beamformer))) - num_rx
+        check_2 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
+        # check_3 = non_cross + improvements[-1]
+        check_3 = non_cross + np.sum(coefficients) + np.sum(np.conjugate(coefficients))
         #   Now perform comparison of optimized phases with random/uniform phases
         # transmit_symbols = BPSK(num_rx)
         noise = c_rand(num_rx, 1, var=1).flatten()
