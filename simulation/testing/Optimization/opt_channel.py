@@ -2,10 +2,10 @@ import numpy as np
 from src.lin_alg import *
 from src.optimization import *
 import matplotlib.pyplot as plt
-average = 50
+average = 100
 num_tx = 16
 num_rx = 10
-IRS_sizes = [16, 64]
+IRS_sizes = [16, 64, 128]
 MSE_opt_size = []
 MSE_rand_size = []
 for size in IRS_sizes:
@@ -56,16 +56,16 @@ for size in IRS_sizes:
         optimal_phases, improvements = optimize_phases(np.asarray(coefficients), phase_adjacency, F2, F1, num_repetitions=2, improvements=True)
         H_opt = F2@optimal_phases@F1
         check_1 = np.trace(-H_t@beamformer) + np.conjugate(np.trace(-H_t@beamformer)) + np.trace(H_t@beamformer@hermetian(H_t@beamformer))
-        check_2 = improvements[-1]
-        check_3 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
+        check_2 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
+
         #   Now perform comparison of optimized phases with random/uniform phases
         # transmit_symbols = BPSK(num_rx)
         noise = c_rand(num_rx, 1, var=1).flatten()
         transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
-        received_rand = F2@F1@beamformer@transmit_symbols
+        received_rand = F2@F1@beamformer@transmit_symbols + noise
         #   Line below could be done by going through each element and shifting the phase. Line below is faster.
         transmit_matched_opt = precode_mf(F2@optimal_phases@F1)
-        received_opt = F2@optimal_phases@F1@beamformer@transmit_symbols
+        received_opt = F2@optimal_phases@F1@beamformer@transmit_symbols + noise
         MSE_rand.append(10 * np.log(np.power(np.linalg.norm(received_rand - transmit_symbols), 2)))
         MSE_optimized.append(10 * np.log(np.power(np.linalg.norm(received_opt - transmit_symbols), 2)))
     MSE_opt_size.append(np.average(MSE_optimized))
@@ -77,7 +77,8 @@ ave_plt.set_ylabel("Average MSE  (dB)")
 ave_plt.set_xlabel("Number of IRS elements (dB)")
 ave_plt.set_yscale('log')
 ave_plt.legend(loc="upper left")
-ave_plt.plot(IRS_sizes, MSE_opt_size, '-o', label='opt MSE MF')
+ave_plt.plot(IRS_sizes, MSE_opt_size, '-o', label='optimized MSE MF')
 ave_plt.plot(IRS_sizes, MSE_rand_size, '-o', label='rand MSE MF')
 ave_plt.legend(loc="upper left")
+ave_plt.set_title(f'MSE  vs Number of IRS elements with N_T = {num_tx}, N_R = {num_rx}')
 plt.show()
