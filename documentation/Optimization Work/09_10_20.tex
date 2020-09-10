@@ -63,11 +63,15 @@ First, we rewrite the above utility function as
 	\begin{equation}
 E\left[ \trace\left((\vs - \mathbf{H}\mathbf{W}\vs)(\vs - \mathbf{H}\mathbf{W}\vs)^H \right)\right]
 \end{equation}
+or equivalently
+	\begin{equation}
+ \trace\left((\mI - \mathbf{H}\mathbf{W})E\left[\vs\vs^H\right](\mI - \mathbf{H}\mathbf{W})^H \right)
+\end{equation}
 Assuming $\mathbf{H}$ and $\mathbf{W}$ to be constant over a coherence period, the expectation applies only to $\vs \vs^H$. If we consider equal power allocation at the transmitter, this becomes
 	\begin{equation}
 \trace\left((\mI - \mathbf{H}\mathbf{W})(\mI - \mathbf{H}\mathbf{W})^H \right).
 \end{equation}
-After finding $K \leq N_S$ IRS element channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, the optimization problem with respect to the IRS phases is given by
+The MSE optimization with respect to the IRS phases is given by
 	\begin{align}
 	    \underset{\phase}{\text{minimize }}
 	    & \; \trace\left((\mI - \mathbf{H}\mathbf{W})
@@ -77,56 +81,75 @@ After finding $K \leq N_S$ IRS element channels $\mathbf{h}_{2,i}\mathbf{h}^T_{1
 	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
 	\end{align}\label{mse_problem}
 	which is further simplified into
-		\begin{align}
-	    \underset{\phase}{\text{minimize }}
+	\begin{subequations}
+	\label{mse_problem_s}
+	\begin{align}
+	   	    \underset{\phi_k}{\text{minimize }}
 	    & \; - \trace \left( \mathbf{H}\mathbf{W}\right) - \trace \left( \mathbf{H}\mathbf{W}\right)^* +
 	    \trace\left(\mathbf{H}\mathbf{W} \mathbf{W}^H \mathbf{H}^H\right)
 	     \\
 	    \text{subject to  } \; &
-	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}
-	\end{align}\label{mse_problem_full}
+	    | \phi_i | = 1   \; \forall i \in {1 \cdots	 K}
+	\end{align}
+	\end{subequations}	
+	
 	with $\mathbf{H} = (\mG +  \mH_1 + \Sigma_{i=1}^{K} \phi_i \mathbf{h}_{2,i}\mathbf{h}^T_{1,i})$ (to fit on page).
 	Expanding the above utility function and neglecting the terms without any phase coefficients, the cost function becomes
 	\begin{equation}
-	\Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right ) +  \Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right)^H.
+	\Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right ) +  \Sigma_{i=1}^{N} \left(\prod_{k=1}^{M_i}\phi_{k} c_i \right)^H*
 	\end{equation}
 	From this expression it can be seen that the complex component of each term will be canceled by its complex conjugate.
 	One method to perform this optimization is to iterate over each element of the IRS and choose $\phi_{i}$ such that 
-	the corresponding component of the sum is real and negative. In this case, each step of the algorithm solves the problem
-			\begin{align}
-	    \underset{\phi_k}{\text{minimize }}
+	the corresponding component of the sum is real and negative. Each step of the algorithm solves the problem
+	\begin{subequations}
+	\label{algo_step}
+	\begin{align}
+	   	    \underset{\phi_k}{\text{minimize }}
 	    & \; \phi_k c + \phi_k^* c^* + a 
 	     \\
 	    \text{subject to  } \; &
 	    | \phi_i | = 1   \; \forall i \in {1 \cdots	 K}
-	\end{align}\label{mse_problem_s}
+	\end{align}
+	\end{subequations}
 	in which $a \in \reals$ and $c \in \complex$ so the result is simply to choose $\phi_k$ such that $\phi_k c$ is negative and real.
+	Note that if the transmitter has found $K \leq N_S$ IRS element channels, $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, then the optimization can only be performed over
+	the elements whose channel , $\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}$, is known (i.e. Step 3 of the pilot symbols has been performed for $\phi_i$).
 
 \section{Optimization Implementation}
-	First, I considered the case in which an arbitrary linear precoding filter is used at the transmitter (in this case the matched filter to the channel when all IRS elements have phase $\phi_i = 1 $) and the MSE is minimized.
-	In this case, each step of the algorithm is the same as Problem \eqref{mse_problem_s}.
-	The results for a system using a matched filter (for the channel before IRS updates) at the transmitter are shown in Figures \ref{MSE_opt} and \ref{MSE_opt_noise} and indicate that increasing the number of elements at the IRS can allow for improved optimization gains.
+	First, I considered the case in which an arbitrary linear precoding filter is used at the transmitter (in this case the matched filter to the channel when all IRS elements have phase $\phi_i = 1 $).
+	Each step of the algorithm is the same as Problem \eqref{algo_step}.
+	All channel elements, transmit symbols and noise are generated using $\mathcal{CN}(0,1)$.
+	The results are shown in Figures \ref{MSE_opt} and \ref{MSE_opt_noise} for the cases with and without noise at the receiver. These results indicate that increasing the number of elements at the IRS can allow for improved optimization gains.
 	\begin{figure}[H]
 	\includegraphics[width= 16cm,height = 13cm]{figures/MSE_optimized}
 	  \caption{MSE with/without optimization versus number of IRS elements without receiver noise.}
 	  	  \label{MSE_opt}
 	\end{figure}
-		The result in Figure \ref{MSE_opt} seems  strange because for infinite SNR case (i.e. no receiver noise), the matched filter should have optimal MSE right?
+		The result in Figure \ref{MSE_opt} seems  strange because for the infinite SNR case (i.e. no receiver noise), the matched filter should have optimal MSE right?
 	\begin{figure}[H]
 	\includegraphics[width= 16cm,height = 13cm]{figures/MSE_optimized_noise}
 	  \caption{MSE with/without optimization versus number of IRS elements with receiver noise.}
 	  	  \label{MSE_opt_noise}
 	\end{figure}
+	
+%For certain choices of $\mathbf{W}$ this phase optimization could be performed during the phase optimization step of an alternating optimization algorithm.
 \section{Next Steps}
 \begin{itemize}
 \item
-The  next step will be to include the impact of the phases on the choice of the beamformer matrix. To simplify the optimization setup, the beamformer was fixed in the above results. For a linear beamformer, this should result in a similar optimization setup as \ref{mse_problem_s}, however, finding the coefficients to the phases will be more difficult and there will be many more terms in the sum. 
+The next step is to extend the MSE/phase optimization to also include the impact of the phases on the beamformer. For example in the case of the matched filter, this would take the form of 
+		\begin{align}
+	    \underset{\phase}{\text{minimize }}
+	    & \; - \trace \left( \mathbf{H}\mathbf{H}\right) - \trace \left( \mathbf{H}\mathbf{H}\right)^* +
+	    \trace\left(\mathbf{H}\mathbf{H} \mathbf{H}^H \mathbf{H}^H\right)
+	     \\
+	    \text{subject to  } \; &
+	    | \phi_i | = 1  \forall i \in {1 \cdots	 K}.
+	\end{align}\label{mse_problem_full}
+To simplify the initial optimization setup in the above results, the beamformer was fixed before the MSE optimization w.r.t. the phases. For a linear beamformer, this should result in a similar optimization setup as \ref{mse_problem_s}, however, finding the coefficients to the phases will be more difficult and there will be many more terms in the sum.  
 \item
-	Next, the impact of CSI knowledge on the optimization gain should be studied. In this case, only some of the IRS paths should be used in the optimization and the result should be compared to the full CSI case. As this would be similar to the case of essentially having fewer 
+	Next, the impact of CSI knowledge on the optimization gain should be studied. In this case, only some of the IRS paths should be used in the optimization and the result should be compared to the full CSI case. 
 \item
 	Finally, the impact of correlation of the impact of the phase optimization should be studied. And perhaps look at the optimal order in which to estimate CSI for the correlated system if not all channels will be found. 
 \end{itemize}
-
-
 \bibliography{bibliography}
 \end{document}

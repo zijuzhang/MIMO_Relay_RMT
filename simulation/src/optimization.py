@@ -4,7 +4,7 @@ Optimization tools for selecting the phases as IRS elements
 import numpy as np
 from src.lin_alg import *
 
-def optimize_phases(coefficients, adjacency, F2, F1, num_repetitions=1, improvements=False):
+def optimize_phases(coefficients, adjacency, F2, F1,  csi = 1, num_repetitions=1, improvements=False):
     """
     Given a sum of complex numbers rotated by a number of phases with overlap, this is a sub-optimal algorithm for
     finding a set of phases to minimize this sum. Note that the complex numbers are implied to be included in a
@@ -15,15 +15,17 @@ def optimize_phases(coefficients, adjacency, F2, F1, num_repetitions=1, improvem
     :param num_repetitions:
     :return:
     """
+    #   Check how many or the IRS paths are known.
+
     #   Do not need to encode adjacency matrix since it is structured.
-    num_elements = adjacency.shape[0]
+    effective_num_elements = int(adjacency.shape[0]*csi)
     final_phases = -1j*1j*np.ones((adjacency.shape[0]))
     #   First setup binary matrix for easier optimization
     H_opt = F2 @ F1
     beamformer = precode_mf(H_opt)
     progress = [np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))]
     for rep_ind in range(num_repetitions):
-        for elem_ind in range(num_elements):
+        for elem_ind in range(effective_num_elements):
             #   For each phase option choose the one resulting in the largest current sum
             poly_code = adjacency[elem_ind, :]
             off_elements = coefficients * np.logical_not(poly_code)
