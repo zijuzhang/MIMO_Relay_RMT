@@ -1,6 +1,7 @@
-Consider the SISO channel with an RIS given by $y = \vh_{rs}^H \phase \vh_{st}$. In this case, $ \phase$ should be chosen optimally such that 
-the phases all add constructively at the receiver (\ie $h_{rs,i} \phi_k h_{st,j}$ add constructively at the receiver). 
-In the case of an i.i.d Rayleigh channel with elements $\CNO$ and $\sigma^2_{\text{noise}} =1$, the SNR at the receiver is given by $\gamma = N$.
-Intuitively if the channel gains are normalized such that the received power is normalized for any system size $N$ the IRS offers no gain. 
-In this case we can achieve this normalization by enforcing that elements of the a channel matrix $\mH \in \CN^{N \times K}$ have variance $\frac{1}{N}$.
-This observation highlights an point that must be considered when performing asymptotic analysis; the received power must be normalized.
+Consider the SISO channel with an IRS given by $y = \vh_{rs}^H \phase \vh_{st}$. To maximize capacity in this case, $ \phase$ should be chosen such that 
+the each incoming signal at the receiver adds constructively (\eg $\angle h_{rs,i} \phi_k h_{st,j} = 0$). 
+In the case of an i.i.d Rayleigh channel with elements $\mathcal{CN} (0,1)$ and $\sigma^2_{\text{noise}} =1$, the SNR at the receiver is given by $\gamma = N$.
+This observation highlights the point that when performing asymptotic analysis (\ie when $N \rightarrow \infty$) the received power (or metric of interest) should be normalized with respect to the system size.
+Extending this to the case of a MIMO channel, for an $N_R \times N_T$ channel $\mH$, we can achieve this normalization by enforcing that elements of the a channel matrix  have variance $\frac{1}{N_R}$ such that even for concatenated MIMO channels (\eg $\mH_2 \mH_1$) the power of the received signal is still
+ $\Expect \left[ \trace \left(\mH_2 \mH_1\vx (\mH_2 \mH_1\vx)^H \right)\right] = 1$ when the total transmit power is normalized to 1. 
+ (Discuss why this is important to consider the conservation of energy?
