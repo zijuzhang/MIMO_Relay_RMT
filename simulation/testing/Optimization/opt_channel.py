@@ -2,7 +2,7 @@ import numpy as np
 from src.lin_alg import *
 from src.optimization import *
 import matplotlib.pyplot as plt
-average = 100
+average = 10
 num_tx = 16
 num_rx = 10
 IRS_sizes = [16, 64, 128]
@@ -19,6 +19,7 @@ for size in IRS_sizes:
         H_t = F2@F1
         rand = random_phase(num_reflectors)
         beamformer = precode_mf(F2@F1)
+        check = H_t@beamformer
         # beamformer = precode_zf(F2@F1)
         coefficients = []
         non_cross = -1j*1j*0
@@ -62,31 +63,32 @@ for size in IRS_sizes:
         check_2 = np.trace(-H_opt@beamformer) + np.conjugate(np.trace(-H_opt@beamformer)) + np.trace(H_opt@beamformer@hermetian(H_opt@beamformer))
         #   Now perform comparison of optimized phases with random/uniform phases
         # transmit_symbols = BPSK(num_rx)
-        transmit_averge = 100
+        transmit_averge = 10
         trasmit_ave_list_rand = []
         trasmit_ave_list_opt = []
         for i in range(transmit_averge):
-            noise = c_rand(num_rx, 1, var=1).flatten()
-            transmit_symbols = c_rand(num_rx, 1, var=1).flatten()
-            received_rand = F2@F1@beamformer@transmit_symbols
+            noise = c_rand(num_rx, 1).flatten()
+            transmit_symbols = c_rand(num_rx, 1).flatten()
+            received_rand = H_t@beamformer@transmit_symbols + noise
+            check1 = np.power(np.linalg.norm(received_rand - transmit_symbols), 2)
             trasmit_ave_list_rand.append(np.power(np.linalg.norm(received_rand - transmit_symbols), 2))
         #   Line below could be done by going through each element and shifting the phase. Line below is faster.
         #     transmit_matched_opt = precode_mf(F2@optimal_phases@F1)
-            received_opt = F2@optimal_phases@F1@beamformer@transmit_symbols
-            trasmit_ave_list_opt.append(np.power(np.linalg.norm(received_opt - transmit_symbols), 2))
+            received_opt = F2@optimal_phases@F1@beamformer@transmit_symbols + noise
+            check2 = np.power(np.linalg.norm(received_opt - transmit_symbols), 2)
+            trasmit_ave_list_opt.append(np.power(np.linalg.norm(received_opt-transmit_symbols), 2))
         MSE_rand.append(10 * np.log(np.average(trasmit_ave_list_rand)))
         MSE_optimized.append(10 * np.log(np.average(trasmit_ave_list_opt)))
     MSE_opt_size.append(np.average(MSE_optimized))
     MSE_rand_size.append(np.average(MSE_rand))
-    
 fig = plt.figure()
 ave_plt = fig.add_subplot(1, 1, 1)
 ave_plt.set_ylabel("Average MSE  (dB)")
 ave_plt.set_xlabel("Number of IRS elements")
 ave_plt.set_yscale('log')
 ave_plt.legend(loc="upper left")
-ave_plt.plot(IRS_sizes, MSE_opt_size, '-o', label='optimized MSE MF')
-ave_plt.plot(IRS_sizes, MSE_rand_size, '-o', label='rand MSE MF')
+ave_plt.plot(IRS_sizes, MSE_opt_size, '-o', label='MSE: optimized phases')
+ave_plt.plot(IRS_sizes, MSE_rand_size, '-o', label='MSE: Random phases')
 ave_plt.legend(loc="upper left")
 ave_plt.set_title(f'MSE  vs Number of IRS elements with N_T = {num_tx}, N_R = {num_rx}')
 plt.show()

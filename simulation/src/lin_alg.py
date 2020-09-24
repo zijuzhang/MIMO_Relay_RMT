@@ -81,6 +81,7 @@ def precode_mf(channel, normalize=True):
     ret = hermetian(channel)
     for col in range(ret.shape[1]):
         ret[:, col] = ret[:, col]/np.power(np.linalg.norm(ret[:, col]), 2)
+        # ret[:, col] = ret[:, col]/np.linalg.norm(ret[:, col])
     return ret
 
 def precode_zf(channel):
