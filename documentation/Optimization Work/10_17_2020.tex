@@ -19,30 +19,20 @@
 \tableofcontents
 \section{Points from Last Meeting}
 \begin{enumerate}
-\item{High MSE Issue:} \par
-	As discussed with was a normalization error. Now I normalize the transmit vector $\vs$ to have total power 1. I normalize the noise vector $\vn$ in the same way.
-	Finally, for the linear beamformer $\mathbf{W}$, in the case of the matched filter, I normalize each column using $\frac{\mathbf{w}_i}{\|\mathbf{w}_i\|^2}$ so that
-	$\Expect\left[\mH\mW\right] = \mI$.
-	
-	\begin{figure}[H]
-	\includegraphics[width= 16cm,height = 13cm]{figures/Corrected_MSE}
-	  \caption{MSE with/without optimization versus number of IRS elements with receiver noise.}
-	  	  \label{MSE_opt_noise}
-	\end{figure}	
-	
-\item{Expectation Over Elements of Channel:} \par
-For the MSE Objective function with deterministic $\mW $ is 
+In the first iteration of CSI collection, 1 pilot is 
+\item{Issue with Expectation Over Elements of Channel:} \par
+	The MSE Objective function with deterministic $\mW $ is 
 	\begin{equation}
 	\Expect\left[\trace\left((\mathbf{s} - \mH \mW \mathbf{s} )  (\mathbf{s} - \mH \mW \mathbf{s} ) ^H  \right)\right]
 	\end{equation}
 		\begin{equation}
-	\trace\left(\Expect\left[ (\mI - \mH \mW  )  (\mI - \mH \mW  ) ^H \right] \Expect\left[ \mathbf{s}\mathbf{s}^H\right]\right)
+	\trace\left(\Expect\left[ (\mI - \mH \mW  )^H  (\mI - \mH \mW  ) \right] \Expect\left[ \mathbf{s}\mathbf{s}^H\right]\right)
 	\end{equation}
-	Assuming equal power allocation here since matrix size are relatively large this becomes
+	Assuming equal power allocation this becomes
 	\begin{equation}
-	\trace\left(\Expect\left[ (\mI - \mH \mW  )  (\mI - \mH \mW  ) ^H \right]\right).
+	\trace\left(\Expect\left[ (\mI - \mH \mW  )^H  (\mI - \mH \mW  )  \right]\right).
 	\end{equation}
-	Because the beamformer, $\mathbf{W}$, is deterministic at this point, the optimization problem becomes
+	Because the beamformer, $\mathbf{W}$, is deterministic, the optimization problem becomes
 		\begin{subequations}
 	\label{mse_problem_total}
 	\begin{align}
@@ -54,7 +44,7 @@ For the MSE Objective function with deterministic $\mW $ is
 	    | \phi_i | = 1   \; \forall i \in {1 \cdots	 K}
 	\end{align}
 	\end{subequations}	
-	Assuming channel components corresponding to the IRS path to be zero-mean, this becomes 
+	Assuming channel components corresponding to the IRS path to be zero-mean (reasonable), this becomes 
 		\begin{subequations}
 	\label{mse_problem_total}
 	\begin{align}
@@ -67,19 +57,18 @@ For the MSE Objective function with deterministic $\mW $ is
 	\end{subequations}	
 	In general we assume the channels through the elements of the IRS are correlated and in this case we use the exponential model.
 	Now we decompose the channel $\mH$ into the individual paths through the IRS  $\Sigma_{i=1}^{N_S} \phi_i \mR_{R}^{\frac{1}{2}}\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}
-	\mR_{T}^{\frac{1}{2}}$. Expanding the utility function in \ref{mse_problem_total} shows that all $\phi_i$ cancel out from any non-cross term. The resulting utility function only contains cross terms of the form 
+	\mR_{T}^{\frac{1}{2}}$. Expanding the utility function in \ref{mse_problem_total} shows that all $\phi_i$  from the channel $\mH$ cancel out from the non-cross terms. The resulting utility function only contains cross terms of the form 
 	\begin{equation}
 		\trace\left(\Expect\left[ \phi_i \mR_{R}^{\frac{1}{2}}\mathbf{h}_{2,i}\mathbf{h}^T_{1,i}
-	\mR_{T}^{\frac{1}{2}} (\phi_i \mR_{R}^{\frac{1}{2}}\mathbf{h}_{2,j}\mathbf{h}^T_{1,j}
-	\mR_{T}^{\frac{1}{2}})\right] \right)
+	\mR_{T}^{\frac{1}{2}} (\phi_j \mR_{R}^{\frac{1}{2}}\mathbf{h}_{2,j}\mathbf{h}^T_{1,j}
+	\mR_{T}^{\frac{1}{2}})^H \right] \right)
 	\end{equation}
-	or equivalently
+	in which $i \neq j$, or equivalently
 		\begin{equation}
 		\phi_j ^* \phi_i  \trace\left(\mR_{R} \Expect\left[ \mathbf{h}_{2,i}\mathbf{h}^T_{1,i}
 	\mR_{T} (\mathbf{h}_{2,j}\mathbf{h}^T_{1,j})^H\right] \right).
 	\end{equation}
-	Assuming the all elements of $\mathbf{h}_{2,i}$ and $\mathbf{h}^T_{1,i}$ to be independent, these cross terms will also have expected value of zero and 
-	thus the final expression does not include any $\phi_i$.
+	Assuming all elements of the random vectors $\mathbf{h}_{2,i}$ and $\mathbf{h}^T_{1,i}$ to be independent (also for $i \neq j$) these cross terms will also have expected value of zero. As a result the final expression does not include any $\phi_i$ meaning that without having knowledge of the actual channels, the MSE cannot be optimized with respect to the phases.
 \item{Deterministic Elements of Channel:} \par
 	In the above problem, if the transmitter has access to the channel state information for the channels through the IRS, the optimization problem from the last report can be used with results seen in figure \ref{MSE_opt_noise}
 \end{enumerate}
