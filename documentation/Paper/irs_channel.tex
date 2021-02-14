@@ -27,11 +27,13 @@ consider the AED of the covariance matrix given by
 	 &  =  
 	 \mH_{1}^H \mR_{S}^{\frac{H}{2}}\phase^H \mH_{2}^H \mR_{R}\mH_{2}\phase \mR_{S}^{\frac{1}{2}}\mH_{1}\mR_{T}.
 	\end{align}
+
+This equivalence is shown by applying the Weinstein-Aronszajn identity to the characteristic polynomials of the to matrices.
 In order to continue decomposing this covariance matrix into sub-components, we exploit a property of the S-Transform given by (proven in Appendix \ref{rotation_property})
 \begin{equation}
 S_{C_N}(z) = \frac{z+1}{z+\chi_2} S_{\tilde{C}_N}(\frac{z}{\chi_2}).
 \end{equation}
-If all system dimensions are $N$, these S-Trasforms equal. For simplified analysis and notation, we will assume that all system dimensions are $N$.
+If all system dimensions are $N$, these S-Trasforms are equal. For simplified analysis and notation, we will assume that all system dimensions are $N$.
 Repeated iteration of the property above gives the equivalent matrix
 	\begin{equation}
 	\mC =
