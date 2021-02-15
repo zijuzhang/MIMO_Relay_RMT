@@ -2,18 +2,18 @@ rows = 100;
 cols = 100;
 steps = 100;
 bottom = 1e-1;
-top = 7; 
+top = 4; 
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-7; % The img component needs to go to zero to evaluate pdf.
-betas = linspace(0.5, 1, 10);
+betas = linspace(0.05, 1, 10);
 numeric_capacity = zeros(size(betas));
 asymptotic_capacity = zeros(size(betas));
 figure(1)
 for i = 1:length(betas)
     numeric_capacity(i) = average_numeric_capacity(rows, cols, betas(i), 10);
 %     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, betas(i)));
-    stieltjes_values = evaluate_points_skupch(s_values,betas(i));
+    stieltjes_values_skupch = evaluate_points_skupch(s_values,betas(i));
     pdf = 1/pi .* imag(stieltjes_values);
 %     pdf = abs(pdf);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
@@ -48,30 +48,17 @@ function output = evaluate_points_skupch(input, beta)
 end
 
 function output = skupch_stieltjes(eval_point, beta)
-%% 
-
 % Skupch paper polynomial (with beta = 1) (s = eval_point)
-% Only the imaginary portion of the returned value is considered...
-% TODO, how to choose proper root???
+syms x;
+skupch_eqn = x^4*eval_point^4 + x^3*eval_point^3*(-2 -2*eval_point*x) + ...
+    x^2*eval_point^2*(4*beta*eval_point * eval_point^2) + ...
+    x*eval_point*(2*beta*eval_point - 2*eval_point^2) + ...
+    eval_point^2;
 
-%%
-% syms x;
-% skupch_eqn = x^4*eval_point^4 + x^3*eval_point^3*(-2 -2*eval_point*x) + ...
-%     x^2*eval_point^2*(4*beta*eval_point * eval_point^2) + ...
-%     x*eval_point*(2*beta*eval_point - 2*eval_point^2) + ...
-%     eval_point^2;
-poly_vector = [eval_point^4  eval_point^3*(-2 -2*beta*eval_point) ...
-    eval_point^2*(4*beta*eval_point * eval_point^2) ...
-    eval_point*(2*beta*eval_point - 2*eval_point^2) ...
-    eval_point^2];
-% check = solve(skupch_eqn, x);
-zeros = roots(poly_vector);
+check = solve(skupch_eqn, x);
+zeros = roots()
 % eval(check)
-% output = check(1);
-output = zeros(3);
-if (imag(output) < 0)
-%     error('Strictly positive PDF??');
-end
+output = check(1);
 end
 
 

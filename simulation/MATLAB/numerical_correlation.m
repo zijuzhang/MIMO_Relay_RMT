@@ -21,11 +21,13 @@ clear all;
 function ave = average_numeric_capacity(rows, cols, rho, average)
     vals = zeros(average,1);
     for i = 1:length(vals)
+        channel1 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
         channel2 = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
         correlation = exponential_correlation(rows, rho);
 %         total_channel = channel1;
 %         total_channel = channel2*channel1;
-        total_channel = correlation*channel2*correlation*channel1*correlation;
+        total_channel = correlation*channel2*channel1*correlation;
+%         total_channel = correlation*channel2*correlation*channel1*correlation;
         total_cov = (total_channel*total_channel');
         vals(i) = MIMO_capacity(total_cov, 1/cols);
     end
