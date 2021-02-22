@@ -61,7 +61,7 @@ for percent in csi_percentages:
                 elem3_ind = elem2_ind + elem_ind + 1
                 phase_adjacency[elem3_ind, ind + elem2_ind] = 1
             ind += num_reflectors - elem_ind - 1
-        optimal_phases, improvements = optimize_phases(np.asarray(coefficients),
+        optimal_phases, improvements = optimize_phases_preselected(np.asarray(coefficients),
                                                        phase_adjacency, F2, F1, csi=percent, num_repetitions=2,
                                                        improvements=True)
         H_opt = F2 @ optimal_phases @ F1

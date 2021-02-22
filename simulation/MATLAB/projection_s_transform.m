@@ -6,7 +6,7 @@ top = 7;
 x_values = linspace(bottom, top , steps);
 step_size = (top-bottom)/steps;
 s_values = x_values + 1i*1e-7; % The img component needs to go to zero to evaluate pdf.
-betas = linspace(0.5, 1, 10);
+betas = linspace(0.3, 1, 10);
 numeric_capacity = zeros(size(betas));
 asymptotic_capacity = zeros(size(betas));
 figure(1)
@@ -15,7 +15,8 @@ for i = 1:length(betas)
 %     stieltjes_values = (1./s_values).*(1+gamma_s(1./s_values, betas(i)));
     stieltjes_values = evaluate_points_skupch(s_values,betas(i));
     pdf = 1/pi .* imag(stieltjes_values);
-%     pdf = abs(pdf);
+    % Really cheating here because I'm not returning the proper roots.
+    pdf = abs(pdf);
     asymptotic_capacity(i)  = aed_capacity(x_values, pdf, 1/cols, rows, step_size);
     plot(x_values,pdf,'DisplayName', '\beta = ' + string(betas(i)));
     title('AED');
@@ -68,6 +69,9 @@ poly_vector = [eval_point^4  eval_point^3*(-2 -2*beta*eval_point) ...
 zeros = roots(poly_vector);
 % eval(check)
 % output = check(1);
+% Return zero with largest img component.
+% [max_imag, max_imag_ind] = max(imag(zeros));
+% output = zeros(max_imag_ind);
 output = zeros(3);
 if (imag(output) < 0)
 %     error('Strictly positive PDF??');
@@ -123,16 +127,12 @@ end
 function ave = average_numeric_capacity(rows, cols, beta, average)
     vals = zeros(average,1);
     for i = 1:length(vals)
-        awgn = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
+        instance_rayleigh = rayleigh_channel(rows, cols, 1/sqrt(2*rows));
 %         awgn = rayleigh_channel(rows, cols, 1/sqrt(2*(rows*beta)));
-        projector1 = projection_matrix(rows, beta);
-        projector2 = projection_matrix(rows, beta);
-%         correlation = exponential_correlation(rows, rho);
-%         total_channel = channel1;
-%         total_channel = channel2*channel1;
-%         total_channel = correlation*channel2*correlation*channel1*correlation;
-        total_channel = awgn*projector1;
-%         total_channel = projector2*awgn*projector1*awgn;
+%         projector1 = projection_matrix(rows, beta);
+%         projector2 = projection_matrix(rows, beta);
+        correlation = exponential_correlation(rows, rho);
+        total_channel = correlation*instance_rayleigh;
         total_cov = (total_channel*total_channel');
         vals(i) = MIMO_capacity(total_cov, 1/cols);
     end

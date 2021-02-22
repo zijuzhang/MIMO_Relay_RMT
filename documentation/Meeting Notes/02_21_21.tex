@@ -1,0 +1,64 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/21_02_21} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Overview Status}\label{overview}
+The hope is to show the following points in the paper to present both some analytic and numerical/optimization results.
+\begin{enumerate}
+\item \label{analysis_point}
+Show the capacity for the IRS channel model with the exponential correlation model. See Section \ref{analysis_section} for status.
+\item
+Show that phases of the IRS will cancel out of the MIMO capacity term as $N \rightarrow \infty	$. (Done as shown in previous reports).
+\item 
+Look at ways of increasing capacity (or improving another metric like MSE) for the small system cases.
+See Section \ref{opt_section} for status.
+\item 
+Conclude by looking at the convergence of the correlated IRS MIMO system towards the asymptotic results. This is easy to look at numerically but lacks much meaning without the comparison to the analytic results that I am having difficulty generating (from point 1 above).
+\end{enumerate}
+\section{Analysis Status}\label{analysis_section}
+Using the S-Transform for the exponential correlation model shown in the work from \cite{skupch2005free} should allow me to find the analytic capacity, however, I have an issue when I attempt to recreate these results for the single rayleigh channel with receiver correlation (i.e. solving a quartic polynomial for the stieltjes transform $G(s)$). The problem I have is how to choose 1 of the 4 roots of the polynomial (for each point in the pdf, I get 4 roots to potentially evaluate). See resulting pdfs/capacity in figures \ref{AED} and \ref{capacity}). Similarly, if I want to extend this to the case with correlation at BOTH the transmitter and receiver, the polynomial is a 5th order polynomial and I'm not sure how to pick the correct root for the AED.
+
+	\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	  \caption{AEDs generated using results from \cite{skupch2005free} }
+	  \label{AED}
+	\end{figure}
+		\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/analytic_capacity}
+	  \caption{Capacities corresponding to AEDs from Figure \ref{AED}}
+	  \label{capacity}
+	\end{figure}
+
+\section{Optimization Status}\label{opt_section}
+For the case $N_T = N_R = 1$ and full CSIT, if the values in $\boldsymbol{\Phi}$ (the IRS phases) are chosen such that all paths from the transmitter to receiver add coherently, this would result in an $N_S^2$ increase in SNR at the receiver (where $N_S$ is the number of IRS elements). However, for the case $N_T = N_R = N_S$ $\rightarrow \infty$ this coherent addition can only be done for a single Tx, Rx pair so the impact of this path will diminish as the power is distributed across an increasing number of antennas. This intuition agrees agrees with the analytic result that $\Phi$ cancels out of the AED.
+\par
+For small $N_T$, $N_R$ there is still be some benefit. 
+\subsection{Full CSIT MSE optimization}
+For the case with full CSIT, I wrote a method for the optimization of the phases assuming that the transmitter uses a matched filter (this can be replaced by another precoder). I'm not sure if it would be better to choose a metric other than mean-square-error to numerically evaluate this optimization but some initial results are in figure \ref{opt_results}.
+
+		\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/opt_results}
+	  \caption{Capacities corresponding to AEDs from Figure \ref{AED}}
+	  \label{opt_results}
+	\end{figure}
+
+This can be extended to the case in which pilots are collected for $< N_S$  IRS elements (rather than the full CSIT considered above.
+\bibliography{bibliography}
+
+\end{document}

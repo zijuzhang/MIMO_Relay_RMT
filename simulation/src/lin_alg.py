@@ -5,6 +5,12 @@ from scipy.stats import bernoulli
 from scipy.linalg import sqrtm
 
 def capacity(matrix, snr):
+    """
+    This assumes that Transmit power is equally distributed.
+    :param matrix:
+    :param snr:
+    :return:
+    """
     return np.sum(np.log2(1 + snr*np.linalg.eigvalsh(matrix)))
 
 def capacity_water_filled(matrix):
@@ -137,6 +143,6 @@ def is_orthonormal(matrix):
 
     return np.alltrue(np.asarray(orthonormal))
 
-#Other Useful Functions
+# Other Useful Functions
 pos = lambda x: (x > 0)*x
 delta = lambda x: x == 0
