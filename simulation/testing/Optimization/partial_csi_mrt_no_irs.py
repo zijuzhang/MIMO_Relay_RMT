@@ -19,7 +19,7 @@ plt.figure(1)
 for snr in SNRs:
     errors = 0
     for simulation_ind in range(num_simulations):
-        los_channel = np.random.standard_normal((1, num_tx)) + 1j*np.random.standard_normal((1, num_tx))
+        los_channel = np.random.standard_normal((1, num_tx))/np.sqrt(2) + 1j*np.random.standard_normal((1, num_tx))/np.sqrt(2)
         beamformer = maximum_ratio_transmission(los_channel.T)
         for i in range(per_channel_symbols_num):
             symbol = alphabet[np.random.randint(0, 2)]

@@ -12,7 +12,7 @@ per_channel_symbols_num = 100
 SNRs_dB = np.linspace(-10, 5, 10)
 SNRs = np.power(10, SNRs_dB/10)
 num_rx = 1
-num_surfaces = 1
+num_surfaces = 8
 num_tx = 8
 alphabet = np.round(np.linspace(-1, +1, 2))
 plt.figure(1)
@@ -21,8 +21,9 @@ for snr in SNRs:
     for simulation_ind in range(num_simulations):
         los_channel = np.random.standard_normal((1, num_tx)) + 1j*np.random.standard_normal((1, num_tx))
         H1 = c_rand(num_surfaces, num_tx)
-        h2 = np.random.standard_normal((num_surfaces, 1)) + 1j*np.random.standard_normal((num_surfaces, 1))
-        beamformer = maximum_ratio_transmission(los_channel.T)
+        h2 = np.random.standard_normal((num_surfaces, 1))/np.sqrt(2) + 1j*np.random.standard_normal((num_surfaces, 1))/np.sqrt(2)
+        beamformer = maximum_ratio_transmission(los_channel.T, partial=0)
+        # beamformer = maximum_ratio_transmission((h2.T@H1).T, partial=0)
         # beamformer = maximum_ratio_transmission((h2.T@H1).T)
         for i in range(per_channel_symbols_num):
                 symbol = alphabet[np.random.randint(0, 2)]

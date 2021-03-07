@@ -27,7 +27,12 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1, vals=False):
         return channel_matrix@covariance_matrix@hermetian(channel_matrix)
 
 
-def maximum_ratio_transmission(CSI):
+def maximum_ratio_transmission(CSI, partial=1):
     # This normalization ensures the power of the transmit signal signal is no
-    beamformer = np.conjugate(CSI/np.linalg.norm(CSI))
+    beamformer = np.copy(CSI)
+    if partial < 1:
+        beamformer[int(partial*beamformer.size)::] = 1
+        beamformer = np.conjugate(beamformer/np.linalg.norm(beamformer))
+    else:
+        beamformer = np.conjugate(beamformer/np.linalg.norm(beamformer))
     return beamformer
