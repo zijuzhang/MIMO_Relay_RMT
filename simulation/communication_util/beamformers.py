@@ -28,6 +28,6 @@ def water_filling(channel_matrix, power_constraint, sigma_square=1, vals=False):
 
 
 def maximum_ratio_transmission(CSI):
-    # This normalization ensures the power of the transmit signal signal is unaffected.
+    # This normalization ensures the power of the transmit signal signal is no
     beamformer = np.conjugate(CSI/np.linalg.norm(CSI))
     return beamformer
