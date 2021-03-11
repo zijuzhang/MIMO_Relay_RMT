@@ -114,11 +114,11 @@ def get_polynomial_adjacency_matrix(num_reflectors, num_coeffifients):
     return phase_adjacency
 
 
-def optimize_MISO_phase(LOS_Channel, IRS_coefficients, iteration_rounds=1):
+def optimize_MISO_phase(LOS_Channel, IRS_coefficients, iteration_rounds=1, relative_pilots=1):
     phase = -1j*1j*np.ones((1, IRS_coefficients.size))
     cur_sum  = LOS_Channel
     for round in range(iteration_rounds):
-        for i in range(phase.size):
+        for i in range(int(np.round(phase.size*relative_pilots))): # Only optimize for number of pilots sent
             phase[0, i] = np.exp(1j*(np.angle(cur_sum) - np.angle(IRS_coefficients[0, i])))
             cur_sum += phase[0, i]*IRS_coefficients[0, i]
     return phase.flatten()
