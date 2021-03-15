@@ -15,12 +15,14 @@ SNRs_dB = np.linspace(-10, 15, 5)
 SNRs = np.power(10, SNRs_dB/10)
 num_rx = 1
 surface_num_list = [16, 64, 256]
+num_surfaces  = 16
 num_tx = 8
 alphabet = np.round(np.linspace(-1, +1, 2))
 IRS_partial = 1
+CSI_amount_list = [.25, .5, .75, 1]
 MRT_partial = 1
 fig = plt.figure(1)
-for num_surfaces in surface_num_list:
+for IRS_partial in CSI_amount_list:
     BER_list = []
     BER_list_opt = []
     for snr in SNRs:
