@@ -1,0 +1,62 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphicx,tikz}
+\usepackage{float}
+\usetikzlibrary{positioning}
+\input defs.tex
+\bibliographystyle{ieeetr}
+\graphicspath{ {./figures/21_02_21} }
+
+\title{Progress Report}
+\author{Peter Hartig}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Optimization Results}\label{overview}
+These results consider a Multiple input Single output channel for which the transmitter sends the same signal across all antennas and using a Maximum Ratio Transmission scheme once the the phases at the IRS have been chosen (two step optimization). The LOS path is $ $
+\begin{enumerate}
+\item 
+First just a figure verifying the basic MRT system is setup correctly for the case without any IRS.
+When power is normalized at the transmitter for increasing numbers of antennas, the difference is quite small. 
+	\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	  \caption{MISO system without IRS using Maximum Ratio Transmission}
+	  \label{basic_MRT}
+	\end{figure}
+	
+\item 
+Comparison of MISO system with and without IRS. Note that the IRS effectively adds power to the received signal at the received because of the new path.
+Also note that the phases in this case are chosen randomly.
+	\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	  \caption{ Comparison of MISO channel with/without an IRS path (non-optimized phases)}
+	  \label{AED}
+	\end{figure}	
+	
+\item 
+Comparison of MISO system with IRS for cases with and without the two-stage IRS phase optimization. For the IRS optimized case, we consider full CSI at the transmitter.
+	\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	  \caption{MISO, IRS system with/without phase optimization}
+	  \label{AED}
+	\end{figure}	
+
+\item 
+Comparison of MISO system with IRS and two-stage IRS phase optimization across different number of pilot symbols sent by the transmitter. 
+	\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	  \caption{MISO, IRS system with phase optimization for different # of pilot symbols.}
+	  \label{AED}
+	\end{figure}		
+
+\end{enumerate}
+
+\bibliography{bibliography}
+
+\end{document}
