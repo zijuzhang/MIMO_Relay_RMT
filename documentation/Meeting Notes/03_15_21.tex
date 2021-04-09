@@ -19,14 +19,20 @@
 \tableofcontents
 
 \section{Optimization Results}\label{overview}
-These results consider a Multiple input Single output channel for which the transmitter sends the same signal across all antennas and using a Maximum Ratio Transmission scheme once the the phases at the IRS have been chosen (two step optimization). The LOS path is $ $
+These results consider a Multiple input Single output channel for which the transmitter sends the same signal across all antennas using a Maximum Ratio Transmission scheme once the the phases at the IRS have been chosen (two step optimization).
+NOTE: The first four figures are just validating that the simulation was setup correctly. The fifth figure shows comparisons of the system with/without optimization.
 \begin{enumerate}
 \item 
 First just a figure verifying the basic MRT system is setup correctly for the case without any IRS.
 When power is normalized at the transmitter for increasing numbers of antennas, the difference is quite small. 
 	\begin{figure}[H]
-	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
-	  \caption{MISO system without IRS using Maximum Ratio Transmission}
+	\includegraphics[width= 15cm,height = 10cm]{figures/16_03_21/MRT_vs_Tx_normalized}
+	  \caption{MISO system without IRS using Maximum Ratio Transmission. Power normalized across number of Transmitters}
+	  \label{basic_MRT}
+	\end{figure}
+		\begin{figure}[H]
+	\includegraphics[width= 15cm,height = 10cm]{figures/16_03_21/MRT_vs_Tx_not_normalized}
+	  \caption{MISO system without IRS using Maximum Ratio Transmission. Power increasing similar to Maximum Ratio Combining for SIMO.}
 	  \label{basic_MRT}
 	\end{figure}
 	
@@ -34,7 +40,7 @@ When power is normalized at the transmitter for increasing numbers of antennas, 
 Comparison of MISO system with and without IRS. Note that the IRS effectively adds power to the received signal at the received because of the new path.
 Also note that the phases in this case are chosen randomly.
 	\begin{figure}[H]
-	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	\includegraphics[width= 15cm,height = 10cm]{figures/16_03_21/MRT_With_Without_IRSPath}
 	  \caption{ Comparison of MISO channel with/without an IRS path (non-optimized phases)}
 	  \label{AED}
 	\end{figure}	
@@ -42,7 +48,7 @@ Also note that the phases in this case are chosen randomly.
 \item 
 Comparison of MISO system with IRS for cases with and without the two-stage IRS phase optimization. For the IRS optimized case, we consider full CSI at the transmitter.
 	\begin{figure}[H]
-	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
+	\includegraphics[width= 15cm,height = 10cm]{figures/16_03_21/Optimized_vs_unoptimized}
 	  \caption{MISO, IRS system with/without phase optimization}
 	  \label{AED}
 	\end{figure}	
@@ -50,13 +56,11 @@ Comparison of MISO system with IRS for cases with and without the two-stage IRS 
 \item 
 Comparison of MISO system with IRS and two-stage IRS phase optimization across different number of pilot symbols sent by the transmitter. 
 	\begin{figure}[H]
-	\includegraphics[width= 15cm,height = 10cm]{figures/21_02_21/aed}
-	  \caption{MISO, IRS system with phase optimization for different # of pilot symbols.}
+	\includegraphics[width= 15cm,height = 10cm]{figures/16_03_21/Optimized_vs_unoptimized}
+	  \caption{MISO, IRS system with phase optimization for different numbers of pilot symbols.}
 	  \label{AED}
 	\end{figure}		
 
 \end{enumerate}
-
-\bibliography{bibliography}
 
 \end{document}

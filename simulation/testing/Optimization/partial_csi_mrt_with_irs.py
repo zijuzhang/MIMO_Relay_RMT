@@ -31,7 +31,9 @@ for num_surfaces in surface_num_list:
             H1 = c_rand(num_surfaces, num_tx)
             h2 = np.random.standard_normal((num_surfaces, 1))/np.sqrt(2) + 1j*np.random.standard_normal((num_surfaces, 1))/np.sqrt(2)
             phase = optimize_MISO_phase(np.sum(los_channel), h2.T*np.sum(H1, 1), relative_pilots=IRS_partial)
-            beamformer_mrt = maximum_ratio_transmission((h2.T@np.eye(num_surfaces)@H1+los_channel).T)
+            phase_mf = np.exp(1j*np.conjugate(np.angle(h2.T*np.sum(H1, 1)))).flatten()
+            # beamformer_mrt = maximum_ratio_transmission((h2.T@np.eye(num_surfaces)@H1+los_channel).T)
+            beamformer_mrt = maximum_ratio_transmission((h2.T@np.diag(phase_mf)@H1+los_channel).T)
             beamformer_opt = maximum_ratio_transmission((h2.T@np.diag(phase)@H1+los_channel).T, partial=MRT_partial)
             for i in range(per_channel_symbols_num):
                     symbol = alphabet[np.random.randint(0, 2)]
@@ -48,7 +50,7 @@ for num_surfaces in surface_num_list:
         BER_list_opt.append(errors_opt/(num_simulations*per_channel_symbols_num))   # only for N_r = 1
     num_pilots_no_IRS = num_tx
     num_pilots_IRS = MRT_partial*num_tx + IRS_partial*num_surfaces
-    plt.plot(SNRs_dB, BER_list, label=f"No IRS Opt: # IRS: {num_surfaces}  # Pilots: {num_pilots_no_IRS}", linestyle='--', marker='o')
+    plt.plot(SNRs_dB, BER_list, label=f"No IRS Opt: # IRS: {num_surfaces}  # Pilots: {num_pilots_no_IRS}", marker='o')
     plt.plot(SNRs_dB, BER_list_opt, label=f"IRS Opt: # IRS: {num_surfaces}  # Pilots: {num_pilots_IRS}", linestyle='--', marker='x')
 plt.xlabel(r'10log$(E[x]/\sigma^2_n$) [dB]')
 plt.ylabel("BER")

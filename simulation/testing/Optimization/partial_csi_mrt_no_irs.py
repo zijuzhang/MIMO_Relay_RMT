@@ -4,13 +4,14 @@ from src.optimization import optimize_MISO_phase
 from src.lin_alg import c_rand
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 
 # BER evaluation framework
 
 num_simulations = 100
 per_channel_symbols_num = 1000
-SNRs_dB = np.linspace(-10, 15, 5)
+SNRs_dB = np.linspace(-10, 15, 8)
 SNRs = np.power(10, SNRs_dB/10)
 num_rx = 1
 num_surfaces = 1
@@ -53,6 +54,6 @@ title = "IRS + LOS "
 plt.title(title)
 plt.grid(True)
 plt.legend(loc='lower left')
-plt.show()
-time_path = f"Output/MRT_With_Without_IRSPath.png"
+# plt.show()
+time_path = f"Output/MRT_With_Without_IRSPath+" + f"{time.time()}" + ".png"
 fig.savefig(time_path, format="png")
